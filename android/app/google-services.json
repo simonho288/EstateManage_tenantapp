@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "304839112685",
+    "project_id": "vpms-tenant-firebase-project",
+    "storage_bucket": "vpms-tenant-firebase-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304839112685:android:bfd4dc315601200d9f59e4",
+        "android_client_info": {
+          "package_name": "com.alslab.VPMSTenantApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304839112685-d177gcfaped30usgtpjp9j071rvt9q6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAODfyTraZZfmrf-dejJu_20KwiyVGU18E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304839112685-d177gcfaped30usgtpjp9j071rvt9q6i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "304839112685-ad612vpferq4p38nrjs5jgro2qlrcnf7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alslab.vpmsTenant"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

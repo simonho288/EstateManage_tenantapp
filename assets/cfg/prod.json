@@ -1,0 +1,4 @@
+{
+  "hostApiUri": "https://hk.vpms.alslab.com",
+  "hostS3Base": "https://vpms-hk.s3.us-west-004.backblazeb2.com/directus"
+}
