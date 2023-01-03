@@ -48,3 +48,8 @@ app.*.map.json
 # Sensitive related
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
+lib/firebase_options.dart
+assets/cfg/dev.json
+
+# Shell scripts
+*.sh
