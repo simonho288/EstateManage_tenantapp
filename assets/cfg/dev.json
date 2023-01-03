@@ -1,7 +1,0 @@
-{
-  "hostApiUri": "https://hk.vpms.alslab.com",
-  "hostApiUri_hk": "https://hk.vpms.alslab.com",
-  "hostApiUri_localhost": "http://10.0.2.2:3000",
-  "hostApiUri_tunnel": "https://lt.simonho.net",
-  "hostS3Base": "https://vpms-hk.s3.us-west-004.backblazeb2.com/directus"
-}
