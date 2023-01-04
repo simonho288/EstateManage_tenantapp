@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     // Determine the estate background image
-    String? imageUrl = Globals.curClientJson?['estate_image_app'];
+    String? imageUrl = Globals.curEstateJson?['estate_image_app'];
     if (imageUrl == null) {
       imageUrl = Globals
           .defaultEstateImage; // When the user didn't upload their estate image

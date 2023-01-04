@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
       String password = _ctrlrPassword.text;
       String? fcmDeviceToken = await Utils.generateDeviceToken();
 
-      assert(Globals.curClientJson != null);
+      assert(Globals.curEstateJson != null);
       String unitType = _unitJson['cls'] == 'R'
           ? 'resident'
           : _unitJson['cls'] == 'C'
@@ -194,7 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
     widgets.add(
       Center(
         child: Text(
-          Globals.curClientJson!['estate_name'],
+          Globals.curEstateJson!['name'],
           style: TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
         ),

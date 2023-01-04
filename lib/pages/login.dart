@@ -253,11 +253,11 @@ class _LoginPageState extends State<LoginPage> {
       // Read the client image background
       Ajax.ApiResponse resp = await Ajax.getClient(
         // clientCode: clientJson!['code'],
-        id: Globals.curClientJson?['id'],
+        id: Globals.curEstateJson?['id'],
         fields: 'estate_image_app',
       );
       Map<String, dynamic> data = resp.data[0] as Map<String, dynamic>;
-      Globals.curClientJson?['estate_image_app'] = data['estate_image_app'];
+      Globals.curEstateJson?['estate_image_app'] = data['estate_image_app'];
 
       // Navigator.pushReplacementNamed(context, '/home');
       Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);

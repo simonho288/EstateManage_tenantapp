@@ -24,7 +24,7 @@ Every time user end the use of this system service, need to log out and close th
 
 Login Information
 
-Without the customer's consent, VPMS will not disclose personal privacy information to third parties.
+Without the customer's consent, EstateManage.Net will not disclose personal privacy information to third parties.
 
 Customers should keep their passwords properly, and do not disclose the password or provide it to others to know or use; all behaviors performed by using the system service with the same account and password will be considered as the account and password holder's behavior.
 
@@ -38,19 +38,19 @@ The following restrictions shall be observed when using this system service:
 (1) Contents of intellectual property rights or other rights that damage the personality of others or trademark rights, copyrights, etc.
 (2) Use text that violates public order or good customs or other illegal texts.
 (3) Radical remarks with strong political and religious overtones.
-(4) Without the permission VPMS, it is not allowed to use other resources provided by this system service, including but not limited to graphic database, to engage in any commercial transactions, or to solicit advertisers or sponsors.
+(4) Without the permission EstateManage.Net, it is not allowed to use other resources provided by this system service, including but not limited to graphic database, to engage in any commercial transactions, or to solicit advertisers or sponsors.
 
 The company's proprietary rights
 
 All software or content linked to this system service, or content provided by the company's advertisers or partners, are protected by their copyrights or other proprietary rights or laws.
 
-When transferring data to the residential mobile phone service provided by VPMS, it is agreed that this data is fully open (anyone can browse).  The customer authorizes and permits VPMS to reproduce, modify, adapt or otherwise use all or part of the content, and use the content to make derivative works.  The copyright of derivative works belongs to our company.
+When transferring data to the residential mobile phone service provided by EstateManage.Net, it is agreed that this data is fully open (anyone can browse).  The customer authorizes and permits EstateManage.Net to reproduce, modify, adapt or otherwise use all or part of the content, and use the content to make derivative works.  The copyright of derivative works belongs to our company.
 
-VPMS agrees that in addition to placing the aforementioned materials and derivative works on this system for internet users to browse and related media belonging to the company in accordance with these terms of use, it will never illegally transfer it for other direct profit purposes or infringe your rights.  The use of.
+EstateManage.Net agrees that in addition to placing the aforementioned materials and derivative works on this system for internet users to browse and related media belonging to the company in accordance with these terms of use, it will never illegally transfer it for other direct profit purposes or infringe your rights.  The use of.
 
-All advertisement boards and event messages (if any) appearing on all pages are owned and operated by VPMS or related advertisers. Users are not allowed to use all the information on their own unless they have obtained VPMS's prior consent.
+All advertisement boards and event messages (if any) appearing on all pages are owned and operated by EstateManage.Net or related advertisers. Users are not allowed to use all the information on their own unless they have obtained EstateManage.Net's prior consent.
 
-The customer agrees and authorizes this system to provide the necessary information to the cooperative unit (third party) for use within the agreed scope for the purpose of providing services or related value-added services In the list of products or services, VPMS can be notified and to delete their information from the list.
+The customer agrees and authorizes this system to provide the necessary information to the cooperative unit (third party) for use within the agreed scope for the purpose of providing services or related value-added services In the list of products or services, EstateManage.Net can be notified and to delete their information from the list.
 
 At the same time, in order to provide marketing, market analysis, statistics or research, or to provide member personalized services or value-added services, members agree that the company, or the company’s strategic partners, may record, save, and use members in this system  The data and records retained or generated, and statistical data may be disclosed or used without disclosing the data.
 
@@ -58,7 +58,7 @@ Regarding the data registered by the customer, it is agreed that this system may
 
 Termination of authorization
 
-If there is any violation of the law or the terms of use or the risk of harming the system or the rights of a third party when using the system services, VPMS has the right to terminate your authorization to use the service immediately or permanently without notice.
+If there is any violation of the law or the terms of use or the risk of harming the system or the rights of a third party when using the system services, EstateManage.Net has the right to terminate your authorization to use the service immediately or permanently without notice.
 
 Disclaimer
  
@@ -67,23 +67,23 @@ When the following situations occur, the system has the right to stop or interru
 (2) When a sudden electronic communication equipment failure occurs.
 (3) When natural disasters or other force majeure factors make this website unable to provide services.
 
-VPMS is not liable for any direct, indirect, derivative or non-property damage caused by the user's use of this system service or use of this service.
+EstateManage.Net is not liable for any direct, indirect, derivative or non-property damage caused by the user's use of this system service or use of this service.
  
-Users should back up the text, pictures and other data uploaded to the message and keep separately for safe reason; VPMS is not responsible for the loss or damage of all or part of its content for any reason.
+Users should back up the text, pictures and other data uploaded to the message and keep separately for safe reason; EstateManage.Net is not responsible for the loss or damage of all or part of its content for any reason.
 
-VPMS does not assume any guarantee responsibility for the use of this service or the results produced, nor does it guarantee that the software related to this system service is free or will be corrected.
+EstateManage.Net does not assume any guarantee responsibility for the use of this service or the results produced, nor does it guarantee that the software related to this system service is free or will be corrected.
 
-VPMS does not bear any responsibility for all the remarks, opinions or behaviors in this system that do not represent the position of VPMS. VPMS  does not guarantee the correctness of the identity claimed by the user.
+EstateManage.Net does not bear any responsibility for all the remarks, opinions or behaviors in this system that do not represent the position of EstateManage.Net. EstateManage.Net  does not guarantee the correctness of the identity claimed by the user.
 
-VPMS is not responsible for any intimidation, defamation, obscenity or all other illegal acts that occur in or through this system service.
+EstateManage.Net is not responsible for any intimidation, defamation, obscenity or all other illegal acts that occur in or through this system service.
 
-For any goods or services purchased or obtained through this service, or published, sold or delivered through client’s sponsors or advertisers, you shall bear its own possible risks or negotiate with the goods or service providers for compensation in accordance with the law. VPMS  has nothing to do with it, and is not responsible for it.
+For any goods or services purchased or obtained through this service, or published, sold or delivered through client’s sponsors or advertisers, you shall bear its own possible risks or negotiate with the goods or service providers for compensation in accordance with the law. EstateManage.Net  has nothing to do with it, and is not responsible for it.
 
 Right to modify
 
 When you start to use this system service, it means that you have fully read, understood and agreed to accept the content of this clause.  
 
-VPMS has the right to modify and change the content of these terms at any time without individual notice. It is recommended that you review these terms of service regularly.  If continue to use the service after the modification and change of these terms, it is deemed that you have read, understood and agreed to accept the modification or change of these terms.
+EstateManage.Net has the right to modify and change the content of these terms at any time without individual notice. It is recommended that you review these terms of service regularly.  If continue to use the service after the modification and change of these terms, it is deemed that you have read, understood and agreed to accept the modification or change of these terms.
 
 Intellectual property rights protection
 
@@ -95,7 +95,7 @@ Other regulations
 
 The contents of the user treaty and exemption of this system also form part of these terms of use.
 
-If your use of this service causes the company to be investigated or prosecuted by a third party or administrative agency, VPMS has the right to request damages from you, including but not limited to litigation costs, attorney fees, and loss of goodwill, etc.  .
+If your use of this service causes the company to be investigated or prosecuted by a third party or administrative agency, EstateManage.Net has the right to request damages from you, including but not limited to litigation costs, attorney fees, and loss of goodwill, etc.  .
 
 For the foreseeable hardware and software maintenance work that may cause system interruption or suspension, the company will inform the customer in an appropriate way before the situation occurs.
 
@@ -105,11 +105,11 @@ ALSLAB.COM (hereinafter referred to as the "Company") values ​​your privacy 
  
 When must we disclose your information
 
-VPMS  will not sell or lend your personal data to any person or company without your consent.  But in some cases there will be exceptions.  These conditions include (but are not limited to):
+EstateManage.Net  will not sell or lend your personal data to any person or company without your consent.  But in some cases there will be exceptions.  These conditions include (but are not limited to):
 
 When user behavior on this system has violated the terms of service of this system, or may damage or hinder the rights and interests of this system, or your behavior has caused damage to anyone, as long as we believe that the disclosure of information is necessary to identify, contact or take legal action  .
 
-When a judicial unit or other competent authority requires the system to disclose specific personal data due to public safety, VPMS will consider the legal and formal procedures of the judicial unit and when it may cooperate with all users of this system for safety considerations.
+When a judicial unit or other competent authority requires the system to disclose specific personal data due to public safety, EstateManage.Net will consider the legal and formal procedures of the judicial unit and when it may cooperate with all users of this system for safety considerations.
 
 Account and personal data privacy protection
 

@@ -103,7 +103,7 @@ class _BookingPageState extends State<BookingPage> {
 
     resp = await Ajax.getClient(
       // clientCode: Globals.curClientJson?['code'],
-      id: Globals.curClientJson?['id'],
+      id: Globals.curEstateJson?['id'],
       fields: 'stripe_publishable_key,stripe_secret_key,payment_currency',
     );
     data = resp.data[0];
