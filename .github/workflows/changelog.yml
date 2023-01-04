@@ -1,3 +1,4 @@
+# Source: https://github.com/EddieHubCommunity/LinkFree/blob/main/.github/workflows/release.yml
 name: Releases
 on:
   push:
