@@ -182,23 +182,17 @@ Future<ApiResponse> scanEstateQrcode({required String code}) async {
 */
 
 // When a new user scan the QR-code on unit sheet
-Future<ApiResponse> scanUnitQrcode(
-    {required String userId,
-    required String cls,
-    required String unitId}) async {
+Future<ApiResponse> scanUnitQrcode(String qrcode) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
   developer.log('hostApiUri: ${Globals.hostApiUri}');
-  assert(userId.substring(0, 2) != 'V-'); // Make sure the 'V-' is removed
 
   // Get the unit ID
   final Map<String, dynamic> param = {
-    'userId': userId,
-    'cls': cls,
-    'unitId': unitId,
+    'url': qrcode,
   };
   Response response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/scanEstateQrcode2'),
+        Uri.parse('${Globals.hostApiUri}/api/nl/scanUnitQrcode'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

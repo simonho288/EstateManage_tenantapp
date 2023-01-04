@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
+// import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'dart:developer' as developer;
 import 'dart:convert' as convert;
@@ -16,9 +17,8 @@ import '../globals.dart' as Globals;
 // import '../components/navBar.dart';
 // import 'register.dart';
 
-const DEBUG_DIRECTUS_USERID = 'd7ea95ae-92cd-41c9-aa44-b042f6cccde7';
-const DEBUG_UNIT_CLASS = 'R'; // R, C, S
-const DEBUG_UNIT_ID = '6d346f75-90c0-4691-a228-a9a5e66699c7';
+const DEBUG_QRCODE =
+    'https://www.estatemanage.net/appdl/index.html/?a=adminuserid123&b=AprTvXkFWkxp6X765kfo3&c=aCfFPPdSR3tLJ2QRN5VXl';
 
 class ScanEstateQrPage extends StatefulWidget {
   const ScanEstateQrPage({Key? key}) : super(key: key);
@@ -36,8 +36,8 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     developer.log('ScanEstateQrPage initState');
 
     _controller = MobileScannerController(
-      facing: CameraFacing.back,
-    );
+        // facing: CameraFacing.back,
+        );
     super.initState();
     setState(() {});
   }
@@ -59,7 +59,7 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
 
     if (code.rawValue == null) return;
     String qrcode = code.rawValue!;
-    if (!qrcode.startsWith('V-')) {
+    if (!qrcode.endsWith('&c=aCfFPPdSR3tLJ2QRN5VXl')) {
       return;
     }
 
@@ -68,23 +68,8 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     String? title, message;
     late Ajax.ApiResponse resp;
 
-    // Extract the unit QRcode into 3 portions: estate id, property type, property id
-    List<String> codes = qrcode.split('|');
-    String directusUserId = codes[0];
-    directusUserId = directusUserId.substring(2); // Remove the V- prefix
-
-    if (codes.length != 3) {
-      // Restart the camera & return
-      _controller!.start();
-      return;
-    }
-
     try {
-      resp = await Ajax.scanUnitQrcode(
-        userId: directusUserId,
-        cls: codes[1],
-        unitId: codes[2],
-      );
+      resp = await Ajax.scanUnitQrcode(qrcode);
 
       if (resp.error != null) {
         throw resp.error!;
@@ -117,22 +102,24 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
 
     // Parse the response & make unit, client JSON
     // assert(resp.data['unit'] != null);
-    assert(resp.data['client'] != null);
+    assert(resp.data['id'] != null);
     assert(resp.data['token'] != null);
+    assert(resp.data['name'] != null);
     Map<String, dynamic> unitJson = resp.data['unit'];
-    unitJson['cls'] = codes[1];
-    unitJson['id'] = codes[2];
+    unitJson['id'] = '<TBD>';
+    unitJson['name'] = '<Unit name>';
     Globals.curUnitJson = unitJson;
-    Globals.curClientJson = resp.data['client'];
+    Globals.curEstateJson = resp.data['estate'];
     Globals.accessToken = resp.data['token'];
 
-    if (Globals.curClientJson!['membership_status'] == 'trial') {
+/*
+    if (Globals.curEstateJson!['membership_status'] == 'trial') {
       await Utils.showAlertDialog(
         context,
         'trialVersionTitle'.tr(),
         'trialVersion'.tr(),
       );
-    } else if (Globals.curClientJson!['membership_status'] != 'active') {
+    } else if (Globals.curEstateJson!['membership_status'] != 'active') {
       await Utils.showAlertDialog(
         context,
         'notEffective'.tr(),
@@ -140,11 +127,12 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
       );
       return;
     }
+*/
 
     // Save all the Json to local storage
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString(
-        'clientJson', convert.jsonEncode(Globals.curClientJson));
+        'estateJson', convert.jsonEncode(Globals.curEstateJson));
     await pref.setString('unitJson', convert.jsonEncode(Globals.curUnitJson));
     await pref.setString('accessToken', Globals.accessToken!);
 
@@ -190,7 +178,7 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     return Scaffold(
       // drawer: NavBar(),
       appBar: AppBar(
-        title: Text('VPMS Tenant App'),
+        title: Text('Estate Manage Tenant App'),
         centerTitle: true,
       ),
       body: Column(
@@ -230,27 +218,35 @@ class _SimulateQrScan extends StatelessWidget {
   Future<void> _onBtnSimulateScan(BuildContext context) async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
-    Ajax.ApiResponse resp = await Ajax.scanUnitQrcode(
-      userId: DEBUG_DIRECTUS_USERID,
-      cls: DEBUG_UNIT_CLASS,
-      unitId: DEBUG_UNIT_ID,
-    );
-
+    Ajax.ApiResponse resp = await Ajax.scanUnitQrcode(DEBUG_QRCODE);
     // Parse the response & make unit, client JSON
     // assert(resp.data['unit'] != null);
-    assert(resp.data['client'] != null);
-    assert(resp.data['token'] != null);
-    Map<String, dynamic> unitJson = resp.data['unit'];
-    unitJson['cls'] = DEBUG_UNIT_CLASS;
-    unitJson['id'] = DEBUG_UNIT_ID;
-    Globals.curUnitJson = unitJson;
-    Globals.curClientJson = resp.data['client'];
+    assert(resp.data['id'] != null); // unitId
+    assert(resp.data['token'] != null); // JWT
+    assert(resp.data['type'] != null); // Unit type
+    assert(resp.data['block'] != null);
+    assert(resp.data['floor'] != null);
+    assert(resp.data['number'] != null);
+    Map<String, dynamic> unitJson = {
+      'type': resp.data['type'],
+      'id': resp.data['id'],
+      'block': resp.data['block'],
+      'floor': resp.data['floor'],
+      'number': resp.data['number'],
+    };
+
     Globals.accessToken = resp.data['token'];
+    Globals.curUnitJson = unitJson;
+    Globals.curEstateJson = resp.data['estate'];
+
+    // Get the estate name with language
+    var nameJson = jsonDecode(Globals.curEstateJson!['name']);
+    Globals.curEstateJson!['name'] = nameJson[Globals.curLang];
 
     // Save all the Json to local storage
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString(
-        'clientJson', convert.jsonEncode(Globals.curClientJson));
+        'estateJson', convert.jsonEncode(Globals.curEstateJson));
     await pref.setString('unitJson', convert.jsonEncode(Globals.curUnitJson));
     await pref.setString('accessToken', Globals.accessToken!);
 
@@ -266,12 +262,8 @@ class _SimulateQrScan extends StatelessWidget {
         children: [
           Text('Debug Mode: Simulate QRcode scan\n',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Text('Directus User ID'),
-          Text('$DEBUG_DIRECTUS_USERID\n'),
-          Text('Class'),
-          Text('$DEBUG_UNIT_CLASS\n'),
           Text('Unit ID'),
-          Text('$DEBUG_UNIT_ID\n'),
+          Text('$DEBUG_QRCODE\n'),
           ElevatedButton(
             child: Text('Confirm QR-Code scan'),
             onPressed: () => _onBtnSimulateScan(context),

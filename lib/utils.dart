@@ -230,7 +230,6 @@ String buildUnitNameWithLangByJson(
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   // Convert the parameters to match buildUnitNameWithLangByCode().
-  String phase = unitJson['phase'] != null ? unitJson['phase'] : '';
   String block = unitJson['block'] != null ? unitJson['block'] : '';
   String floor = unitJson['floor'] != null ? unitJson['floor'] : '';
   String number = unitJson['number'];
@@ -239,16 +238,16 @@ String buildUnitNameWithLangByJson(
   late String unitType;
   late String propTypeName;
 
-  if (unitJson['cls'] == 'R') {
-    unitCode = '$phase|$block|$floor|$number';
+  if (unitJson['type'] == 'res') {
+    unitCode = '$block|$floor|$number';
     unitType = 'residences';
     propTypeName = 'resident'.tr();
-  } else if (unitJson['cls'] == 'C') {
-    unitCode = '$phase|$floor|$number';
+  } else if (unitJson['type'] == 'car') {
+    unitCode = '$block|$floor|$number';
     unitType = 'carparks';
     propTypeName = 'carpark'.tr();
-  } else if (unitJson['cls'] == 'S') {
-    unitCode = '$phase|$floor|$number';
+  } else if (unitJson['type'] == 'shp') {
+    unitCode = '$block|$floor|$number';
     unitType = 'shops';
     propTypeName = 'shop'.tr();
   }
@@ -273,19 +272,9 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
     if (unitType == 'residences') {
       // rstUnitType = 'resident'.tr();
       rstUnitType = 'Resident';
-      String stage = unitParts[0].trim();
-      String block = unitParts[1].trim();
-      String floor = unitParts[2].trim();
-      String room = unitParts[3].trim();
-      if (stage != '') {
-        if (Globals.curLang == 'en') {
-          rstUnitName += '${'stage2'.tr()} $stage, ';
-          // rstUnitName += 'Phase $stage, ';
-        } else {
-          rstUnitName += '$stage${'stage2'.tr()}, ';
-          // rstUnitName += 'Phase $stage, ';
-        }
-      }
+      String block = unitParts[0].trim();
+      String floor = unitParts[1].trim();
+      String room = unitParts[2].trim();
       if (block != '') {
         if (Globals.curLang == 'en') {
           rstUnitName += '${'block2'.tr()} $block, ';

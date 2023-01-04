@@ -53,3 +53,4 @@ assets/cfg/dev.json
 
 # Shell scripts
 *.sh
+.vscode/settings.json

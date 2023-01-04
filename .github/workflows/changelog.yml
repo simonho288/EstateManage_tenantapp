@@ -1,3 +1,4 @@
+# Source: https://github.com/BobAnkh/auto-generate-changelog
 name: Generate changelog
 on:
   release:

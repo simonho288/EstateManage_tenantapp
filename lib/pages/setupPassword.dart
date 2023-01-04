@@ -82,7 +82,7 @@ class _setupPasswordPageState extends State<SetupPasswordPage> {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     Ajax.ApiResponse resp = await Ajax.setUserPassword(
-      clientCode: Globals.curClientJson?['code'],
+      clientCode: Globals.curEstateJson?['code'],
       tenantId: Globals.curUserJson?['id'],
       password: password,
     );

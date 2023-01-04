@@ -24,7 +24,7 @@ Map<String, dynamic>? curUserJson;
 
 // Current client config record (collection client)
 String? accessToken;
-Map<String, dynamic>? curClientJson;
+Map<String, dynamic>? curEstateJson;
 Map<String, dynamic>? curUnitJson;
 
 // Configuration file name. dev.json or prod.json

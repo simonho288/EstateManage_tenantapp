@@ -71,11 +71,11 @@ void main() async {
   // Globals.curLang = data['langId'];
   // Locale locale = Utils.langIdToLocale(Globals.curLang);
   var defaultLocale = Locale('en', 'US');
-
+  Globals.curLang = 'en';
   // runApp(MainApp(locale));
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en', 'US')],
+      supportedLocales: [defaultLocale],
       path: 'assets/langs',
       fallbackLocale: defaultLocale,
       child: MainApp(defaultLocale),
@@ -211,7 +211,7 @@ class _MainAppState extends State<MainApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'VPMS Tenant App',
+      title: 'Estate Manage Tenant App',
       // theme: Theme.buildShrineTheme(),
       theme: ThemeData(
         fontFamily: 'NotoSansHK',
@@ -381,9 +381,11 @@ class _RootPageState extends State<RootPage> {
         rtnVal['accessToken'] = sn;
         Globals.accessToken = sn;
       }
-      sn = prefs.getString('clientJson');
+      sn = prefs.getString('estateJson');
       if (sn != null) {
-        Globals.curClientJson = jsonDecode(sn);
+        Globals.curEstateJson = jsonDecode(sn);
+        var nameJson = jsonDecode(Globals.curEstateJson!['name']);
+        Globals.curEstateJson!['name'] = nameJson[Globals.curLang];
       }
       sn = prefs.getString('unitJson');
       if (sn != null) {
@@ -434,7 +436,7 @@ class _RootPageState extends State<RootPage> {
     // State 0: Clean stage: Estate QR-Code not scanned -> clientJson=null
     // Stage 1: Estate QR-Code scanned -> clientJson!=null, userJson=null
     // Stage 2: User registered (status=pending,approved,normal,rejected,disabled)
-    if (Globals.curClientJson == null) {
+    if (Globals.curEstateJson == null) {
       // State 0
       home = ScanEstateQrPage();
     } else {
