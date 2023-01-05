@@ -117,24 +117,26 @@ class _RegisterPageState extends State<RegisterPage> {
       String? fcmDeviceToken = await Utils.generateDeviceToken();
 
       assert(Globals.curEstateJson != null);
-      String unitType = _unitJson['cls'] == 'R'
-          ? 'resident'
-          : _unitJson['cls'] == 'C'
-              ? 'carpark'
-              : 'shop';
-      String phase = _unitJson['phase'] ?? '';
+      /*
+      String unitType = _unitJson['type'];
+      // String unitType = _unitJson['type'] == 'res'
+      //     ? 'resident'
+      //     : _unitJson['type'] == 'car'
+      //         ? 'carpark'
+      //         : 'shop';
       String block = _unitJson['block'] ?? '';
       String floor = _unitJson['floor'] ?? '';
       String number = _unitJson['number'] ?? '';
+      */
       fcmDeviceToken = fcmDeviceToken != null ? fcmDeviceToken : '';
 
-      Ajax.ApiResponse resp = await Ajax.saveTenant(
+      Ajax.ApiResponse resp = await Ajax.createNewTenant(
         unitId: _unitJson['id'],
-        unitType: unitType,
-        phase: phase,
-        block: block,
-        floor: floor,
-        number: number,
+        userId: Globals.userId!,
+        // unitType: unitType,
+        // block: block,
+        // floor: floor,
+        // number: number,
         role: role,
         name: name,
         mobile: mobile,
@@ -160,16 +162,17 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         }
       } else {
-        // Save the userjson to SharedPreferences
-        Globals.curUserJson = resp.data as Map<String, dynamic>;
+        // Save the result from backend to SharedPreferences
+        Map<String, dynamic> result = resp.data as Map<String, dynamic>;
+        Globals.tenantId = result['tenantId'];
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString(
-            'userJson', convert.jsonEncode(Globals.curUserJson));
+        // await prefs.setString('userJson', convert.jsonEncode(Globals.curUserJson));
+        await prefs.setString('tenantId', Globals.tenantId!);
 
         await Utils.showAlertDialog(
           context,
           'success'.tr(),
-          'passwordSavedDspt'.tr(),
+          'confirmEmailSent'.tr(),
         );
 
         Navigator.pushReplacementNamed(context, '/login');
@@ -189,7 +192,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     // This is the widgets to be shown
     List<Widget> widgets = [];
-    const double SEPERATOR = 0.0;
+    const MARGIN1 = 10.0;
+    const MARGIN2 = 5.0;
 
     widgets.add(
       Center(
@@ -200,7 +204,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
-    widgets.add(SizedBox(height: SEPERATOR));
+    widgets.add(SizedBox(height: MARGIN2));
+    // TODO: Support multi-languages
+    /*
     widgets.add(
       DropdownButton<String>(
         value: _langDdv, // language dropdown value
@@ -226,6 +232,8 @@ class _RegisterPageState extends State<RegisterPage> {
         }).toList(),
       ),
     );
+    */
+    widgets.add(SizedBox(height: MARGIN1));
     widgets.add(
       RichText(
         textAlign: TextAlign.center,
@@ -247,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
-    widgets.add(SizedBox(height: 20));
+    widgets.add(SizedBox(height: MARGIN1));
     String msgConfirmUnit = 'pleaseVerifyUnitBelow'.tr();
     String unitName = Utils.buildUnitNameWithLangByJson(context, _unitJson);
     msgConfirmUnit = msgConfirmUnit.replaceFirst('{unit}', unitName);
@@ -273,7 +281,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
-    widgets.add(SizedBox(height: 20));
+    widgets.add(SizedBox(height: MARGIN1));
     widgets.add(
       Text(
         'pleaseSubmitFormBelow'.tr(),
@@ -286,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     // Select Role dropdown
-    widgets.add(SizedBox(height: SEPERATOR));
+    // widgets.add(SizedBox(height: MARGIN2));
     widgets.add(Row(children: [
       Container(
         width: 110,
@@ -305,7 +313,6 @@ class _RegisterPageState extends State<RegisterPage> {
     ]));
 
     // Next, input personal info -> name
-    widgets.add(SizedBox(height: SEPERATOR));
     widgets.add(
       TextFormField(
         controller: _ctrlrName,
@@ -321,51 +328,49 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
-    // Next, input personal info -> tel
-    widgets.add(SizedBox(height: SEPERATOR));
-    widgets.add(
-      TextFormField(
-        keyboardType: TextInputType.phone,
-        controller: _ctrlrMobile,
-        decoration: InputDecoration(
-          labelText: 'mobileNo'.tr() + '*',
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'cantEmpty'.tr();
-          }
-          if (!RegExp(r"^\b\d{8}\b$").hasMatch(value)) {
-            return 'invalidPhoneno'.tr();
-          }
-          return null;
-        },
-      ),
-    );
-
     // Next, input personal info -> email
-    widgets.add(SizedBox(height: SEPERATOR));
+    widgets.add(SizedBox(height: MARGIN2));
     widgets.add(
       TextFormField(
         keyboardType: TextInputType.emailAddress,
         controller: _ctrlrEmail,
         decoration: InputDecoration(
-          labelText: 'email'.tr(),
+          labelText: 'email'.tr() + '*',
         ),
         validator: (value) {
-          if (value != null && !value.isEmpty) {
-            if (!RegExp(
-                    r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$")
-                .hasMatch(value)) {
-              return 'invalidEmail'.tr();
-            }
+          if (value == null || value.isEmpty) {
+            return 'cantEmpty'.tr();
+          }
+          if (!RegExp(
+                  r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$")
+              .hasMatch(value)) {
+            return 'invalidEmail'.tr();
           }
           return null;
         },
       ),
     );
 
+    // Next, input personal info -> tel
+    widgets.add(SizedBox(height: MARGIN2));
+    widgets.add(
+      TextFormField(
+        keyboardType: TextInputType.phone,
+        controller: _ctrlrMobile,
+        decoration: InputDecoration(
+          labelText: 'mobileNo'.tr(),
+        ),
+        // validator: (value) {
+        //   if (!RegExp(r"^\b\d{8}\b$").hasMatch(value)) {
+        //     return 'invalidPhoneno'.tr();
+        //   }
+        //   return null;
+        // },
+      ),
+    );
+
     // Next, input personal info -> password
-    widgets.add(SizedBox(height: SEPERATOR));
+    widgets.add(SizedBox(height: MARGIN2));
     widgets.add(
       TextFormField(
         keyboardType: TextInputType.text,
@@ -388,7 +393,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     // Next, input personal info -> passwordVerify
-    widgets.add(SizedBox(height: SEPERATOR));
+    widgets.add(SizedBox(height: MARGIN2));
     widgets.add(
       TextFormField(
         keyboardType: TextInputType.text,
@@ -410,7 +415,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     // Next, the action button(s)
-    widgets.add(SizedBox(height: SEPERATOR));
+    widgets.add(SizedBox(height: MARGIN2));
     widgets.add(
       Row(
         children: [
@@ -433,7 +438,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
-    widgets.add(SizedBox(height: SEPERATOR));
+    widgets.add(SizedBox(height: MARGIN2));
     widgets.add(
       Text(
         Globals.appVersion != null ? 'v${Globals.appVersion!}' : '',

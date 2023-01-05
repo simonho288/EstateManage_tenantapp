@@ -353,13 +353,13 @@ Future<ApiResponse> submitJoinRequest(
 */
 
 // New version of submitJoinRequest()
-Future<ApiResponse> saveTenant(
+Future<ApiResponse> createNewTenant(
     {required String unitId,
-    required String unitType,
-    required String phase,
-    required String block,
-    required String floor,
-    required String number,
+    required String userId,
+    // required String unitType,
+    // required String block,
+    // required String floor,
+    // required String number,
     required String role,
     required String name,
     required String mobile,
@@ -370,11 +370,11 @@ Future<ApiResponse> saveTenant(
 
   final Map<String, dynamic> param = {
     'unitId': unitId,
-    'unitType': unitType,
-    'phase': phase,
-    'block': block,
-    'floor': floor,
-    'number': number,
+    // 'unitType': unitType,
+    // 'block': block,
+    // 'floor': floor,
+    // 'number': number,
+    'userId': userId,
     'role': role,
     'name': name,
     'mobile': mobile,
@@ -382,18 +382,17 @@ Future<ApiResponse> saveTenant(
     'password': password,
     'fcmDeviceToken': fcmDeviceToken,
   };
-  // final String ccEnc = Utils.encryptStringAES256CTR(Globals.accessToken);
 
   final response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/saveTenant'),
+        Uri.parse('${Globals.hostApiUri}/api/nl/createNewTenant'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: 'Apikey ' + Globals.accessToken!,
+          // HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
+        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 

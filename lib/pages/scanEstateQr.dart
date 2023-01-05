@@ -221,7 +221,8 @@ class _SimulateQrScan extends StatelessWidget {
     Ajax.ApiResponse resp = await Ajax.scanUnitQrcode(DEBUG_QRCODE);
     // Parse the response & make unit, client JSON
     // assert(resp.data['unit'] != null);
-    assert(resp.data['id'] != null); // unitId
+    assert(resp.data['userId'] != null); // unitId
+    assert(resp.data['unitId'] != null); // unitId
     assert(resp.data['token'] != null); // JWT
     assert(resp.data['type'] != null); // Unit type
     assert(resp.data['block'] != null);
@@ -229,26 +230,28 @@ class _SimulateQrScan extends StatelessWidget {
     assert(resp.data['number'] != null);
     Map<String, dynamic> unitJson = {
       'type': resp.data['type'],
-      'id': resp.data['id'],
+      'id': resp.data['unitId'],
       'block': resp.data['block'],
       'floor': resp.data['floor'],
       'number': resp.data['number'],
     };
 
+    Globals.userId = resp.data['userId'];
     Globals.accessToken = resp.data['token'];
     Globals.curUnitJson = unitJson;
     Globals.curEstateJson = resp.data['estate'];
 
-    // Get the estate name with language
-    var nameJson = jsonDecode(Globals.curEstateJson!['name']);
-    Globals.curEstateJson!['name'] = nameJson[Globals.curLang];
-
     // Save all the Json to local storage
     SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('userId', Globals.userId!);
     await pref.setString(
         'estateJson', convert.jsonEncode(Globals.curEstateJson));
     await pref.setString('unitJson', convert.jsonEncode(Globals.curUnitJson));
     await pref.setString('accessToken', Globals.accessToken!);
+
+    // Get the estate name with language
+    var nameJson = jsonDecode(Globals.curEstateJson!['name']);
+    Globals.curEstateJson!['name'] = nameJson[Globals.curLang];
 
     Navigator.of(context).pushReplacementNamed('/register');
   }

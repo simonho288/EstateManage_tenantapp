@@ -381,6 +381,14 @@ class _RootPageState extends State<RootPage> {
         rtnVal['accessToken'] = sn;
         Globals.accessToken = sn;
       }
+      sn = prefs.getString('userId');
+      if (sn != null) {
+        Globals.userId = sn;
+      }
+      sn = prefs.getString('tenantId');
+      if (sn != null) {
+        Globals.tenantId = sn;
+      }
       sn = prefs.getString('estateJson');
       if (sn != null) {
         Globals.curEstateJson = jsonDecode(sn);

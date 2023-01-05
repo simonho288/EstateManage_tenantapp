@@ -23,6 +23,8 @@ const Color primaryLighterColor2 = const Color(0xFFF9F0DF);
 Map<String, dynamic>? curUserJson;
 
 // Current client config record (collection client)
+String? userId;
+String? tenantId;
 String? accessToken;
 Map<String, dynamic>? curEstateJson;
 Map<String, dynamic>? curUnitJson;
