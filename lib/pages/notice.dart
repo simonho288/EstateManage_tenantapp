@@ -56,7 +56,7 @@ class _NoticePageState extends State<NoticePage> {
 
   Future<Map<String, dynamic>> _loadInitialData() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
-    assert(Globals.curUserJson != null);
+    assert(Globals.curTenantJson != null);
 
     assert(_loop.paramsJson != null);
     var loopParams = convert.jsonDecode(_loop.paramsJson!);

@@ -46,7 +46,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
   Future<Map<String, dynamic>> _loadInitialData() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
-    assert(Globals.curUserJson != null);
+    assert(Globals.curTenantJson != null);
 
     assert(widget._loop.paramsJson != null);
     _loopJson = convert.jsonDecode(widget._loop.paramsJson!);

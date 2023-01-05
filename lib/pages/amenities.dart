@@ -43,7 +43,7 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
 
   Future<Map<String, dynamic>> _loadInitialData() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
-    assert(Globals.curUserJson != null);
+    assert(Globals.curTenantJson != null);
 
     Map<String, dynamic> rtnVal = {}; // Return JSON (equivalent _datum)
 

@@ -430,6 +430,7 @@ Future<ApiResponse> setUserPassword({
 
 Future<ApiResponse> tenantLogin({
   // required String clientCode,
+  required String tenantId,
   required String mobileOrEmail,
   required String password,
   required String? fcmDeviceToken,
@@ -437,7 +438,8 @@ Future<ApiResponse> tenantLogin({
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   final Map<String, dynamic> param = {
-    'mobileEmail': mobileOrEmail,
+    'tenantId': tenantId,
+    'mobileOrEmail': mobileOrEmail,
     'password': password,
     'fcmDeviceToken': fcmDeviceToken,
   };
@@ -445,11 +447,10 @@ Future<ApiResponse> tenantLogin({
 
   final response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/login'),
+        Uri.parse('${Globals.hostApiUri}/api/nl/tenant/auth'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: 'Apikey ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
         encoding: convert.Encoding.getByName('utf-8'),
@@ -519,7 +520,7 @@ Future<ApiResponse> getLoops({
   required List<String> excludeIDs,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
-  assert(Globals.curUserJson != null);
+  assert(Globals.curTenantJson != null);
 
   // Directus query filter
   // Doc: https://docs.directus.io/reference/api/query/#filter
@@ -837,21 +838,15 @@ Future<ApiResponse> getOneAmenity({
   return _returnResponse(response);
 }
 
-Future<ApiResponse> getClient({
+Future<ApiResponse> getEstate({
   // required String clientCode,
   required String id,
-  required String fields,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  Map<String, dynamic> filter = {
-    'id': id,
-  };
-
   // Calling Directus API ItemServices
   final response = await http.get(
-    Uri.parse(
-        '${Globals.hostApiUri}/items/clients?filter=${convert.jsonEncode(filter)}&fields=$fields'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getEstateAfterLoggedIn/${id}'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

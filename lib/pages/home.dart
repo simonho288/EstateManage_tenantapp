@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       // Get any new records where are exclude existing records
       Ajax.ApiResponse resp = await Ajax.getLoops(
         // clientCode: Globals.curClientJson?['code'],
-        tenantId: Globals.curUserJson?['id'],
+        tenantId: Globals.curTenantJson?['id'],
         excludeIDs: existingIDs,
       );
       List<Map<String, dynamic>> remoteData =
@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     // Determine the estate background image
-    String? imageUrl = Globals.curEstateJson?['estate_image_app'];
+    String? imageUrl = Globals.curEstateJson?['estateImageApp'];
     if (imageUrl == null) {
       imageUrl = Globals
           .defaultEstateImage; // When the user didn't upload their estate image

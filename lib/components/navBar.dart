@@ -17,11 +17,12 @@ class NavBar extends StatelessWidget {
   Widget buildHeader() {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
-    assert(Globals.curUserJson != null);
-    String name = Globals.curUserJson?['name'] ?? '';
+    assert(Globals.curTenantJson != null);
+    String name = Globals.curTenantJson?['name'] ?? '';
     // String name = '陳大文';
-    String email =
-        Globals.curUserJson?['mobile'] ?? Globals.curUserJson?['email'] ?? '';
+    String email = Globals.curTenantJson?['mobile'] ??
+        Globals.curTenantJson?['email'] ??
+        '';
     // String email = '9876-5432';
 
     return UserAccountsDrawerHeader(
@@ -171,11 +172,11 @@ class NavBar extends StatelessWidget {
 
     if (rst) {
       // Call backend to sign out
-      await Ajax.tenantLogout(tenantId: Globals.curUserJson?['id']);
+      await Ajax.tenantLogout(tenantId: Globals.curTenantJson?['id']);
 
       // Clean the shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      Globals.curUserJson = null;
+      Globals.curTenantJson = null;
       await prefs.remove('userJson');
 
       final dbPath =

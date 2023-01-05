@@ -103,14 +103,14 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     // Parse the response & make unit, client JSON
     // assert(resp.data['unit'] != null);
     assert(resp.data['id'] != null);
-    assert(resp.data['token'] != null);
+    // assert(resp.data['token'] != null);
     assert(resp.data['name'] != null);
     Map<String, dynamic> unitJson = resp.data['unit'];
     unitJson['id'] = '<TBD>';
     unitJson['name'] = '<Unit name>';
     Globals.curUnitJson = unitJson;
     Globals.curEstateJson = resp.data['estate'];
-    Globals.accessToken = resp.data['token'];
+    // Globals.accessToken = resp.data['token'];
 
 /*
     if (Globals.curEstateJson!['membership_status'] == 'trial') {
@@ -134,7 +134,7 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     await pref.setString(
         'estateJson', convert.jsonEncode(Globals.curEstateJson));
     await pref.setString('unitJson', convert.jsonEncode(Globals.curUnitJson));
-    await pref.setString('accessToken', Globals.accessToken!);
+    // await pref.setString('accessToken', Globals.accessToken!);
 
     Timer(Duration(milliseconds: 500), () {
       Navigator.of(context).pushReplacementNamed('/register');
@@ -223,7 +223,7 @@ class _SimulateQrScan extends StatelessWidget {
     // assert(resp.data['unit'] != null);
     assert(resp.data['userId'] != null); // unitId
     assert(resp.data['unitId'] != null); // unitId
-    assert(resp.data['token'] != null); // JWT
+    // assert(resp.data['token'] != null); // JWT
     assert(resp.data['type'] != null); // Unit type
     assert(resp.data['block'] != null);
     assert(resp.data['floor'] != null);
@@ -237,7 +237,7 @@ class _SimulateQrScan extends StatelessWidget {
     };
 
     Globals.userId = resp.data['userId'];
-    Globals.accessToken = resp.data['token'];
+    // Globals.accessToken = resp.data['token'];
     Globals.curUnitJson = unitJson;
     Globals.curEstateJson = resp.data['estate'];
 
@@ -247,7 +247,7 @@ class _SimulateQrScan extends StatelessWidget {
     await pref.setString(
         'estateJson', convert.jsonEncode(Globals.curEstateJson));
     await pref.setString('unitJson', convert.jsonEncode(Globals.curUnitJson));
-    await pref.setString('accessToken', Globals.accessToken!);
+    // await pref.setString('accessToken', Globals.accessToken!);
 
     // Get the estate name with language
     var nameJson = jsonDecode(Globals.curEstateJson!['name']);

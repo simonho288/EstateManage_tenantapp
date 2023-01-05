@@ -348,7 +348,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
   void _changeTimeSlotsStatus() {
     developer.log(StackTrace.current.toString().split('\n')[0]);
     assert(_slots.length > 0);
-    String curTenantId = Globals.curUserJson!['id'];
+    String curTenantId = Globals.curTenantJson!['id'];
 
     for (int i = 0; i < _slots.length; ++i) {
       TimeSlot ts = _slots[i];
@@ -463,7 +463,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
     Models.TenantAmenityBooking booking = Models.TenantAmenityBooking(
       id: _uuid.v4(),
       dateCreated: DateTime.now(),
-      tenantId: Globals.curUserJson?['id'],
+      tenantId: Globals.curTenantJson?['id'],
       amenityId: _amenity.id,
       bookingTimeBasic: _amenity.bookingTimeBasic,
       date: DateFormat('yyyy-MM-dd').format(_tarDate),

@@ -18,6 +18,7 @@ import 'include.dart';
 import 'constants.dart' as Constants;
 import 'globals.dart' as Globals;
 import 'pages/receipt.dart';
+import 'pages/suspended.dart';
 import 'utils.dart' as Utils;
 import 'ajax.dart' as Ajax;
 // import 'theme.dart' as Theme;
@@ -385,9 +386,9 @@ class _RootPageState extends State<RootPage> {
       if (sn != null) {
         Globals.userId = sn;
       }
-      sn = prefs.getString('tenantId');
+      sn = prefs.getString('tenantJson');
       if (sn != null) {
-        Globals.tenantId = sn;
+        Globals.curTenantJson = jsonDecode(sn);
       }
       sn = prefs.getString('estateJson');
       if (sn != null) {
@@ -401,21 +402,21 @@ class _RootPageState extends State<RootPage> {
       }
       sn = prefs.getString('userJson');
       if (sn != null) {
-        Globals.curUserJson = jsonDecode(sn);
+        Globals.curTenantJson = jsonDecode(sn);
         // rtnVal['userJson'] = userJson;
 
-        if (Globals.curUserJson!['status'] == 'pending') {
+        if (Globals.curTenantJson!['status'] == 'pending') {
           // Is the user approved;
           Ajax.ApiResponse resp = await Ajax.getTenantStatus(
             // clientCode: clientJson!['code'],
-            tenantId: Globals.curUserJson!['id'],
+            tenantId: Globals.curTenantJson!['id'],
           );
 
           if (resp.data.length == 0) {
             // Remove the userJson from the return value
             rtnVal['userJson'] = null;
           } else {
-            Globals.curUserJson!['status'] = resp.data[0]['status'];
+            Globals.curTenantJson!['status'] = resp.data[0]['status'];
           }
         }
       }
@@ -448,19 +449,22 @@ class _RootPageState extends State<RootPage> {
       // State 0
       home = ScanEstateQrPage();
     } else {
-      if (Globals.curUserJson == null) {
+      if (Globals.curTenantJson == null) {
         // State 1
         home = RegisterPage();
       } else {
+        home = LoginPage();
+        /*
         // State 2
-        String status = Globals.curUserJson?['status'];
-        if (status == 'approved') {
-          home = SetupPasswordPage();
-        } else if (status == 'pending') {
+        int status = Globals.curTenantJson?['status'];
+        if (status == 0) {
           home = PendingPage();
-        } else {
+        } else if (status == 2) {
+          home = SuspendedPage();
+        } else if (status == 1) {
           home = LoginPage();
         }
+        */
       }
     }
 

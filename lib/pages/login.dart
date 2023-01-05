@@ -3,6 +3,7 @@
  * https://youtu.be/ExKYjqgswJg
  */
 
+import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:convert' as convert;
 import 'package:easy_localization/easy_localization.dart';
@@ -82,7 +83,7 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 20),
+            SizedBox(height: 50),
             // Heading
             Text(
               'loginHeader'.tr(),
@@ -172,75 +173,53 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    _isLoginPressed = true;
+    _isLoginPressed = true; // prevent re-entrant
 
     Map<String, dynamic> values = _formKey.currentState!.value;
     // Map<String, dynamic> values = _formKey.currentState!.value;
-    String mobile = values['name'];
+    String mobileOrEmail = values['name'];
     String password = values['password'];
     bool isRemember = values['remember'];
     String? fcmDeviceToken = await Utils.generateDeviceToken();
 
     Ajax.ApiResponse resp = await Ajax.tenantLogin(
-      // clientCode: Globals.curClientJson?['code'],
-      mobileOrEmail: mobile,
+      tenantId: Globals.curTenantJson!['id'],
+      mobileOrEmail: mobileOrEmail,
       password: password,
       fcmDeviceToken: fcmDeviceToken,
     );
 
     if (resp.error != null) {
-      await Utils.showAlertDialog(
-        context,
-        'loginFailed'.tr(),
-        'invalidMobileNoOrEmail'.tr(),
-      );
-      _isLoginPressed = false;
-      return;
-    }
-
-    // User login return status, any update?
-    Map<String, dynamic> rst = resp.data;
-    if (rst['failed'] != null) {
-      if (rst['failed'] == 'tenant_not_found' ||
-          rst['failed'] == 'invalid_password') {
+      String err = resp.error!;
+      if (err == 'tenant_not_found' || err == 'invalid_password') {
         await Utils.showAlertDialog(
           context,
           'loginFailed'.tr(),
           'invalidMobileNoOrEmail'.tr(),
         );
-      } else if (rst['failed'] == 'account_pending') {
+      } else if (err == 'account_pending') {
         await Utils.showAlertDialog(
           context,
           'loginFailed'.tr(),
           'accountPendingApproval'.tr(),
         );
-      } else if (rst['failed'] == 'password_not_setup') {
-        Globals.curUserJson?['status'] = 'approved';
-        await _prefs.setString(
-            'userJson', convert.jsonEncode(Globals.curUserJson));
-        Navigator.pushReplacementNamed(context, '/setupPassword');
-      } else if (rst['failed'] == 'account_rejected') {
-        Globals.curUserJson?['status'] = 'rejected';
-        await _prefs.setString(
-            'userJson', convert.jsonEncode(Globals.curUserJson));
-        Navigator.pushReplacementNamed(context, '/rejectedPage');
-      } else if (rst['failed'] == 'account_disabled') {
+      } else if (err == 'account_suspended') {
         await Utils.showAlertDialog(
           context,
-          'forbidden'.tr(),
-          'accountDisabled'.tr(),
+          'loginFailed'.tr(),
+          'accountIsSuspended'.tr(),
         );
       }
+
+      await Utils.showAlertDialog(
+        context,
+        'sysError'.tr(),
+        'serverError'.tr() + err.toString(),
+      );
     } else {
-      Map<String, dynamic> user = rst['success'];
+      Map<String, dynamic> data = resp.data;
 
-      // Store the remote user data
-      Globals.curUserJson = user;
-      await _prefs.setString(
-          'userJson', convert.jsonEncode(Globals.curUserJson));
-
-      // Save & replace userJson
-      Globals.curUserJson = user;
+      Globals.accessToken = data['token']; // jwt token
       if (isRemember) {
         if (_password != password) {
           await _prefs.setString(
@@ -251,13 +230,12 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       // Read the client image background
-      Ajax.ApiResponse resp = await Ajax.getClient(
-        // clientCode: clientJson!['code'],
+      resp = await Ajax.getEstate(
         id: Globals.curEstateJson?['id'],
-        fields: 'estate_image_app',
       );
-      Map<String, dynamic> data = resp.data[0] as Map<String, dynamic>;
-      Globals.curEstateJson?['estate_image_app'] = data['estate_image_app'];
+      data = resp.data;
+      Map<String, dynamic> estate = jsonDecode(data['estate']);
+      Globals.curEstateJson?['estateImageApp'] = estate['estateImageApp'];
 
       // Navigator.pushReplacementNamed(context, '/home');
       Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
@@ -266,6 +244,7 @@ class _LoginPageState extends State<LoginPage> {
     _isLoginPressed = false;
   }
 
+/* Only supported English at the moment
   Future<void> _onLangChanged(dynamic value) async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
@@ -277,9 +256,10 @@ class _LoginPageState extends State<LoginPage> {
     Locale loc = Utils.langIdToLocale(value);
     MainApp.changeLanguage(context, loc);
   }
+*/
 
   Body _renderBody() {
-    final name = Globals.curUserJson?['mobile'] ?? '';
+    final email = Globals.curTenantJson?['email'] ?? '';
     final password = _password ?? '';
     final remember = password != '';
 
@@ -291,10 +271,8 @@ class _LoginPageState extends State<LoginPage> {
             autovalidateMode: AutovalidateMode.disabled,
             child: Column(
               children: <Widget>[
-                Text(
-                  Globals.appVersion != null ? 'v${Globals.appVersion!}' : '',
-                  style: TextStyle(fontSize: 12.0),
-                ),
+                SizedBox(height: 10),
+                /* Only support English at this moment
                 DropdownContainer(
                   child: FormBuilderDropdown(
                     name: 'language',
@@ -317,10 +295,11 @@ class _LoginPageState extends State<LoginPage> {
                     items: _ddiLanguages,
                   ),
                 ),
+                */
                 TextFieldContainer(
                   child: FormBuilderTextField(
                     name: 'name',
-                    initialValue: name,
+                    initialValue: email,
                     decoration: InputDecoration(
                       icon: Icon(
                         Icons.person,
@@ -424,9 +403,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    String title = 'programTitle'.tr();
+    if (Globals.appVersion != null) {
+      title += ' v' + Globals.appVersion.toString();
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('programTitle'.tr()),
+        title: Text(title),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,

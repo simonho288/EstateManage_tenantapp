@@ -83,7 +83,7 @@ class _setupPasswordPageState extends State<SetupPasswordPage> {
 
     Ajax.ApiResponse resp = await Ajax.setUserPassword(
       clientCode: Globals.curEstateJson?['code'],
-      tenantId: Globals.curUserJson?['id'],
+      tenantId: Globals.curTenantJson?['id'],
       password: password,
     );
 
@@ -91,10 +91,10 @@ class _setupPasswordPageState extends State<SetupPasswordPage> {
     String status = resp.data;
     if (status == 'normal') {
       // Change the user status & save it
-      Globals.curUserJson?['status'] = status;
+      Globals.curTenantJson?['status'] = status;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString(
-          'userJson', convert.jsonEncode(Globals.curUserJson));
+          'userJson', convert.jsonEncode(Globals.curTenantJson));
 
       await Utils.showAlertDialog(
         context,

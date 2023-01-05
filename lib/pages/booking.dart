@@ -57,7 +57,7 @@ class _BookingPageState extends State<BookingPage> {
 
   Future<Map<String, dynamic>> _loadInitialData() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
-    assert(Globals.curUserJson != null);
+    assert(Globals.curTenantJson != null);
 
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
     assert(_loop.paramsJson != null);
@@ -101,10 +101,10 @@ class _BookingPageState extends State<BookingPage> {
       contactWhatsapp: data['contact_whatsapp'],
     );
 
-    resp = await Ajax.getClient(
+    resp = await Ajax.getEstate(
       // clientCode: Globals.curClientJson?['code'],
       id: Globals.curEstateJson?['id'],
-      fields: 'stripe_publishable_key,stripe_secret_key,payment_currency',
+      // fields: 'stripe_publishable_key,stripe_secret_key,payment_currency',
     );
     data = resp.data[0];
     _client = Models.Client(

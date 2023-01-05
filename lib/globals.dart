@@ -19,13 +19,13 @@ const Color primaryLightColor = const Color(0xFFF0CF93);
 const Color primaryLighterColor = const Color(0xFFF9ECD5);
 const Color primaryLighterColor2 = const Color(0xFFF9F0DF);
 
-// Current logged-in user json
-Map<String, dynamic>? curUserJson;
-
 // Current client config record (collection client)
 String? userId;
-String? tenantId;
+// String? tenantId;
 String? accessToken;
+
+// Saved database records
+Map<String, dynamic>? curTenantJson;
 Map<String, dynamic>? curEstateJson;
 Map<String, dynamic>? curUnitJson;
 

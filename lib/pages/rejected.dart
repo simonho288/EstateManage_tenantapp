@@ -15,15 +15,15 @@ class RejectedPage extends StatelessWidget {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Ajax.ApiResponse resp = await Ajax.getTenantStatus(
-      tenantId: Globals.curUserJson!['id'],
+      tenantId: Globals.curTenantJson!['id'],
     );
 
     String newStatus = resp.data[0]['status'];
     if (newStatus == 'approved') {
       // Save the new status to SharedPreferences
-      Globals.curUserJson?['status'] = newStatus;
+      Globals.curTenantJson?['status'] = newStatus;
       await prefs.setString(
-          'userJson', convert.jsonEncode(Globals.curUserJson));
+          'userJson', convert.jsonEncode(Globals.curTenantJson));
 
       await Utils.showAlertDialog(
         context,
@@ -34,9 +34,9 @@ class RejectedPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, '/setupPassword');
     } else if (newStatus == 'normal') {
       // Save the new status to SharedPreferences
-      Globals.curUserJson?['status'] = newStatus;
+      Globals.curTenantJson?['status'] = newStatus;
       await prefs.setString(
-          'userJson', convert.jsonEncode(Globals.curUserJson));
+          'userJson', convert.jsonEncode(Globals.curTenantJson));
 
       await Utils.showAlertDialog(
         context,
@@ -55,7 +55,7 @@ class RejectedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic>? userJson = Globals.curUserJson;
+    Map<String, dynamic>? userJson = Globals.curTenantJson;
 
     late String unitType;
     if (userJson?['unit_type'] == 'resident') {
@@ -148,13 +148,13 @@ class RejectedPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Name: ${Globals.curUserJson?['name']}',
+                              'Name: ${Globals.curTenantJson?['name']}',
                             ),
                             Text(
-                              'Mobile: ${Globals.curUserJson?['mobile']}',
+                              'Mobile: ${Globals.curTenantJson?['mobile']}',
                             ),
                             Text(
-                              'Email: ${Globals.curUserJson?['email']}',
+                              'Email: ${Globals.curTenantJson?['email']}',
                             ),
                           ],
                         ),

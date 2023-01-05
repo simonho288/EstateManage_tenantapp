@@ -146,12 +146,12 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (resp.error != null) {
-        if (resp.error == 'tenant_exist') {
+        if (resp.error == 'email_exist') {
           // Tenant exists
           await Utils.showAlertDialog(
             context,
             'forbidden'.tr(),
-            'tenantPhoneExist'.tr(),
+            'tenantEmailExist'.tr(),
           );
         } else {
           // Tenant exists
@@ -164,10 +164,17 @@ class _RegisterPageState extends State<RegisterPage> {
       } else {
         // Save the result from backend to SharedPreferences
         Map<String, dynamic> result = resp.data as Map<String, dynamic>;
-        Globals.tenantId = result['tenantId'];
+        String tenantId = result['tenantId'];
+        Globals.curTenantJson = {
+          'id': tenantId,
+          'name': name,
+          'email': email,
+          'mobile': mobile,
+          'role': role,
+        };
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        // await prefs.setString('userJson', convert.jsonEncode(Globals.curUserJson));
-        await prefs.setString('tenantId', Globals.tenantId!);
+        await prefs.setString(
+            'tenantJson', convert.jsonEncode(Globals.curTenantJson));
 
         await Utils.showAlertDialog(
           context,
