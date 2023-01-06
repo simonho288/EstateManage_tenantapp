@@ -400,8 +400,8 @@ String encryptStringAES256CTR(val) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
   assert(val != null);
 
-  final encrypt.Key key = encrypt.Key.fromBase64(Constants.ENC_SECRET_KEY);
-  final encrypt.IV iv = encrypt.IV.fromBase64(Constants.ENC_IV);
+  final encrypt.Key key = encrypt.Key.fromBase64(Globals.encryptSecretKey);
+  final encrypt.IV iv = encrypt.IV.fromBase64(Globals.encryptIv);
 
   // AES256, Mode = CTR, No Padding, https://pub.dev/packages/encrypt
   final algorithm = encrypt.AES(key, mode: encrypt.AESMode.ctr, padding: null);
@@ -414,8 +414,8 @@ String encryptStringAES256CTR(val) {
 String decryptStringAES256CTR(String val) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  final encrypt.Key key = encrypt.Key.fromBase64(Constants.ENC_SECRET_KEY);
-  final encrypt.IV iv = encrypt.IV.fromBase64(Constants.ENC_IV);
+  final encrypt.Key key = encrypt.Key.fromBase64(Globals.encryptSecretKey);
+  final encrypt.IV iv = encrypt.IV.fromBase64(Globals.encryptIv);
 
   // AES256, Mode = CTR, No Padding, https://pub.dev/packages/encrypt
   final algorithm = encrypt.AES(key, mode: encrypt.AESMode.ctr, padding: null);

@@ -103,10 +103,11 @@ Future<void> _initialize() async {
   Globals.isDebug = kDebugMode;
   String configFileName = Globals.configFileName = kDebugMode ? 'dev' : 'prod';
 
-  // Load config json
+  // Load config json file
   developer
       .log('Loading config file: /assets/cfg/${Globals.configFileName}.json');
   await GlobalConfiguration().loadFromAsset(configFileName);
+  await GlobalConfiguration().loadFromAsset('secrets');
 
   // Firebase initialization
   await Firebase.initializeApp();
@@ -156,9 +157,9 @@ Future<Map<String, dynamic>> _loadStartupData() async {
   final prefs = await SharedPreferences.getInstance();
 
   Globals.hostApiUri = GlobalConfiguration().getValue("hostApiUri");
-  // Globals.hostApiUri = prefs.getString('hostApiUri');
-  // Globals.hostSocketUri = prefs.getString('hostSocketUri');
   Globals.hostS3Base = GlobalConfiguration().getValue('hostS3Base');
+  Globals.encryptSecretKey = GlobalConfiguration().getValue('enc_secret_key');
+  Globals.encryptIv = GlobalConfiguration().getValue('enc_iv');
 
   // developer.log(
   //     'hostApiUri: ${Globals.hostApiUri}, hostSocketUri: ${Globals.hostSocketUri}, hostS3Base: ${Globals.hostS3Base}');

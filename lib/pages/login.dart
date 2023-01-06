@@ -209,19 +209,20 @@ class _LoginPageState extends State<LoginPage> {
           'loginFailed'.tr(),
           'accountIsSuspended'.tr(),
         );
+      } else {
+        await Utils.showAlertDialog(
+          context,
+          'sysError'.tr(),
+          'serverError'.tr() + err.toString(),
+        );
       }
-
-      await Utils.showAlertDialog(
-        context,
-        'sysError'.tr(),
-        'serverError'.tr() + err.toString(),
-      );
     } else {
       Map<String, dynamic> data = resp.data;
 
       Globals.accessToken = data['token']; // jwt token
       if (isRemember) {
         if (_password != password) {
+          // Encrypt the password
           await _prefs.setString(
               'loginPassword', Utils.encryptStringAES256CTR(password));
         }

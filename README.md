@@ -19,6 +19,22 @@ This is the frontend mobile app of the [EstateManage.Net platform](https://www.e
 
 4. Modify the `assets/cfg/prod.json` & enter the values for your production environment.
 
+5. Create a secret key file at `assets/cfg/secrets.json`. The contents are:
+
+```json
+{
+  "enc_secret_key": "<you generate base 64 encryption key>",
+  "enc_iv": "<you generate length 16 encryption key>"
+}
+```
+
+Note: To generate above encryption keys, please follow the [Dart encrypt package](https://pub.dev/packages/encrypt). After the package installed, enter below commands:
+
+```sh
+$ secure-random -b 64 # copy&paste the value to above 'enc_secret_key'
+$ secure-random -l 16 # copy&paste the value to above 'enc_iv'
+```
+
 ## Debug The App
 
 In Visual Studio Code, select the "Debug Mode" & press [F5] to start the debugger.

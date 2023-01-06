@@ -522,6 +522,26 @@ Future<ApiResponse> getLoops({
   developer.log(StackTrace.current.toString().split('\n')[0]);
   assert(Globals.curTenantJson != null);
 
+  final Map<String, dynamic> param = {
+    'excludeIDs': excludeIDs,
+  };
+
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/getHomepageLoops'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(param),
+        encoding: convert.Encoding.getByName('utf-8'),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+
+/*
   // Directus query filter
   // Doc: https://docs.directus.io/reference/api/query/#filter
   Map<String, dynamic> filter = {
@@ -548,21 +568,6 @@ Future<ApiResponse> getLoops({
   const fields = 'date_created,id,title_id,params_json,url,type,tenant_sender';
   const sort = 'date_created';
 
-  /*
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'loops',
-    'query': {
-      'filter': filter,
-      'sort': 'date_created',
-      'fields': fields,
-    },
-  };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-  */
-
   final response = await http.get(
     Uri.parse(
         '${Globals.hostApiUri}/items/loops?filter=${convert.jsonEncode(filter)}&fields=$fields&sort=$sort'),
@@ -576,69 +581,8 @@ Future<ApiResponse> getLoops({
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
-}
-/* backup
-Future<ApiResponse> getLoops({
-  required String clientCode,
-  required String tenantId,
-  required List<int> excludeIDs,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-  assert(Globals.curUserJson != null);
-
-  // Directus query filter
-  // Doc: https://docs.directus.io/reference/api/query/#filter
-  Map<String, dynamic> filter = {
-    '_and': [
-      {
-        'receiver': {'_eq': tenantId},
-      } as Map<String, dynamic>, // * MUST need this casting
-      {
-        'visible_date': {
-          '_lte': DateFormat('yyyy-MM-dd').format(DateTime.now())
-        },
-      } as Map<String, dynamic>, // * MUST need this casting
-    ]
-  };
-
-  // If there're existing IDs to exclude, use 'not in': _nin
-  if (excludeIDs.length > 0) {
-    filter['_and'].add(
-      {
-        'id': {'_nin': excludeIDs}
-      } as Map<String, dynamic>, // * MUST need this casting
-    );
-  }
-
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'loops',
-    'query': {
-      'filter': filter,
-      'sort': 'date_created',
-      'fields': 'date_created,id,title_id,params_json,url,type,tenant_sender',
-    },
-  };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-
-  final response = await http
-      .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/dbGet'),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: 'Apikey ' + ccEnc,
-        },
-        body: convert.jsonEncode({'s': s}),
-        encoding: convert.Encoding.getByName('utf-8'),
-      )
-      .timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-} // getLoops()
 */
+}
 
 /*
 Future<ApiResponse> getUserNotifications({

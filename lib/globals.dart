@@ -60,3 +60,7 @@ late Database sqlite;
 
 // Homepage widget
 late HomePage homePage;
+
+// // copy from assets/secret/keys.json. See README.md Installation section
+late String encryptSecretKey;
+late String encryptIv;

@@ -50,6 +50,7 @@ ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
 lib/firebase_options.dart
 assets/cfg/dev.json
+assets/cfg/secrets.json
 
 # Shell scripts
 *.sh
