@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
     String? fcmDeviceToken = await Utils.generateDeviceToken();
 
     Ajax.ApiResponse resp = await Ajax.tenantLogin(
-      tenantId: Globals.curTenantJson!['id'],
+      userId: Globals.userId!,
       mobileOrEmail: mobileOrEmail,
       password: password,
       fcmDeviceToken: fcmDeviceToken,
@@ -220,12 +220,15 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> data = resp.data;
 
       Globals.accessToken = data['token']; // jwt token
+      Globals.curTenantJson = data['tenant'];
       if (isRemember) {
         if (_password != password) {
           // Encrypt the password
           await _prefs.setString(
               'loginPassword', Utils.encryptStringAES256CTR(password));
         }
+        await _prefs.setString(
+            'tenantJson', convert.jsonEncode(Globals.curTenantJson));
       } else {
         await _prefs.remove('loginPassword');
       }
@@ -235,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
         id: Globals.curEstateJson?['id'],
       );
       data = resp.data;
-      Map<String, dynamic> estate = jsonDecode(data['estate']);
+      Map<String, dynamic> estate = data;
       Globals.curEstateJson?['estateImageApp'] = estate['estateImageApp'];
 
       // Navigator.pushReplacementNamed(context, '/home');

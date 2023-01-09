@@ -1,6 +1,7 @@
 library utils;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as developer;
 // import 'package:stack_trace/stack_trace.dart';
 // import 'dart:convert' as convert;
@@ -192,6 +193,17 @@ Future<String?> showInputDialog(
   return cmptr.future;
 }
 
+String getDbStringByCurLocale(String dbJsonStr) {
+  var json = jsonDecode(dbJsonStr);
+  if (Globals.curLang == 'en') return json['en'];
+  throw 'Unhandled curLang: ${Globals.curLang}';
+}
+
+String getDbMapByCurLocale(Map<String, dynamic> dbJson) {
+  if (Globals.curLang == 'en') return dbJson['en'];
+  throw 'Unhandled curLang: ${Globals.curLang}';
+}
+
 // A generic empty text field checking
 // e.g.: validator: (text) { return Utils.isFieldEmpty(text); }
 String isFieldEmpty(BuildContext context, String text) {
@@ -241,7 +253,7 @@ String buildUnitNameWithLangByJson(
   if (unitJson['type'] == 'res') {
     unitCode = '$block|$floor|$number';
     unitType = 'residences';
-    propTypeName = 'resident'.tr();
+    propTypeName = 'residence'.tr();
   } else if (unitJson['type'] == 'car') {
     unitCode = '$block|$floor|$number';
     unitType = 'carparks';
@@ -270,8 +282,8 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
   if (unitCode != null) {
     List<String> unitParts = unitCode.split('|');
     if (unitType == 'residences') {
-      // rstUnitType = 'resident'.tr();
-      rstUnitType = 'Resident';
+      // rstUnitType = 'residence'.tr();
+      rstUnitType = 'Residence';
       String block = unitParts[0].trim();
       String floor = unitParts[1].trim();
       String room = unitParts[2].trim();
@@ -374,8 +386,8 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
   } else if (authorizer != null) {
     rstUnitName = authorizer;
     if (unitType == 'residences') {
-      rstUnitType = 'resident'.tr();
-      // rstUnitType = 'Resident';
+      rstUnitType = 'residence'.tr();
+      // rstUnitType = 'Residence';
     } else if (unitType == 'carparks') {
       rstUnitType = 'carpark'.tr();
       // rstUnitType = 'Carpark';
@@ -525,10 +537,12 @@ Map<String, String> _translateLoopTitle_newAmenityBkg({
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  String amenityName = params['amenityName'];
+  String amenityName = getDbStringByCurLocale(params['amenityName']);
   int fee = params['fee'];
-  String date = params['date'];
-  String bookingId = params['bookingId'].toString();
+  DateTime dtDate = DateTime.parse(params['date']);
+  String date = DateFormat('yyyy-MM-dd').format(dtDate);
+  // String bookingId = params['bookingId'].toString();
+  int bookingNo = params['bookingNo'];
   String status = (params['status'] == 'pending')
       ? 'pending'.tr()
       : (params['status'] == 'confirmed')
@@ -536,13 +550,20 @@ Map<String, String> _translateLoopTitle_newAmenityBkg({
           : (params['status'] == 'cancelled')
               ? 'cancelled'.tr()
               : params['status'];
+  List<dynamic> slots = jsonDecode(params['slots']);
   List<String> timeSlots = []; // Store the string of time range
-  for (int i = 0; i < params['slots'].length; ++i) {
-    Map<String, dynamic> slot = params['slots'][i];
+  for (int i = 0; i < slots.length; i++) {
+    var slot = slots[i];
     String timeBegin = formatTime(slot['timeBegin']);
     String timeEnd = formatTime(slot['timeEnd']);
     timeSlots.add(timeBegin + ' - ' + timeEnd);
   }
+  // for (int i = 0; i < params['slots'].length; ++i) {
+  //   Map<String, dynamic> slot = params['slots'][i];
+  //   String timeBegin = formatTime(slot['timeBegin']);
+  //   String timeEnd = formatTime(slot['timeEnd']);
+  //   timeSlots.add(timeBegin + ' - ' + timeEnd);
+  // }
 
   String timeSlotsUl = '<ul>'; // Store the string of time range in <ul>
   for (int i = 0; i < timeSlots.length; ++i) {
@@ -552,11 +573,11 @@ Map<String, String> _translateLoopTitle_newAmenityBkg({
 
   if (params['fee'] == 0) {
     rtnVal['title'] =
-        '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingId';
+        '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingNo';
     rtnVal['body'] = '''
-          <h3>${'youHaveBooked'.tr()} <b>${params["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
+          <h3>${'youHaveBooked'.tr()} <b>$amenityName</b>. ${'detailsAsBelow'.tr()}:</h3>
           <ul>
-            <li>${'bookingNo'.tr()}: $bookingId</li>
+            <li>${'bookingNo'.tr()}: $bookingNo</li>
             <li>${'status'.tr()}: $status</li>
             <li>${'date'.tr()}: $date</li>
             <li>${'fee'.tr()}: \$$fee</li>
@@ -567,7 +588,7 @@ Map<String, String> _translateLoopTitle_newAmenityBkg({
            ''';
   } else {
     rtnVal['title'] =
-        '${'actionRequired'.tr()} ${'tentativeBooking'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingId${'fullstop'.tr()}${'pleasePayAmenityFee'.tr()}';
+        '${'actionRequired'.tr()} ${'tentativeBooking'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingNo${'fullstop'.tr()}${'pleasePayAmenityFee'.tr()}';
     String remindToPay = 'remindToPayBookingFee'.tr();
     remindToPay = remindToPay.replaceAll('{fee}', fee.toString());
 
@@ -578,9 +599,9 @@ Map<String, String> _translateLoopTitle_newAmenityBkg({
           DateFormat('yy-MM-dd h:mm a').format(payBeforeDt).toLowerCase();
     }
     rtnVal['body'] = '''
-          <h3>${'youHaveBooked'.tr()} <b>${params["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
+          <h3>${'youHaveBooked'.tr()} <b>$amenityName</b>. ${'detailsAsBelow'.tr()}:</h3>
           <ul>
-            <li>${'bookingNo'.tr()}: $bookingId</li>
+            <li>${'bookingNo'.tr()}: $bookingNo</li>
             <li>${'status'.tr()}: $status</li>
             <li>${'date'.tr()}: $date</li>
             <li>${'fee'.tr()}: \$$fee</li>
@@ -751,20 +772,20 @@ Map<String, String> _translateLoopTitle_mgrmtNotice({
 
   Map<String, String> rtnVal = {};
 
-  List<String> audiences = [];
-  for (int i = 0; i < params['audiences'].length; ++i) {
-    switch (params['audiences'][i]) {
-      case 'resident':
-        audiences.add('resident'.tr());
-        break;
-      case 'carpark':
-        audiences.add('carpark'.tr());
-        break;
-      case 'shop':
-        audiences.add('shop'.tr());
-        break;
-    }
-  }
+  List<String> audiences = List<String>.from(jsonDecode(params['audiences']));
+  // for (int i = 0; i < params['audiences'].length; ++i) {
+  //   switch (params['audiences'][i]) {
+  //     case 'residence':
+  //       audiences.add('residence'.tr());
+  //       break;
+  //     case 'carpark':
+  //       audiences.add('carpark'.tr());
+  //       break;
+  //     case 'shop':
+  //       audiences.add('shop'.tr());
+  //       break;
+  //   }
+  // }
   rtnVal['title'] =
       '${'navbarNotice'.tr()}: ${params["noticeTitle"]} ${'at'.tr()} ${params["issueDate"]}';
   rtnVal['body'] = '''
@@ -787,25 +808,12 @@ Map<String, String> _translateLoopTitle_newAdWithImg({
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  List<String> audiences = [];
-  for (int i = 0; i < params['audiences'].length; ++i) {
-    switch (params['audiences'][i]) {
-      case 'resident':
-        audiences.add('resident'.tr());
-        break;
-      case 'carpark':
-        audiences.add('carpark'.tr());
-        break;
-      case 'shop':
-        audiences.add('shop'.tr());
-        break;
-    }
-  }
+  String title = getDbStringByCurLocale(params["title"]);
 
-  rtnVal['title'] = 'Ad: ${params["title"]}';
+  rtnVal['title'] = 'Ad: $title';
   rtnVal['body'] = '''
     <h3>${'navbarMarketplace'.tr()}</h3>
-    <p>${params["title"]} - ${params["postDate"]}</p>
+    <p>$title - ${params["postDate"]}</p>
     ''';
 
   return rtnVal;
@@ -859,7 +867,7 @@ Map<String, dynamic> translateLoopTitleId({
     rtnVal = _translateLoopTitle_mgrmReceipt(
         context: context, params: params, type: type);
   } else {
-    throw 'Unhandled titleId: ${titleId}';
+    throw 'Unhandled titleId: $titleId';
   }
 
   return rtnVal;

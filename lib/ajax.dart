@@ -27,7 +27,7 @@ class ApiResponse {
 
 // Common function to build the ApiResponse
 ApiResponse _returnResponse(var postResp) {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
+  // developer.log(StackTrace.current.toString().split('\n')[0]);
 
   if (postResp.statusCode > 299) {
     throw 'error ${postResp.statusCode}';
@@ -430,7 +430,7 @@ Future<ApiResponse> setUserPassword({
 
 Future<ApiResponse> tenantLogin({
   // required String clientCode,
-  required String tenantId,
+  required String userId,
   required String mobileOrEmail,
   required String password,
   required String? fcmDeviceToken,
@@ -438,7 +438,7 @@ Future<ApiResponse> tenantLogin({
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   final Map<String, dynamic> param = {
-    'tenantId': tenantId,
+    'userId': userId,
     'mobileOrEmail': mobileOrEmail,
     'password': password,
     'fcmDeviceToken': fcmDeviceToken,
@@ -647,11 +647,11 @@ Future<ApiResponse> getNotices({
   // Directus query filter
   // Doc: https://docs.directus.io/reference/api/query/#filter
   Map<String, dynamic> filter = {};
-  if (unitType == 'resident') {
-    filter['for_resident'] = true;
-  } else if (unitType == 'carpark') {
+  if (unitType == 'res') {
+    filter['for_residence'] = true;
+  } else if (unitType == 'car') {
     filter['for_carpark'] = true;
-  } else if (unitType == 'shop') {
+  } else if (unitType == 'shp') {
     filter['for_shop'] = true;
   } else {
     throw 'Unhandled unitType: $unitType';
@@ -704,11 +704,11 @@ Future<ApiResponse> getMarketplaces({
   // Directus query filter
   // Doc: https://docs.directus.io/reference/api/query/#filter
   Map<String, dynamic> filter = {};
-  if (unitType == 'resident') {
-    filter['for_resident'] = true;
-  } else if (unitType == 'carpark') {
+  if (unitType == 'res') {
+    filter['for_residence'] = true;
+  } else if (unitType == 'car') {
     filter['for_carpark'] = true;
-  } else if (unitType == 'shop') {
+  } else if (unitType == 'shp') {
     filter['for_shop'] = true;
   } else {
     throw 'Unhandled unitType: $unitType';
@@ -751,25 +751,13 @@ Future<ApiResponse> getMarketplaces({
   return _returnResponse(response);
 }
 
-Future<ApiResponse> getOneAmenity({
-  // required String clientCode,
+Future<ApiResponse> getAmenity({
   required String id,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  /*
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'amenities',
-    'id': id,
-  };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-  */
-
   final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/items/amenities/$id'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getAmenity/$id'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -790,7 +778,7 @@ Future<ApiResponse> getEstate({
 
   // Calling Directus API ItemServices
   final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/api/tl/getEstateAfterLoggedIn/${id}'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getEstate/${id}'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -803,24 +791,13 @@ Future<ApiResponse> getEstate({
   return _returnResponse(response);
 }
 
-Future<ApiResponse> getOneNotice({
+Future<ApiResponse> getNotice({
   required String id,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  /*
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'notices',
-    'id': id,
-  };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-  */
-
   final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/items/notices/$id'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getNotice/$id'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -839,19 +816,8 @@ Future<ApiResponse> getOneMarketplace({
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  /*
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'marketplaces',
-    'id': id,
-  };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-  */
-
   final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/items/marketplaces/$id'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getMarketplace/$id'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

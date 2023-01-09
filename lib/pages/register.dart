@@ -170,7 +170,6 @@ class _RegisterPageState extends State<RegisterPage> {
           'name': name,
           'email': email,
           'mobile': mobile,
-          'role': role,
         };
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString(

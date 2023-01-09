@@ -98,25 +98,27 @@ class _HomePageState extends State<HomePage> {
       if (remoteData.length > 0) {
         // Copy the records from server to local db
         remoteData.forEach((e) async {
-          Map<String, dynamic> params = convert.jsonDecode(e['params_json']);
+          Map<String, dynamic> meta = convert.jsonDecode(e['meta']);
           // Add the title_id to the paramsJson
-          params['title_id'] = e['title_id'];
+          // meta['title_id'] = e['title_id'];
           Map<String, dynamic> translated = await Utils.translateLoopTitleId(
             context: homePageContext,
-            titleId: e['title_id'],
+            titleId: meta['titleId'],
             type: e['type'],
-            params: params,
+            params: meta,
           );
+
+          String senderName = Utils.getDbStringByCurLocale(meta['senderName']);
 
           final notice = Models.Loop(
             id: e['id'],
-            dateCreated: Utils.isoDatetimeToLocal(e['date_created']),
-            titleId: e['title_id'],
+            dateCreated: Utils.isoDatetimeToLocal(e['dateCreated']),
+            titleId: meta['titleId'],
             titleTranslated: translated['title'],
             url: e['url'],
             type: e['type'],
-            sender: params['senderName'],
-            paramsJson: convert.jsonEncode(params),
+            sender: senderName,
+            paramsJson: e['meta'],
             isNew: true,
           );
           notice.insert(_database); // Save to Sqlite
@@ -222,7 +224,8 @@ class _HomePageState extends State<HomePage> {
       imageUrl = Globals
           .defaultEstateImage; // When the user didn't upload their estate image
     } else {
-      imageUrl = Globals.hostS3Base! + '/' + imageUrl + '.jpg';
+      // imageUrl = Globals.hostS3Base! + '/' + imageUrl + '.jpg';
+      imageUrl = imageUrl;
     }
 
     return _Background(

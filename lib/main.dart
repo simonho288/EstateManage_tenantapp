@@ -207,10 +207,6 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    // List<LocalizationsDelegate<dynamic>> locs =
-    //     List.from(AppLocalizations.localizationsDelegates);
-    // locs.add(FormBuilderLocalizations.delegate);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Estate Manage Tenant App',

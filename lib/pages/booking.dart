@@ -41,7 +41,7 @@ class _BookingPageState extends State<BookingPage> {
   late Models.Loop _loop; // The Loop record
   late Future<Map<String, dynamic>> _futureData;
   late Models.Amenity _amenity;
-  late Models.Client _client;
+  late Models.Estate _estate;
 
   _BookingPageState(Models.Loop loop) {
     _loop = loop;
@@ -62,43 +62,58 @@ class _BookingPageState extends State<BookingPage> {
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
     assert(_loop.paramsJson != null);
     var loopParams = convert.jsonDecode(_loop.paramsJson!);
-    Ajax.ApiResponse resp = await Ajax.getOneAmenity(
+    Ajax.ApiResponse resp = await Ajax.getAmenity(
         // clientCode: Globals.curClientJson?['code'],
         id: loopParams['amenityId']);
     Map<String, dynamic> data = resp.data;
     String photo = data['photo'] == null
         ? Globals.defaultAmenityCanvas
-        : Globals.hostS3Base! + '/${data['photo']}.jpg';
+        // : Globals.hostS3Base! + '/${data['photo']}.jpg';
+        : data['photo'];
+
+    Map<String, dynamic> availableDays =
+        convert.jsonDecode(data['availableDays']);
+    Map<String, dynamic> timeBased = convert.jsonDecode(data['timeBased']);
+    List<Map<String, dynamic>> sectionBased = List<Map<String, dynamic>>.from(
+        convert.jsonDecode(data['sectionBased']));
+    Map<String, dynamic> contact = convert.jsonDecode(data['contact']);
+    String whatsapp = '';
+    if (contact['whatsapp'] != null &&
+        contact['whatsapp']['name'] != null &&
+        contact['whatsapp']['number'] != null) {
+      whatsapp =
+          '${contact['whatsapp']['name']}: ${contact['whatsapp']['number']}';
+    }
 
     _amenity = Models.Amenity(
       id: data['id'],
-      dateCreated: data['date_created'],
-      name: data['name'],
-      details: data['details'],
+      dateCreated: data['dateCreated'],
+      name: Utils.getDbStringByCurLocale(data['name']),
+      details: Utils.getDbStringByCurLocale(data['details']),
       photo: photo,
-      monday: data['monday'],
-      tuesday: data['tuesday'],
-      wednesday: data['wednesday'],
-      thursday: data['thursday'],
-      friday: data['friday'],
-      saturday: data['saturday'],
-      sunday: data['sunday'],
+      monday: availableDays['mon'],
+      tuesday: availableDays['tue'],
+      wednesday: availableDays['wed'],
+      thursday: availableDays['thu'],
+      friday: availableDays['fri'],
+      saturday: availableDays['sat'],
+      sunday: availableDays['sun'],
       status: data['status'],
       fee: data['fee'],
-      timeOpen: data['time_open'] != null
-          ? DateTime.parse(today + ' ' + data['time_open'])
+      timeOpen: timeBased['timeOpen'] != null
+          ? DateTime.parse(today + ' ' + timeBased['timeOpen'])
           : null,
-      timeClose: data['time_close'] != null
-          ? DateTime.parse(today + ' ' + data['time_close'])
+      timeClose: timeBased['timeClose'] != null
+          ? DateTime.parse(today + ' ' + timeBased['timeClose'])
           : null,
-      timeMinimum: data['time_minimum'],
-      timeMaximum: data['time_maximum'],
-      timeIncrement: data['time_increment'],
-      bookingTimeBasic: data['booking_time_basic'],
-      isRepetitiveBooking: data['is_repetitive_booking'],
-      bookingAdvanceDays: data['booking_advance_days'] ?? 0,
-      autoCancelHours: data['auto_cancel_hours'],
-      contactWhatsapp: data['contact_whatsapp'],
+      timeMinimum: int.parse(timeBased['timeMinimum']),
+      timeMaximum: int.parse(timeBased['timeMaximum']),
+      timeIncrement: int.parse(timeBased['timeIncrement']),
+      bookingTimeBasic: data['bookingTimeBasic'],
+      isRepetitiveBooking: data['isRepetitiveBooking'] == 1,
+      bookingAdvanceDays: data['bookingAdvanceDays'] ?? 0,
+      autoCancelHours: data['autoCancelHours'],
+      contactWhatsapp: whatsapp,
     );
 
     resp = await Ajax.getEstate(
@@ -106,11 +121,26 @@ class _BookingPageState extends State<BookingPage> {
       id: Globals.curEstateJson?['id'],
       // fields: 'stripe_publishable_key,stripe_secret_key,payment_currency',
     );
-    data = resp.data[0];
-    _client = Models.Client(
-      stripePublishableKey: data['stripe_publishable_key'],
-      stripeSecretKey: data['stripe_secret_key'],
-      stripeCurrency: data['payment_currency'],
+    data = resp.data;
+    contact = convert.jsonDecode(data['contact']);
+    contact['name'] = Utils.getDbMapByCurLocale(contact['name']);
+    Map<String, dynamic> tenantApp = convert.jsonDecode(data['tenantApp']);
+    Map<String, dynamic> timezoneMeta =
+        convert.jsonDecode(data['timezoneMeta']);
+    Map<String, dynamic> onlinePayments =
+        convert.jsonDecode(data['onlinePayments']);
+
+    _estate = Models.Estate(
+      dateCreated: data['dateCreated'],
+      name: Utils.getDbStringByCurLocale(data['name']),
+      address: Utils.getDbStringByCurLocale(data['address']),
+      contact: contact['name'],
+      tel: contact['tel'],
+      email: contact['email'],
+      website: data['website'],
+      langEntries: data['langEntries'],
+      tenantAppEstateImage: tenantApp['estateImageApp'],
+      currency: data['currency'],
     );
 
     return {}; // Assign to _datum
@@ -208,7 +238,7 @@ class _BookingPageState extends State<BookingPage> {
           title = 'bookingConfirm'.tr();
         } else {
           icon = Icons.notifications_none;
-          title = 'actionRequired'.tr() + 'tentativeBooking'.tr();
+          title = 'actionRequired'.tr() + ' ' + 'tentativeBooking'.tr();
         }
         break;
       case Constants.LOOP_TITLE_AMENITY_BOOKING_CONFIRMED:
@@ -229,7 +259,7 @@ class _BookingPageState extends State<BookingPage> {
     Map<String, dynamic> params = convert.jsonDecode(this._loop.paramsJson!);
     Map<String, dynamic> translated = Utils.translateLoopTitleId(
         context: context,
-        titleId: params['title_id'],
+        titleId: params['titleId'],
         type: this._loop.type,
         params: params);
     String body = translated['body'];

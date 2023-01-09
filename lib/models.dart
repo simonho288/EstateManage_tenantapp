@@ -281,49 +281,51 @@ class AmenityBookingSection {
 }
 
 // Schema for client (Estate)
-class Client {
+class Estate {
   String? dateCreated;
-  String? estateName;
+  String? name;
   String? address;
   String? contact;
   String? tel;
   String? email;
   String? website;
-  int? committeeTerm;
-  String? termDate;
-  int? mgrfeePaymentDays;
-  String? chequePayableTo;
-  bool? isEffect;
-  String? srvLangMode;
-  DateTime? trialExpiry;
-  String? mgrfeeTitle;
-  bool? isModMiscIncome;
-  String? estateImageApp;
-  String? stripePublishableKey;
-  String? stripeSecretKey;
-  String? stripeCurrency;
+  String? langEntries;
+  // int? committeeTerm;
+  // String? termDate;
+  // int? mgrfeePaymentDays;
+  // String? chequePayableTo;
+  // bool? isEffect;
+  // String? srvLangMode;
+  // DateTime? trialExpiry;
+  // String? mgrfeeTitle;
+  // bool? isModMiscIncome;
+  String? tenantAppEstateImage;
+  // String? stripePublishableKey;
+  // String? stripeSecretKey;
+  String? currency;
 
-  Client({
+  Estate({
     this.dateCreated,
-    this.estateName,
+    this.name,
     this.address,
     this.contact,
     this.tel,
     this.email,
     this.website,
-    this.committeeTerm,
-    this.termDate,
-    this.mgrfeePaymentDays,
-    this.chequePayableTo,
-    this.isEffect,
-    this.srvLangMode,
-    this.trialExpiry,
-    this.mgrfeeTitle,
-    this.isModMiscIncome,
-    this.estateImageApp,
-    this.stripePublishableKey,
-    this.stripeSecretKey,
-    this.stripeCurrency,
+    this.langEntries,
+    // this.committeeTerm,
+    // this.termDate,
+    // this.mgrfeePaymentDays,
+    // this.chequePayableTo,
+    // this.isEffect,
+    // this.srvLangMode,
+    // this.trialExpiry,
+    // this.mgrfeeTitle,
+    // this.isModMiscIncome,
+    this.tenantAppEstateImage,
+    // this.stripePublishableKey,
+    // this.stripeSecretKey,
+    this.currency,
   });
 }
 
