@@ -338,7 +338,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
         timeStart: section.timeBegin,
         timeEnd: section.timeEnd,
         duration: dtEnd.difference(dtBegin).inMinutes,
-        sectionId: section.bookingSectionId,
+        sectionId: section.id,
       );
       _slots.add(slot);
     }

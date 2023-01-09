@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 // import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
@@ -54,9 +55,8 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
     List<Models.Amenity> amenities = [];
     for (int i = 0; i < remoteData.length; ++i) {
       var e = remoteData[i];
-      String photo = e['photo'] == null
-          ? Globals.defaultAmenityCanvas
-          : '${Globals.hostApiUri}/assets/${e['photo']}?key=amenity-photo-img&access_token=${Globals.accessToken}';
+      String photo =
+          e['photo'] == null ? Globals.defaultAmenityCanvas : e['photo'];
       // : Globals.hostS3Base! + '/${e['photo']}.jpg';
       DateTime? dtOpen = null;
       DateTime? dtClose = null;
@@ -64,59 +64,66 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
       int? timeMaximum = null;
       int? timeIncrement = null;
       List<Models.AmenityBookingSection> bookingSections = [];
-      if (e['booking_time_basic'] == 'time') {
-        if (e['time_open'] != null) {
-          dtOpen = DateTime.parse('2000-01-01 ' + e['time_open']);
+      if (e['bookingTimeBasic'] == 'time') {
+        var timeBased = jsonDecode(e['timeBased']);
+        if (timeBased['timeOpen'] != null) {
+          dtOpen = DateTime.parse('2000-01-01 ' + timeBased['timeOpen']);
         }
-        if (e['time_close'] != null) {
-          dtClose = DateTime.parse('2000-01-01 ' + e['time_close']);
+        if (timeBased['timeClose'] != null) {
+          dtClose = DateTime.parse('2000-01-01 ' + timeBased['timeClose']);
         }
-        if (e['time_minimum'] != null) {
-          timeMinimum = e['time_minimum'];
+        if (timeBased['timeMinimum'] != null) {
+          timeMinimum = int.parse(timeBased['timeMinimum']);
         }
-        if (e['time_maximum'] != null) {
-          timeMaximum = e['time_maximum'];
+        if (timeBased['timeMaximum'] != null) {
+          timeMaximum = int.parse(timeBased['timeMaximum']);
         }
-        if (e['time_increment'] != null) {
-          timeIncrement = e['time_increment'];
+        if (timeBased['timeIncrement'] != null) {
+          timeIncrement = int.parse(timeBased['timeIncrement']);
         }
-      } else if (e['booking_time_basic'] == 'section') {
-        resp = await Ajax.getAmenityBookingSections(
-          // clientCode: Globals.curClientJson?['code'],
-          amenityId: e['id'],
-        );
-        List<Map<String, dynamic>> remoteData =
-            new List<Map<String, dynamic>>.from(resp.data as List);
-        for (int j = 0; j < remoteData.length; ++j) {
-          var e2 = remoteData[j];
-          DateTime timeBegin = DateTime.parse(
-              '2000-01-01 ' + e2['booking_sections_id']['time_begin']);
-          DateTime timeEnd = DateTime.parse(
-              '2000-01-01 ' + e2['booking_sections_id']['time_end']);
+      } else if (e['bookingTimeBasic'] == 'section') {
+        var sectionBased = jsonDecode(e['sectionBased']);
+        var sections = List<Map<String, dynamic>>.from(sectionBased);
+        for (int j = 0; j < sections.length; ++j) {
+          var section = sections[j];
+          DateTime timeBegin = DateTime.parse('2000-01-01 ' + section['begin']);
+          DateTime timeEnd = DateTime.parse('2000-01-01 ' + section['end']);
           final bs = Models.AmenityBookingSection(
-            id: e2['id'],
-            amenityId: e2['amenities_id'],
-            bookingSectionId: e2['booking_sections_id']['id'],
-            name: e2['booking_sections_id']['name'],
+            // id: section['id'],
+            // amenityId: e2['amenities_id'],
+            id: j.toString(),
+            name: section['name'],
             timeBegin: DateFormat('HH:mm').format(timeBegin),
             timeEnd: DateFormat('HH:mm').format(timeEnd),
           );
           bookingSections.add(bs);
         }
+      } else {
+        throw 'Unhandled basic: ${e['bookingTimeBasic']}';
       }
+      var availableDays = jsonDecode(e['availableDays']);
+      var contact = jsonDecode(e['contact']);
+      var whatsapp = null, email = null;
+      if (contact['whatsapp'] != null) {
+        whatsapp = contact['whatsapp'];
+      }
+      if (contact['email'] != null) {
+        email = contact['email'];
+      }
+
       final amenity = Models.Amenity(
         id: e['id'],
-        dateCreated: e['date_created'],
+        dateCreated: e['dateCreated'],
         name: e['name'],
         details: e['details'] ?? '',
         photo: photo,
-        monday: e['monday'],
-        tuesday: e['tuesday'],
-        wednesday: e['wednesday'],
-        thursday: e['thursday'],
-        friday: e['friday'],
-        saturday: e['saturday'],
-        sunday: e['sunday'],
+        monday: availableDays['mon'],
+        tuesday: availableDays['tue'],
+        wednesday: availableDays['wed'],
+        thursday: availableDays['thu'],
+        friday: availableDays['fri'],
+        saturday: availableDays['sat'],
+        sunday: availableDays['sun'],
         status: e['status'],
         fee: e['fee'],
         timeOpen: dtOpen,
@@ -124,11 +131,12 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
         timeMinimum: timeMinimum,
         timeMaximum: timeMaximum,
         timeIncrement: timeIncrement,
-        bookingTimeBasic: e['booking_time_basic'],
-        isRepetitiveBooking: Utils.parseDbBoolean(e['is_repetitive_booking']),
-        bookingAdvanceDays: e['booking_advance_days'] ?? 0,
-        autoCancelHours: e['auto_cancel_hours'],
-        contactWhatsapp: e['contact_whatsapp'],
+        bookingTimeBasic: e['bookingTimeBasic'],
+        isRepetitiveBooking: e['isRepetitiveBooking'] != 0,
+        bookingAdvanceDays: e['bookingAdvanceDays'] ?? 0,
+        autoCancelHours: e['autoCancelHours'],
+        contactEmail: email,
+        contactWhatsapp: whatsapp,
       );
       amenity.bookingSections = bookingSections;
       amenities.add(amenity);

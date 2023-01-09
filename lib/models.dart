@@ -263,17 +263,17 @@ class Marketplace {
 
 // Schema for amenities_booking_sections
 class AmenityBookingSection {
-  int id;
-  String amenityId;
-  String bookingSectionId;
+  String id;
+  // String amenityId;
+  // String bookingSectionId;
   String name;
   String timeBegin;
   String timeEnd;
 
   AmenityBookingSection({
     required this.id,
-    required this.amenityId,
-    required this.bookingSectionId,
+    // required this.amenityId,
+    // required this.bookingSectionId,
     required this.name,
     required this.timeBegin,
     required this.timeEnd,
@@ -355,7 +355,8 @@ class Amenity {
   bool isRepetitiveBooking;
   int bookingAdvanceDays;
   int? autoCancelHours;
-  String? contactWhatsapp;
+  Map<String, dynamic>? contactWhatsapp;
+  Map<String, dynamic>? contactEmail;
 
   Amenity({
     required this.id,
@@ -381,7 +382,8 @@ class Amenity {
     required this.isRepetitiveBooking,
     required this.bookingAdvanceDays,
     required this.autoCancelHours,
-    required this.contactWhatsapp,
+    this.contactEmail,
+    this.contactWhatsapp,
   });
 }
 

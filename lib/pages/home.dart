@@ -20,16 +20,17 @@ import '../globals.dart' as Globals;
 import '../loopTranslate.dart' as LoopTranslate;
 import '../components/navBar.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  String? _filter;
   late _HomePageState _appState;
 
   HomePage({Key? key, args}) : super(key: key) {
     Globals.homePage = this;
+    String? filter;
     if (args != null) {
-      _filter = args['filter'];
+      filter = args['filter'];
     }
-    _appState = _HomePageState(_filter);
+    _appState = _HomePageState(filter);
   }
 
   @override
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
       records.sort(
           (a, b) => b.dateCreated.compareTo(a.dateCreated)); // Sort descending
     } else {
-      String sql = 'SELECT * FROM Loops WHERE type=? ORDER BY dateCreated DESC';
+      const sql = 'SELECT * FROM Loops WHERE type=? ORDER BY dateCreated DESC';
       records = await Models.Loop.query(_database, sql, [_filter]);
     }
 

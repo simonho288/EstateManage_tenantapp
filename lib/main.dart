@@ -244,10 +244,10 @@ class _MainAppState extends State<MainApp> {
             AmenityBookingPage(args: ModalRoute.of(ctx)?.settings.arguments),
         '/marketplace': (ctx) =>
             MarketplacePage(args: ModalRoute.of(ctx)?.settings.arguments),
-        '/marketplaces': (ctx) => HomePage(args: {'filter': 'new_marketplace'}),
+        '/marketplaces': (ctx) => HomePage(args: {'filter': 'marketplace'}),
         '/notice': (ctx) =>
             NoticePage(args: ModalRoute.of(ctx)?.settings.arguments),
-        '/notices': (ctx) => HomePage(args: {'filter': 'management_notice'}),
+        '/notices': (ctx) => HomePage(args: {'filter': 'notice'}),
         '/receipt': (ctx) =>
             ReceiptPage(args: ModalRoute.of(ctx)?.settings.arguments),
         '/settings': (ctx) => SettingsPage(),

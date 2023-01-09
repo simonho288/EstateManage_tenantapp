@@ -833,29 +833,8 @@ Future<ApiResponse> getOneMarketplace({
 Future<ApiResponse> getBookableAmenities() async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  /*
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'amenities',
-    'query': {
-      'sort': 'name',
-      'filter': {
-        'status': {'_neq': 'hide'}
-      },
-    },
-  };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-  */
-  Map<String, dynamic> filter = {
-    'status': {'_neq': 'hide'},
-  };
-  const sort = 'name';
-
   final response = await http.get(
-    Uri.parse(
-        '${Globals.hostApiUri}/items/amenities?filter=${convert.jsonEncode(filter)}&sort=$sort'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getBookableAmenities'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

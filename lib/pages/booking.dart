@@ -78,13 +78,14 @@ class _BookingPageState extends State<BookingPage> {
     List<Map<String, dynamic>> sectionBased = List<Map<String, dynamic>>.from(
         convert.jsonDecode(data['sectionBased']));
     Map<String, dynamic> contact = convert.jsonDecode(data['contact']);
-    String whatsapp = '';
-    if (contact['whatsapp'] != null &&
-        contact['whatsapp']['name'] != null &&
-        contact['whatsapp']['number'] != null) {
-      whatsapp =
-          '${contact['whatsapp']['name']}: ${contact['whatsapp']['number']}';
-    }
+    Map<String, dynamic> whatsapp = contact['whatsapp'];
+    // String whatsapp = '';
+    // if (contact['whatsapp'] != null &&
+    //     contact['whatsapp']['name'] != null &&
+    //     contact['whatsapp']['number'] != null) {
+    //   whatsapp =
+    //       '${contact['whatsapp']['name']}: ${contact['whatsapp']['number']}';
+    // }
 
     _amenity = Models.Amenity(
       id: data['id'],
@@ -150,9 +151,10 @@ class _BookingPageState extends State<BookingPage> {
   Future<void> _onBtnContactUs() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
-    String wano = this._amenity.contactWhatsapp!;
-    if (!wano.startsWith('+')) {
-      wano = '+852-' + wano;
+    // TODO: Currently support whatsapp only
+    String wano = '';
+    if (this._amenity.contactWhatsapp != null) {
+      wano = this._amenity.contactWhatsapp!['phone'];
     }
 
     String msg = 'bookingWhatsappMessage'.tr();
