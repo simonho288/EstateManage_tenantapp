@@ -24,6 +24,7 @@ import '../models.dart' as Models;
 import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
 import '../globals.dart' as Globals;
+import '../loopTranslate.dart' as LoopTranslate;
 
 class MarketplacePage extends StatefulWidget {
   late Models.Loop _loop;
@@ -65,7 +66,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
     var loopParams = convert.jsonDecode(_loop.paramsJson!);
     Ajax.ApiResponse resp = await Ajax.getOneMarketplace(
         // clientCode: Globals.curClientJson?['code'],
-        id: loopParams['marketplaceId']);
+        id: loopParams['adId']);
 
     if (resp.data == null) {
       return {'error': 'rec_not_found'};
@@ -73,16 +74,15 @@ class _MarketplacePageState extends State<MarketplacePage> {
       Map<String, dynamic> data = resp.data;
       // Get the thumbnail by Direcuts custom transform. See:
       // https://docs.directus.io/reference/files/#custom-transformations
-      String thmUrl =
-          '${Globals.hostApiUri}/assets/${data['ad_image']}?key=marketplace-ad-img-thm&access_token=${Globals.accessToken}';
       _marketplace = Models.Marketplace(
         id: data['id'],
-        dateCreated: DateTime.parse(data['date_created']),
-        postDate: data['post_date'],
+        dateCreated: DateTime.parse(data['dateCreated']),
+        postDate: data['dateStart'],
         title: data['title'],
-        adImage: Globals.hostS3Base! + '/' + data['ad_image'] + '.jpg',
-        adImageThm: thmUrl,
-        commerceUrl: data['commerce_url'],
+        // adImage: Globals.hostS3Base! + '/' + data['adImage'] + '.jpg',
+        adImage: data['adImage'],
+        adImageThm: data['adImage'],
+        commerceUrl: data['commerceUrl'],
       );
 
       return {'status': 'success'};
@@ -147,14 +147,14 @@ class _MarketplacePageState extends State<MarketplacePage> {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     IconData icon = Icons.event_note;
-    String title = _marketplace.title;
-    String subTitle = _marketplace.postDate;
+    String title = Utils.getDbStringByCurLocale(_marketplace.title);
+    String subTitle = "created".tr() + ': ' + _marketplace.postDate;
 
     // Translate the parameters
     Map<String, dynamic> params = convert.jsonDecode(this._loop.paramsJson!);
-    Map<String, dynamic> translated = Utils.translateLoopTitleId(
+    Map<String, dynamic> translated = LoopTranslate.byTitleId(
         context: context,
-        titleId: params['title_id'],
+        titleId: params['titleId'],
         type: this._loop.type,
         params: params);
     String body = translated['body'];

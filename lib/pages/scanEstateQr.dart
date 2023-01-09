@@ -36,8 +36,9 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     developer.log('ScanEstateQrPage initState');
 
     _controller = MobileScannerController(
-        // facing: CameraFacing.back,
-        );
+      facing: CameraFacing.front,
+      torchEnabled: true,
+    );
     super.initState();
     setState(() {});
   }

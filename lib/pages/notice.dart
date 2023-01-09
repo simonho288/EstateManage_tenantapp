@@ -21,6 +21,7 @@ import '../models.dart' as Models;
 import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
 import '../globals.dart' as Globals;
+import '../loopTranslate.dart' as LoopTranslate;
 
 class NoticePage extends StatefulWidget {
   late Models.Loop _loop;
@@ -68,10 +69,11 @@ class _NoticePageState extends State<NoticePage> {
       Map<String, dynamic> data = resp.data;
       _notice = Models.Notice(
         id: data['id'],
-        dateCreated: DateTime.parse(data['date_created']),
-        issueDate: data['issue_date'],
+        dateCreated: DateTime.parse(data['dateCreated']),
+        issueDate: data['issueDate'],
         title: data['title'],
-        pdfUrl: Globals.hostS3Base! + '/' + data['pdf'] + '.pdf',
+        pdfUrl: data['pdf'],
+        // pdfUrl: Globals.hostS3Base! + '/' + data['pdf'] + '.pdf',
       );
 
       return {'status': 'success'};
@@ -102,14 +104,14 @@ class _NoticePageState extends State<NoticePage> {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     IconData icon = Icons.event_note;
-    String title = _notice.title;
-    String subTitle = _notice.issueDate;
+    String title = Utils.getDbStringByCurLocale(_notice.title);
+    String subTitle = "created".tr() + ': ' + _notice.issueDate;
 
     // Translate the parameters
     Map<String, dynamic> params = convert.jsonDecode(this._loop.paramsJson!);
-    Map<String, dynamic> translated = Utils.translateLoopTitleId(
+    Map<String, dynamic> translated = LoopTranslate.byTitleId(
         context: context,
-        titleId: params['title_id'],
+        titleId: params['titleId'],
         type: this._loop.type,
         params: params);
     String body = translated['body'];

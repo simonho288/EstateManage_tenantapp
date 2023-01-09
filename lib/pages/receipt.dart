@@ -15,6 +15,7 @@ import '../constants.dart' as Constants;
 import '../models.dart' as Models;
 import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
+import '../loopTranslate.dart' as LoopTranslate;
 import '../globals.dart' as Globals;
 
 class ReceiptPage extends StatefulWidget {
@@ -111,7 +112,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
     String title = 'mgroffReceipt'.tr();
 
     // Translate the parameters
-    Map<String, dynamic> translated = Utils.translateLoopTitleId(
+    Map<String, dynamic> translated = LoopTranslate.byTitleId(
         context: context,
         titleId: _loopJson['title_id'],
         type: widget._loop.type,

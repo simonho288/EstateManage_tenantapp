@@ -26,6 +26,7 @@ import '../models.dart' as Models;
 import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
 import '../globals.dart' as Globals;
+import '../loopTranslate.dart' as LoopTranslate;
 
 class BookingPage extends StatefulWidget {
   late Models.Loop _loop;
@@ -253,16 +254,19 @@ class _BookingPageState extends State<BookingPage> {
 
     // title = this.loop.type;
     // icon = Icons.arrow_drop_down_circle;
-    String subTitle = DateFormat('yyyy-MM-dd').format(this._loop.dateCreated);
 
     // Translate the parameters
     Map<String, dynamic> params = convert.jsonDecode(this._loop.paramsJson!);
-    Map<String, dynamic> translated = Utils.translateLoopTitleId(
+    Map<String, dynamic> translated = LoopTranslate.byTitleId(
         context: context,
         titleId: params['titleId'],
         type: this._loop.type,
         params: params);
     String body = translated['body'];
+    String subTitle = "created".tr() +
+        ': ' +
+        DateFormat('yyyy-MM-dd').format(this._loop.dateCreated);
+    // String subTitle = translated['title'];
 
     List<Widget> contents = [];
     contents.add(

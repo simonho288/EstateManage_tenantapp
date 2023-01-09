@@ -17,6 +17,7 @@ import '../models.dart' as Models;
 import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
 import '../globals.dart' as Globals;
+import '../loopTranslate.dart' as LoopTranslate;
 import '../components/navBar.dart';
 
 class HomePage extends StatefulWidget {
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
           Map<String, dynamic> meta = convert.jsonDecode(e['meta']);
           // Add the title_id to the paramsJson
           // meta['title_id'] = e['title_id'];
-          Map<String, dynamic> translated = await Utils.translateLoopTitleId(
+          Map<String, dynamic> translated = LoopTranslate.byTitleId(
             context: homePageContext,
             titleId: meta['titleId'],
             type: e['type'],
@@ -471,10 +472,10 @@ class _LoopTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(DateFormat('yyyy-MM-dd').format(loop.dateCreated),
-                      style: TextStyle(fontSize: 16.0)),
+                      style: TextStyle(fontSize: 16.0, color: Colors.black54)),
                   Text(
                     Utils.truncateString(loop.titleTranslated, 100),
-                    style: TextStyle(fontSize: 22.0, color: Colors.black54),
+                    style: TextStyle(fontSize: 22.0, color: Colors.black),
                   )
                 ],
               ),
