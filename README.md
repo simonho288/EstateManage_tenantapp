@@ -41,3 +41,6 @@ In Visual Studio Code, select the "Debug Mode" & press [F5] to start the debugge
 
 5. If your language is other than English, you can create a new language JSON file which copies from `assets/langs/en-US.json` to your language in same directory. For more information, please refer to the package [easy_locations](https://pub.dev/packages/easy_localization).
 
+## Backend
+
+This app cannot be executed alone. It requires connect to the [EstateManage backend](https://github.com/simonho288/EstateManage_backend). Please go to the backend repo for installation instructions.
