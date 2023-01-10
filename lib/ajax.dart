@@ -877,12 +877,14 @@ Future<ApiResponse> getTenantBookingsByDate({
   // required String clientCode,
   required String date,
   required String amenityId,
+  List<String>? times,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, dynamic> params = {
     'date': date,
     'amenity': amenityId,
+    'times': times,
   };
 
   final response = await http
@@ -899,41 +901,8 @@ Future<ApiResponse> getTenantBookingsByDate({
 
   return _returnResponse(response);
 }
-/* Backup
-Future<ApiResponse> getTenantBookingsByDate({
-  // required String clientCode,
-  required String date,
-  required String amenityId,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  Map<String, dynamic> filter = {
-    'date': {
-      '_eq': date,
-    },
-    'amenity': amenityId,
-    'status': {
-      '_neq': 'cancelled', // exclude cancelled booking
-    },
-  };
-  const fields =
-      '*,tenant.tenants_id.id,amenity.amenities_id.id,time_slots.tenant_amenity_bkgslots_id.time_start,time_slots.tenant_amenity_bkgslots_id.time_end,time_slots.tenant_amenity_bkgslots_id.booking_section'; // Note the tenants_id.id is the M2M formed
-
-  final response = await http.get(
-    Uri.parse(
-        '${Globals.hostApiUri}/items/tenant_amenity_bookings?filter=${convert.jsonEncode(filter)}&fields=$fields'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-}
-*/
-
+/*
 // To get specified time(s) of booking, not daily bookings list
 Future<ApiResponse> getTenantBookingByTimes({
   // required String clientCode,
@@ -944,32 +913,36 @@ Future<ApiResponse> getTenantBookingByTimes({
   developer.log(StackTrace.current.toString().split('\n')[0]);
   assert(times.length > 0);
 
-  /*
-  // Parameters for dbGet
-  final Map<String, dynamic> param = {
-    'coll': 'tenant_amenity_bookings',
-    'query': {
-      'filter': {
-        'date': {
-          '_eq': date,
-        },
-        'amenity': amenityId,
-        'time_slots': {
-          'tenant_amenity_bkgslots_id': {
-            'time_start': {
-              '_in': times,
-            },
-          },
-        },
-      },
-      'fields':
-          'id,status,tenant.tenants_id.id,time_slots.tenant_amenity_bkgslots_id.time_start',
-    },
+  Map<String, dynamic> params = {
+    'date': date,
+    'amenity': amenityId,
+    'times': times,
   };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-  */
+
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/getAmenityBookingsByTimes'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(params),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+*/
+/* Backup
+Future<ApiResponse> getTenantBookingByTimes({
+  // required String clientCode,
+  required String amenityId,
+  required String date,
+  required List<String> times,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+  assert(times.length > 0);
 
   Map<String, dynamic> filter = {
     'date': {
@@ -1000,6 +973,7 @@ Future<ApiResponse> getTenantBookingByTimes({
 
   return _returnResponse(response);
 }
+*/
 
 Future<ApiResponse> saveAmenityBooking({
   required Models.Amenity amenity,
@@ -1016,6 +990,9 @@ Future<ApiResponse> saveAmenityBooking({
   String? payBefore;
   if (autoCancelTime != null) {
     payBefore = autoCancelTime.toIso8601String();
+  } else if (amenity.fee != 0) {
+    DateTime dt = DateTime.parse(booking.date + ' ' + slots[0].timeStart);
+    payBefore = dt.toIso8601String();
   }
 
   String senderName = convert.jsonEncode({'en': 'TenantApp'});

@@ -186,6 +186,77 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     DateTime now = DateTime.now();
+    bool isNotToday = _tarDate.year != now.year ||
+        _tarDate.month != now.month ||
+        _tarDate.day !=
+            now.day; // If date changed, the begin time will be the amenity opening time
+
+    // Calculate the amenity bookable start time & end time
+    DateTime startTime;
+    DateTime endTime = DateTime(now.year, now.month, now.day,
+        this._amenity.timeClose!.hour, this._amenity.timeClose!.minute, 0);
+    endTime = endTime.subtract(Duration(minutes: this._amenity.timeIncrement!));
+
+    // Is today pass? If so, proceed to tomorrow's startTime defined in amenity
+    if (!isNotToday && now.isAfter(endTime)) {
+      isNotToday = true;
+      _tarDate = _tarDate.add(Duration(days: 1)); // move to tomorrow
+    }
+
+    // Skip until the weekday is bookable
+    int loop = 0; // To detect whole week is not bookable
+    while (!_isWeekdayOpen(_tarDate)) {
+      isNotToday = true;
+      _tarDate = _tarDate.add(Duration(days: 1));
+      if (++loop > 7) {
+        throw 'This amenity is not available all the time (Mon-Sun). Please contact mangement office';
+      }
+    }
+
+    if (_minDate == null) {
+      _minDate = _tarDate; // Tell popup calendar the minimum date
+    }
+
+    startTime = DateTime(_tarDate.year, _tarDate.month, _tarDate.day,
+        this._amenity.timeOpen!.hour, this._amenity.timeOpen!.minute, 0);
+    endTime = DateTime(startTime.year, startTime.month, startTime.day,
+        this._amenity.timeClose!.hour, this._amenity.timeClose!.minute, 0);
+    endTime = endTime.subtract(Duration(minutes: this._amenity.timeIncrement!));
+
+    startTime = DateTime(now.year, now.month, now.day,
+        this._amenity.timeOpen!.hour, this._amenity.timeOpen!.minute, 0);
+
+    // Reset the time slots
+    _slots = [];
+    DateFormat timeFmt1 = DateFormat('h:mm a'); // Time format for human
+    DateFormat timeFmt2 = DateFormat('HH:mm'); // time format for computer
+    int seq = 0;
+    while (startTime.isAtSameMomentAs(endTime) || startTime.isBefore(endTime)) {
+      DateTime timeTo =
+          startTime.add(Duration(minutes: this._amenity.timeIncrement!));
+      BookStatus bookStatus = BookStatus.available;
+      if (!isNotToday && startTime.isBefore(now)) {
+        bookStatus = BookStatus.isPast;
+      }
+      TimeSlot slot = new TimeSlot(
+        seq: ++seq,
+        startText: timeFmt1.format(startTime).toLowerCase(),
+        endText: timeFmt1.format(timeTo),
+        timeStart: timeFmt2.format(startTime),
+        timeEnd: timeFmt2.format(timeTo),
+        duration: timeTo.difference(startTime).inMinutes,
+        bookStatus: bookStatus,
+      );
+      _slots.add(slot);
+
+      startTime = timeTo;
+    }
+  }
+  /* Backup
+  void _createTimeSlots() {
+    developer.log(StackTrace.current.toString().split('\n')[0]);
+
+    DateTime now = DateTime.now();
     bool isDateChanged = _tarDate.year != now.year ||
         _tarDate.month != now.month ||
         _tarDate.day !=
@@ -264,13 +335,14 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
       startTime = timeTo;
     }
   }
+  */
 
   // Create the screen bookable slots for 'section' based amenity
   void _createSectionSlots() {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     DateTime now = DateTime.now();
-    bool isDateChanged = _tarDate.year != now.year ||
+    bool isNotToday = _tarDate.year != now.year ||
         _tarDate.month != now.month ||
         _tarDate.day !=
             now.day; // If date changed, the begin time will be the amenity opening time
@@ -280,7 +352,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
       return a.timeBegin.compareTo(b.timeBegin);
     });
 
-    if (!isDateChanged) {
+    if (!isNotToday) {
       // If today, is now later than last sections begin time? If so, move to tomorrow
       String todayLastSectionBeginTime = this
           ._amenity
@@ -291,7 +363,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
               ' ' +
               todayLastSectionBeginTime);
       if (now.isAfter(dtTodayLastSectionBeginTime)) {
-        isDateChanged = true;
+        isNotToday = true;
         _tarDate = _tarDate.add(Duration(days: 1)); // move to tomorrow
       }
     }
@@ -299,7 +371,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
     // Skip until the weekday is bookable
     int loop = 0; // To detect whole week is not bookable
     while (!_isWeekdayOpen(_tarDate)) {
-      isDateChanged = true;
+      isNotToday = true;
       _tarDate = _tarDate.add(Duration(days: 1));
       if (++loop > 7) {
         throw 'amenityNotAvailAllTime'.tr();
@@ -312,19 +384,20 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
 
     // What section(s) will be shown
     List<Models.AmenityBookingSection> sections = [];
-    if (isDateChanged) {
-      // If not today, all sections are okay
-      sections.addAll(this._amenity.bookingSections!);
-    } else {
-      // If today, calculate what section(s) is past
-      String nowTime = DateFormat('HH:mm').format(now);
-      for (int i = 0; i < this._amenity.bookingSections!.length; ++i) {
-        var bs = this._amenity.bookingSections![i];
-        if (nowTime.compareTo(bs.timeBegin) < 0) {
-          sections.add(bs);
-        }
-      }
-    }
+    // if (isNotToday) {
+    //   // If not today, all sections are okay
+    //   sections.addAll(this._amenity.bookingSections!);
+    // } else {
+    //   // If today, calculate what section(s) is past
+    //   String nowTime = DateFormat('HH:mm').format(now);
+    //   for (int i = 0; i < this._amenity.bookingSections!.length; ++i) {
+    //     var bs = this._amenity.bookingSections![i];
+    //     if (nowTime.compareTo(bs.timeBegin) < 0) {
+    //       sections.add(bs);
+    //     }
+    //   }
+    // }
+    sections.addAll(this._amenity.bookingSections!);
 
     // Reset the time slots
     _slots = [];
@@ -338,6 +411,12 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
       DateTime dtEnd = DateTime.parse(
           DateFormat('yyyy-MM-dd').format(_tarDate) + ' ' + section.timeEnd);
 
+      BookStatus bookStatus = BookStatus.available;
+
+      if (!isNotToday && dtBegin.isBefore(now)) {
+        bookStatus = BookStatus.isPast;
+      }
+
       TimeSlot slot = new TimeSlot(
         seq: ++seq,
         startText: timeFmt1.format(dtBegin).toLowerCase(),
@@ -345,7 +424,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
         timeStart: section.timeBegin,
         timeEnd: section.timeEnd,
         duration: dtEnd.difference(dtBegin).inMinutes,
-        // sectionId: section.id,
+        bookStatus: bookStatus,
       );
       _slots.add(slot);
     }
@@ -429,7 +508,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
 
     if (!_amenity.isRepetitiveBooking) {
       // Verify the latest status: Is someone booked the same time?
-      Ajax.ApiResponse resp = await Ajax.getTenantBookingByTimes(
+      Ajax.ApiResponse resp = await Ajax.getTenantBookingsByDate(
         // clientCode: Globals.curClientJson?['code'],
         amenityId: this._amenity.id,
         date: DateFormat('yyyy-MM-dd').format(_tarDate),
@@ -496,20 +575,24 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
       currency: Globals.curEstateJson!['currency'],
       loopTitle: jsonEncode(loopTitle),
     );
-    late String msg;
+    late String title, msg;
     if (this._amenity.fee == 0) {
+      title = 'bookedSuccessTitle'.tr();
       msg = 'amenityBookToCancel'.tr();
     } else {
-      msg = 'amenityPayUsageFee'.tr();
-      msg = msg.replaceAll('{fee}', totalFee.toString());
-      msg = msg.replaceAll('{hours}', _amenity.autoCancelHours.toString());
+      title = 'tentativeBookedTitle'.tr();
+      if (_amenity.autoCancelHours != null) {
+        msg = 'amenityPayUsageFeeB4Hours'.tr();
+        msg = msg.replaceAll('{fee}', totalFee.toString());
+        msg = msg.replaceAll('{hours}', _amenity.autoCancelHours.toString());
+      } else {
+        msg = 'amenityPayUsageFeeB4Date'.tr();
+        msg = msg.replaceAll('{fee}', totalFee.toString());
+        msg = msg.replaceAll('{date}', booking.date);
+      }
     }
 
-    await Utils.showAlertDialog(
-      context,
-      'amenityBookedSuccess'.tr(),
-      msg,
-    );
+    await Utils.showAlertDialog(context, title, msg);
 
     await Globals.homePage.refreshData();
     Navigator.pop(context);
@@ -987,6 +1070,7 @@ enum BookStatus {
   available,
   bookedByMe,
   bookedInDb,
+  isPast,
 }
 
 // Data structure to handle a time slot
@@ -998,7 +1082,8 @@ class TimeSlot {
   String timeEnd;
   int duration; // duration in minutes
   // String? sectionId; // used in section based booking only
-  BookStatus bookStatus = BookStatus.available;
+  // BookStatus bookStatus = BookStatus.available;
+  BookStatus bookStatus;
 
   TimeSlot({
     required this.seq,
@@ -1007,6 +1092,7 @@ class TimeSlot {
     required this.timeStart,
     required this.timeEnd,
     required this.duration,
+    required this.bookStatus,
     // this.sectionId,
   });
 
@@ -1094,9 +1180,15 @@ class _TimeSlotTileState extends State<TimeSlotTile> {
         color: Globals.primaryColor, // Colors.green[800],
         size: 24.0,
       );
-    } else {
+    } else if (timeslot.bookStatus == BookStatus.bookedInDb) {
       stsIcon = Icon(
         Icons.radio_button_checked,
+        color: Colors.grey,
+        size: 24.0,
+      );
+    } else if (timeslot.bookStatus == BookStatus.isPast) {
+      stsIcon = Icon(
+        Icons.radio_button_unchecked,
         color: Colors.grey,
         size: 24.0,
       );
@@ -1135,13 +1227,14 @@ class _TimeSlotTileState extends State<TimeSlotTile> {
           ),
           stsIcon,
           MaterialButton(
-            onPressed: (timeslot.bookStatus == BookStatus.bookedInDb)
+            onPressed: (timeslot.bookStatus == BookStatus.bookedInDb ||
+                    timeslot.bookStatus == BookStatus.isPast)
                 ? null
                 : () {
                     _onBtnBook(context);
                   },
             disabledColor: Colors.grey[400],
-            color: Globals.primaryLightDarkColor, // Colors.green[800],
+            color: Globals.primaryLightDarkColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
