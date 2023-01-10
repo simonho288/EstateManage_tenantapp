@@ -1,10 +1,12 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
+// import 'package:uuid/uuid.dart';
+import 'package:nanoid/nanoid.dart';
 
 import '../include.dart';
 import '../models.dart' as Models;
@@ -25,12 +27,13 @@ class AmenityBookingPage extends StatefulWidget {
 
 class _AmenityBookingPageState extends State<AmenityBookingPage> {
   late Models.Amenity _amenity;
+  late String _amenityName;
+  late String _amenityDetails;
   DateTime? _minDate = null;
   late DateTime _tarDate;
   List<TimeSlot> _slots = []; // Timeslot calculated
   Future<bool>? _futureData;
   late List<Models.TenantAmenityBooking> _dbBookings;
-  var _uuid = Uuid();
 
   /////////////////////////// Getters/Setters ///////////////////////////
 
@@ -69,6 +72,8 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
 
   _AmenityBookingPageState(Models.Amenity amenity) {
     this._amenity = amenity;
+    this._amenityName = Utils.getDbStringByCurLocale(amenity.name);
+    this._amenityDetails = Utils.getDbStringByCurLocale(amenity.details);
   }
 
   @override
@@ -124,28 +129,30 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
     // Convert from JSON to Models.TenantAmenityBooking[]
     _dbBookings = [];
     for (int i = 0; i < resp.data.length; ++i) {
-      Map<String, dynamic> r = resp.data[i];
+      Map<String, dynamic> bkg = resp.data[i];
+      List<Map<String, dynamic>> timeSlots =
+          List<Map<String, dynamic>>.from(jsonDecode(bkg['timeSlots']));
 
       List<Models.TenantAmenityBookingSlot> slots = [];
-      for (int j = 0; j < r['time_slots'].length; ++j) {
-        Map<String, dynamic> s = r['time_slots'][j];
+      for (int j = 0; j < timeSlots.length; ++j) {
+        Map<String, dynamic> ts = timeSlots[j];
         slots.add(Models.TenantAmenityBookingSlot(
-          id: _uuid.v4(),
-          timeStart: s['tenant_amenity_bkgslots_id']['time_start'],
-          timeEnd: s['tenant_amenity_bkgslots_id']['time_end'],
-          bookingSection: s['tenant_amenity_bkgslots_id']['booking_section'],
-          fee: s['tenant_amenity_bkgslots_id']['fee'],
+          timeStart: ts['from'],
+          timeEnd: ts['to'],
+          name: ts['name'],
+          // section: ts['section'],
+          // fee: ts['fee'].toDouble(),
         ));
       }
       _dbBookings.add(Models.TenantAmenityBooking(
-        id: r['id'],
-        dateCreated: DateTime.parse(r['date_created']),
-        tenantId: r['tenant'],
-        amenityId: r['amenity'],
-        bookingTimeBasic: r['booking_time_basic'],
-        date: r['date'],
-        totalFee: r['total_fee']?.toDouble(),
-        isPaid: r['is_paid'],
+        id: bkg['id'],
+        dateCreated: DateTime.parse(bkg['dateCreated']),
+        tenantId: bkg['tenantId'],
+        amenityId: bkg['amenityId'],
+        bookingTimeBasic: bkg['bookingTimeBasic'],
+        date: bkg['date'],
+        totalFee: bkg['totalFee'].toDouble(),
+        isPaid: bkg['isPaid'] != 0,
         slots: slots,
         // timeStart: r['time_start'],
         // timeEnd: r['time_end'],
@@ -338,7 +345,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
         timeStart: section.timeBegin,
         timeEnd: section.timeEnd,
         duration: dtEnd.difference(dtBegin).inMinutes,
-        sectionId: section.id,
+        // sectionId: section.id,
       );
       _slots.add(slot);
     }
@@ -404,20 +411,17 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
     for (int i = 0; i < _slots.length; ++i) {
       TimeSlot slot = _slots[i];
       if (slot.bookStatus == BookStatus.bookedByMe) {
-        String? sectionId = null;
-        if (this._amenity.bookingTimeBasic == 'section') {
-          sectionId = slot.sectionId;
-        }
+        // String? sectionId = null;
+        // if (this._amenity.bookingTimeBasic == 'section') {
+        //   sectionId = slot.sectionId;
+        // }
         totalFee += _amenity.fee.toDouble();
 
         tabslots.add(Models.TenantAmenityBookingSlot(
-          // tenantAmenityBookingId: 0,
-          // bookingTimeBasic: amenity.bookingTimeBasic,
-          id: _uuid.v4(),
           timeStart: slot.timeStart,
           timeEnd: slot.timeEnd,
-          bookingSection: sectionId,
-          fee: _amenity.fee.toDouble(),
+          // section: sectionId,
+          // fee: _amenity.fee.toDouble(),
         ));
         times.add(slot.timeStart);
       }
@@ -461,7 +465,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
 
     // Now it can save the booking
     Models.TenantAmenityBooking booking = Models.TenantAmenityBooking(
-      id: _uuid.v4(),
+      id: nanoid(),
       dateCreated: DateTime.now(),
       tenantId: Globals.curTenantJson?['id'],
       amenityId: _amenity.id,
@@ -478,11 +482,20 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
       autoCancelTime =
           DateTime.now().add(Duration(hours: _amenity.autoCancelHours!));
     }
+
+    Map<String, dynamic> loopTitle = {
+      'en':
+          '${"amenityBooking".tr()}: $_amenityName on ${booking.date} ${times[0]}'
+    };
     await Ajax.saveAmenityBooking(
-        booking: booking,
-        slots: tabslots,
-        status: status,
-        autoCancelTime: autoCancelTime);
+      amenity: _amenity,
+      booking: booking,
+      slots: tabslots,
+      status: status,
+      autoCancelTime: autoCancelTime,
+      currency: Globals.curEstateJson!['currency'],
+      loopTitle: jsonEncode(loopTitle),
+    );
     late String msg;
     if (this._amenity.fee == 0) {
       msg = 'amenityBookToCancel'.tr();
@@ -750,7 +763,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        _amenity.name,
+                        _amenityName,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -760,7 +773,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
                       SizedBox(
                         height: 50,
                         child: SingleChildScrollView(
-                          child: Html(data: _amenity.details),
+                          child: Html(data: _amenityDetails),
                         ),
                       ),
                     ],
@@ -838,7 +851,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
                     onPressed: _onBtnBack,
                   ),
                   Text(
-                    _amenity.name,
+                    _amenityName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -922,7 +935,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
                       SizedBox(
                         height: 80,
                         child: SingleChildScrollView(
-                          child: Html(data: _amenity.details),
+                          child: Html(data: _amenityDetails),
                         ),
                       ),
                     ],
@@ -984,7 +997,7 @@ class TimeSlot {
   String timeStart;
   String timeEnd;
   int duration; // duration in minutes
-  String? sectionId; // used in section based booking only
+  // String? sectionId; // used in section based booking only
   BookStatus bookStatus = BookStatus.available;
 
   TimeSlot({
@@ -994,7 +1007,7 @@ class TimeSlot {
     required this.timeStart,
     required this.timeEnd,
     required this.duration,
-    this.sectionId,
+    // this.sectionId,
   });
 
   String get durationText {

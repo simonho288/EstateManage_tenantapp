@@ -131,7 +131,6 @@ Future<ApiResponse> scanEstateQrcode({required String code}) async {
       'Content-Type': 'application/json',
     },
     // body: convert.jsonEncode(param),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   if (response.statusCode > 299) {
@@ -174,7 +173,6 @@ Future<ApiResponse> scanEstateQrcode({required String code}) async {
       'Content-Type': 'application/json',
     },
     // body: convert.jsonEncode(param),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -198,7 +196,6 @@ Future<ApiResponse> scanUnitQrcode(String qrcode) async {
           'Content-Type': 'application/json',
         },
         body: convert.jsonEncode(param),
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -226,7 +223,6 @@ Future<ApiResponse> scanUnitQrcode(
       'Content-Type': 'application/json',
     },
     // body: convert.jsonEncode(param),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   if (response.statusCode > 299) {
@@ -269,7 +265,6 @@ Future<ApiResponse> scanUnitQrcode(
           'Content-Type': 'application/json',
         },
         body: convert.jsonEncode(param),
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -297,7 +292,6 @@ Future<ApiResponse> scanUnitQrcode(
       'Content-Type': 'application/json',
     },
     // body: convert.jsonEncode(param),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -344,7 +338,6 @@ Future<ApiResponse> submitJoinRequest(
           HttpHeaders.authorizationHeader: 'Apikey ' + ccEnc,
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -392,7 +385,6 @@ Future<ApiResponse> createNewTenant(
           // HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -421,7 +413,6 @@ Future<ApiResponse> setUserPassword({
           HttpHeaders.authorizationHeader: 'Apikey ' + ccEnc,
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -453,7 +444,6 @@ Future<ApiResponse> tenantLogin({
           'Content-Type': 'application/json',
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -479,7 +469,6 @@ Future<ApiResponse> tenantLogout({
           HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -508,7 +497,6 @@ Future<ApiResponse> getAllUnits({
           HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -535,7 +523,6 @@ Future<ApiResponse> getLoops({
           HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -577,7 +564,6 @@ Future<ApiResponse> getLoops({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -630,7 +616,6 @@ Future<ApiResponse> getUserNotifications({
           HttpHeaders.authorizationHeader: 'Apikey ' + ccEnc,
         },
         body: convert.jsonEncode({'s': s}),
-        encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -688,7 +673,6 @@ Future<ApiResponse> getNotices({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -745,7 +729,6 @@ Future<ApiResponse> getMarketplaces({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -764,7 +747,6 @@ Future<ApiResponse> getAmenity({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -785,7 +767,6 @@ Future<ApiResponse> getEstate({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -804,7 +785,6 @@ Future<ApiResponse> getNotice({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -824,7 +804,6 @@ Future<ApiResponse> getOneMarketplace({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -841,7 +820,6 @@ Future<ApiResponse> getBookableAmenities() async {
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -889,7 +867,6 @@ Future<ApiResponse> getAmenityBookingSections({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
@@ -903,28 +880,33 @@ Future<ApiResponse> getTenantBookingsByDate({
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-/*
-  // Parameters for backend
-  final Map<String, dynamic> param = {
-    'coll': 'tenant_amenity_bookings',
-    'query': {
-      'filter': {
-        'date': {
-          '_eq': date,
-        },
-        'amenity': amenityId,
-        'status': {
-          '_neq': 'cancelled', // exclude cancelled booking
-        },
-      },
-      'fields':
-          '*,tenant.tenants_id.id,amenity.amenities_id.id,time_slots.tenant_amenity_bkgslots_id.time_start,time_slots.tenant_amenity_bkgslots_id.time_end,time_slots.tenant_amenity_bkgslots_id.booking_section', // Note the tenants_id.id is the M2M formed
-    },
+  Map<String, dynamic> params = {
+    'date': date,
+    'amenity': amenityId,
   };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
-  // Encrypt the parameter body since it is directus specific
-  final String s = Utils.encryptStringAES256CTR(convert.jsonEncode(param));
-*/
+
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/getAmenityBookingsByDate'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(params),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+/* Backup
+Future<ApiResponse> getTenantBookingsByDate({
+  // required String clientCode,
+  required String date,
+  required String amenityId,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
   Map<String, dynamic> filter = {
     'date': {
       '_eq': date,
@@ -946,11 +928,11 @@ Future<ApiResponse> getTenantBookingsByDate({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
 }
+*/
 
 // To get specified time(s) of booking, not daily bookings list
 Future<ApiResponse> getTenantBookingByTimes({
@@ -1014,43 +996,58 @@ Future<ApiResponse> getTenantBookingByTimes({
       HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
     // body: convert.jsonEncode({'s': s}),
-    // encoding: convert.Encoding.getByName('utf-8'),
   ).timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
 }
 
 Future<ApiResponse> saveAmenityBooking({
+  required Models.Amenity amenity,
   required Models.TenantAmenityBooking booking,
   required List<Models.TenantAmenityBookingSlot> slots,
   required String status,
+  required String currency,
   DateTime? autoCancelTime,
+  required String loopTitle,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
   assert(slots.length > 0);
 
+  String? payBefore;
+  if (autoCancelTime != null) {
+    payBefore = autoCancelTime.toIso8601String();
+  }
+
+  String senderName = convert.jsonEncode({'en': 'TenantApp'});
+
   // Map Models.TenantAmenityBooking to Directus M2M create JSON
   Map<String, dynamic> param = {
-    'tenant': booking.tenantId,
-    'amenity': booking.amenityId,
-    'booking_time_basic': booking.bookingTimeBasic,
+    'tenantId': booking.tenantId,
+    'amenityId': booking.amenityId,
+    'amenityName': amenity.name,
+    'amenityPhoto': amenity.photo,
+    'bookingTimeBasic': booking.bookingTimeBasic,
+    'senderName': senderName,
     'date': booking.date,
+    'fee': amenity.fee,
     'status': status,
-    'total_fee': booking.totalFee,
-    'is_paid': booking.isPaid,
+    'title': loopTitle,
+    'totalFee': booking.totalFee,
+    'currency': currency,
+    'isPaid': booking.isPaid,
     'slots': [],
-    'auto_cancel_time': autoCancelTime?.toIso8601String(),
-    'local_time': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+    'autoCancelTime': autoCancelTime?.toIso8601String(),
+    'localTime': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+    'payBefore': payBefore,
   };
-
   slots.forEach((slot) {
     param['slots'].add({
       // 'booking_time_basic': slot.bookingTimeBasic,
-      'time_start': slot.timeStart,
-      'time_end': slot.timeEnd,
-      'section': slot.bookingSection,
-      // 'tenant_amenity_booking': slot.tenantAmenityBookingId,
-      'fee': slot.fee,
+      'name': slot.name,
+      'from': slot.timeStart,
+      'to': slot.timeEnd,
+      // 'section': slot.section,
+      // 'fee': slot.fee,
     });
   });
 
@@ -1058,14 +1055,13 @@ Future<ApiResponse> saveAmenityBooking({
 
   final response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/saveAmenityBooking'),
+        Uri.parse('${Globals.hostApiUri}/api/tl/saveAmenityBooking'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -1099,7 +1095,6 @@ Future<ApiResponse> deleteTenantBooking({
         },
         body: convert.jsonEncode(
             tenantAmenityBookingIds), // the encrypted param put to 's'
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -1130,7 +1125,6 @@ Future<ApiResponse> deleteTenantBooking({
           HttpHeaders.authorizationHeader: 'Apikey ' + ccEnc,
         },
         body: convert.jsonEncode({'s': s}), // the encrypted param put to 's'
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
@@ -1160,7 +1154,6 @@ Future<ApiResponse> fetchPaymentSheetData({
           HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
-        // encoding: convert.Encoding.getByName('utf-8'),
       )
       .timeout(Duration(seconds: TIMEOUT));
 

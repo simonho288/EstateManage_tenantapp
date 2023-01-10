@@ -116,7 +116,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
         context: context,
         titleId: _loopJson['title_id'],
         type: widget._loop.type,
-        params: _loopJson);
+        meta: _loopJson);
     String body = translated['body'];
     // Size size = MediaQuery.of(context).size;
 

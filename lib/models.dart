@@ -413,21 +413,19 @@ class TenantAmenityBooking {
 }
 
 class TenantAmenityBookingSlot {
-  String id;
-  // int tenantAmenityBookingId; // Point to Models.TenantAmenityBooking
-  // String bookingTimeBasic;
+  String? name;
   String timeStart;
   String timeEnd;
-  String? bookingSection;
-  double? fee;
+  // String? section;
+  // double? fee;
 
   TenantAmenityBookingSlot({
-    required this.id,
+    this.name,
     // required this.tenantAmenityBookingId,
     // required this.bookingTimeBasic,
     required this.timeStart,
     required this.timeEnd,
-    this.bookingSection,
-    this.fee,
+    // this.section,
+    // this.fee,
   });
 }

@@ -263,7 +263,7 @@ class _BookingPageState extends State<BookingPage> {
         context: context,
         titleId: params['titleId'],
         type: this._loop.type,
-        params: params);
+        meta: params);
     String body = translated['body'];
     String subTitle = "created".tr() +
         ': ' +

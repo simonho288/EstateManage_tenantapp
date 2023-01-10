@@ -26,30 +26,30 @@ import 'utils.dart' as Utils;
 
 Map<String, String> _newAmenityBkg({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  String amenityName = Utils.getDbStringByCurLocale(params['amenityName']);
-  int fee = params['fee'];
-  String date = Utils.formatDate(params['date']);
+  String amenityName = Utils.getDbStringByCurLocale(meta['amenityName']);
+  int fee = meta['fee'];
+  String date = Utils.formatDate(meta['date']);
   // String bookingId = params['bookingId'].toString();
-  int bookingNo = params['bookingNo'];
-  String status = (params['status'] == 'pending')
+  int bookingNo = meta['bookingNo'];
+  String status = (meta['status'] == 'pending')
       ? 'pending'.tr()
-      : (params['status'] == 'confirmed')
+      : (meta['status'] == 'confirmed')
           ? 'confirmed'.tr()
-          : (params['status'] == 'cancelled')
+          : (meta['status'] == 'cancelled')
               ? 'cancelled'.tr()
-              : params['status'];
-  List<dynamic> slots = jsonDecode(params['slots']);
+              : meta['status'];
+  List<dynamic> slots = meta['slots'];
   List<String> timeSlots = []; // Store the string of time range
   for (int i = 0; i < slots.length; i++) {
     var slot = slots[i];
-    String timeBegin = Utils.formatTime(slot['timeBegin']);
-    String timeEnd = Utils.formatTime(slot['timeEnd']);
+    String timeBegin = Utils.formatTime(slot['from']);
+    String timeEnd = Utils.formatTime(slot['to']);
     timeSlots.add(timeBegin + ' - ' + timeEnd);
   }
 
@@ -62,7 +62,7 @@ Map<String, String> _newAmenityBkg({
   late String title;
   late String points;
   late String finalLine;
-  if (params['fee'] == 0) {
+  if (meta['fee'] == 0) {
     title =
         '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingNo';
     finalLine = 'plsComeToAmenityOntime'.tr();
@@ -83,8 +83,8 @@ Map<String, String> _newAmenityBkg({
     // remindToPay = remindToPay.replaceAll('{fee}', fee.toString());
 
     String payBefore = '-';
-    if (params['payBefore'] != null) {
-      payBefore = Utils.formatDatetime(params['payBefore']);
+    if (meta['payBefore'] != null) {
+      payBefore = Utils.formatDatetime(meta['payBefore']);
     }
 
     points = '''
@@ -154,26 +154,26 @@ Map<String, String> _newAmenityBkg({
 
 Map<String, String> _amenityBkgConfirmed({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  String amenityName = params['amenityName'];
-  int fee = params['totalFee'];
-  String date = params['date'];
-  String bookingId = params['bookingId'].toString();
-  String status = (params['status'] == 'pending')
+  String amenityName = meta['amenityName'];
+  int fee = meta['totalFee'];
+  String date = meta['date'];
+  String bookingId = meta['bookingId'].toString();
+  String status = (meta['status'] == 'pending')
       ? 'pending'.tr()
-      : (params['status'] == 'confirmed')
+      : (meta['status'] == 'confirmed')
           ? 'confirmed'.tr()
-          : (params['status'] == 'cancelled')
+          : (meta['status'] == 'cancelled')
               ? 'cancelled'.tr()
-              : params['status'];
+              : meta['status'];
   List<String> timeSlots = []; // Store the string of time range
-  for (int i = 0; i < params['slots'].length; ++i) {
-    Map<String, dynamic> slot = params['slots'][i];
+  for (int i = 0; i < meta['slots'].length; ++i) {
+    Map<String, dynamic> slot = meta['slots'][i];
     String timeBegin = Utils.formatTime(slot['timeBegin']);
     String timeEnd = Utils.formatTime(slot['timeEnd']);
     timeSlots.add(timeBegin + ' - ' + timeEnd);
@@ -186,15 +186,15 @@ Map<String, String> _amenityBkgConfirmed({
   timeSlotsUl += '</ul>';
 
   String? isPaidStr;
-  if (params['isPaid'] != null) {
+  if (meta['isPaid'] != null) {
     isPaidStr =
-        params['isPaid'] ? 'paymentConfirmed'.tr() : 'paymentNotConfirmed'.tr();
+        meta['isPaid'] ? 'paymentConfirmed'.tr() : 'paymentNotConfirmed'.tr();
   }
 
   rtnVal['title'] =
       '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date${'fullstop'.tr()}${'bookingNo'.tr()}: $bookingId';
   rtnVal['body'] = '''
-      <h3>${'youHaveBooked'.tr()} <b>${params["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
+      <h3>${'youHaveBooked'.tr()} <b>${meta["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
       <ul>
         <li>${'bookingNo'.tr()}: $bookingId</li>
         <li>${'status'.tr()}: $status</li>
@@ -211,26 +211,26 @@ Map<String, String> _amenityBkgConfirmed({
 
 Map<String, String> _amenityBkgCancelled({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  String amenityName = params['amenityName'];
-  int fee = params['totalFee'];
-  String date = params['date'];
-  String bookingId = params['bookingId'].toString();
-  String status = (params['status'] == 'pending')
+  String amenityName = meta['amenityName'];
+  int fee = meta['totalFee'];
+  String date = meta['date'];
+  String bookingId = meta['bookingId'].toString();
+  String status = (meta['status'] == 'pending')
       ? 'pending'.tr()
-      : (params['status'] == 'confirmed')
+      : (meta['status'] == 'confirmed')
           ? 'confirmed'.tr()
-          : (params['status'] == 'cancelled')
+          : (meta['status'] == 'cancelled')
               ? 'cancelled'.tr()
-              : params['status'];
+              : meta['status'];
   List<String> timeSlots = []; // Store the string of time range
-  for (int i = 0; i < params['slots'].length; ++i) {
-    Map<String, dynamic> slot = params['slots'][i];
+  for (int i = 0; i < meta['slots'].length; ++i) {
+    Map<String, dynamic> slot = meta['slots'][i];
     String timeBegin = Utils.formatTime(slot['timeBegin']);
     String timeEnd = Utils.formatTime(slot['timeEnd']);
     timeSlots.add(timeBegin + ' - ' + timeEnd);
@@ -243,14 +243,14 @@ Map<String, String> _amenityBkgCancelled({
   timeSlotsUl += '</ul>';
 
   String? payBefore = null;
-  if (params['payBefore'] != null) {
-    payBefore = Utils.formatDatetime(params['payBefore']);
+  if (meta['payBefore'] != null) {
+    payBefore = Utils.formatDatetime(meta['payBefore']);
   }
 
   rtnVal['title'] =
       '${'bookingCancel'.tr()} "$amenityName" ${'at'.tr()}$date${'fullstop'.tr()}${'bookingNo'.tr()}: $bookingId';
   rtnVal['body'] = '''
-      <h3>${'youHaveBooked'.tr()} <b>${params["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
+      <h3>${'youHaveBooked'.tr()} <b>${meta["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
       <ul>
         <li>${'bookingNo'.tr()}: $bookingId</li>
         <li>${'status'.tr()}: $status</li>
@@ -268,22 +268,22 @@ Map<String, String> _amenityBkgCancelled({
 
 Map<String, String> _mgrmReceipt({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
 
-  var unitJson = params['unit'];
-  unitJson['cls'] = params['unitType'];
-  String month = params['month'];
-  String unitName = Utils.buildUnitNameWithLangByJson(context, params['unit']);
-  String paidDate = params['paidRec']['paidRec']['paid']['paidDate'];
+  var unitJson = meta['unit'];
+  unitJson['cls'] = meta['unitType'];
+  String month = meta['month'];
+  String unitName = Utils.buildUnitNameWithLangByJson(context, meta['unit']);
+  String paidDate = meta['paidRec']['paidRec']['paid']['paidDate'];
   String paidDate2 = Utils.formatDate(paidDate);
 
   rtnVal['title'] =
-      '${'mgroffReceipt'.tr()}: ${params['month']} ${'mgrfeeReceipt'.tr()}';
+      '${'mgroffReceipt'.tr()}: ${meta['month']} ${'mgrfeeReceipt'.tr()}';
   rtnVal['body'] = '''
     <h3>${'mgrfeeReceipt'.tr()}</h3>
     <p>${'title'.tr()}: ${'officialReceipt'.tr()}</p>
@@ -297,16 +297,16 @@ Map<String, String> _mgrmReceipt({
 
 Map<String, String> _mgrmtNotice({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  String noticeTitle = Utils.getDbStringByCurLocale(params["title"]);
-  String issueDate = Utils.formatDate(params["issueDate"]);
+  String noticeTitle = Utils.getDbStringByCurLocale(meta["title"]);
+  String issueDate = Utils.formatDate(meta["issueDate"]);
 
-  List<String> audiences = List<String>.from(jsonDecode(params['audiences']));
+  List<String> audiences = List<String>.from(jsonDecode(meta['audiences']));
   rtnVal['title'] =
       '${'navbarNotice'.tr()}: $noticeTitle ${'at'.tr()} $issueDate';
   rtnVal['body'] = '''
@@ -321,14 +321,14 @@ Map<String, String> _mgrmtNotice({
 
 Map<String, String> _newAdWithImg({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   Map<String, String> rtnVal = {};
-  String title = Utils.getDbStringByCurLocale(params["title"]);
-  String postDate = Utils.formatDate(params["postDate"]);
+  String title = Utils.getDbStringByCurLocale(meta["title"]);
+  String postDate = Utils.formatDate(meta["postDate"]);
 
   rtnVal['title'] = 'Ad: $title';
   rtnVal['body'] = '''
@@ -342,7 +342,7 @@ Map<String, String> _newAdWithImg({
 
 Map<String, String> _reqAccess({
   required BuildContext context,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
   required String type,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
@@ -360,7 +360,7 @@ Map<String, dynamic> byTitleId({
   required BuildContext context,
   required String titleId,
   required String type,
-  required Map<String, dynamic> params,
+  required Map<String, dynamic> meta,
 }) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
   developer.log('Processing Loop translate: $titleId');
@@ -368,19 +368,19 @@ Map<String, dynamic> byTitleId({
   Map<String, String> rtnVal;
 
   if (titleId == Constants.LOOP_TITLE_NEW_AMENITY_BOOKING) {
-    rtnVal = _newAmenityBkg(context: context, params: params, type: type);
+    rtnVal = _newAmenityBkg(context: context, meta: meta, type: type);
   } else if (titleId == Constants.LOOP_TITLE_AMENITY_BOOKING_CONFIRMED) {
-    rtnVal = _amenityBkgConfirmed(context: context, params: params, type: type);
+    rtnVal = _amenityBkgConfirmed(context: context, meta: meta, type: type);
   } else if (titleId == Constants.LOOP_TITLE_AMENITY_BOOKING_CANCELLED) {
-    rtnVal = _amenityBkgCancelled(context: context, params: params, type: type);
+    rtnVal = _amenityBkgCancelled(context: context, meta: meta, type: type);
   } else if (titleId == Constants.LOOP_TITLE_MANAGEMENT_NOTICE) {
-    rtnVal = _mgrmtNotice(context: context, params: params, type: type);
+    rtnVal = _mgrmtNotice(context: context, meta: meta, type: type);
   } else if (titleId == Constants.LOOP_TITLE_NEW_AD_WITH_IMAGE) {
-    rtnVal = _newAdWithImg(context: context, params: params, type: type);
+    rtnVal = _newAdWithImg(context: context, meta: meta, type: type);
   } else if (titleId == Constants.LOOP_TITLE_TENANT_REQUEST_ACCESS) {
-    rtnVal = _reqAccess(context: context, params: params, type: type);
+    rtnVal = _reqAccess(context: context, meta: meta, type: type);
   } else if (titleId == Constants.LOOP_TITLE_MANAGEMENT_RECEIPT) {
-    rtnVal = _mgrmReceipt(context: context, params: params, type: type);
+    rtnVal = _mgrmReceipt(context: context, meta: meta, type: type);
   } else {
     throw 'Unhandled titleId: $titleId';
   }

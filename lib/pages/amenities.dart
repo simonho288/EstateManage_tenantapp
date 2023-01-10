@@ -155,6 +155,7 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
 
     Widget? trailing = null;
     late String dspt;
+    String amenityName = Utils.getDbStringByCurLocale(rec.name);
 
     if (rec.fee == 0) {
       dspt = 'freeFee'.tr();
@@ -218,7 +219,7 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
             // ),
             ListTile(
               title: Text(
-                rec.name,
+                amenityName,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

@@ -113,7 +113,7 @@ class _NoticePageState extends State<NoticePage> {
         context: context,
         titleId: params['titleId'],
         type: this._loop.type,
-        params: params);
+        meta: params);
     String body = translated['body'];
     // Size size = MediaQuery.of(context).size;
 

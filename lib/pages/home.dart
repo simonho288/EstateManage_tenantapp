@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             context: homePageContext,
             titleId: meta['titleId'],
             type: e['type'],
-            params: meta,
+            meta: meta,
           );
 
           String senderName = Utils.getDbStringByCurLocale(meta['senderName']);

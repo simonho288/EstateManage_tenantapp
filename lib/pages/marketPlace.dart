@@ -156,7 +156,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
         context: context,
         titleId: params['titleId'],
         type: this._loop.type,
-        params: params);
+        meta: params);
     String body = translated['body'];
 
     return RawBackground(
