@@ -1,0 +1,23 @@
+{
+  "name": "em-flutter-tenant",
+  "version": "1.0.0",
+  "description": "This is the frontend mobile app of the [EstateManage.Net platform](https://www.estatemanage.net). For detail documentation, please see the [backend repository](https://github.com/simonho288/estate-manage-backend).",
+  "scripts": {
+    "release": "yarn release --npm.skipChecks"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonho288/EstateManage_tenantapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simonho288/EstateManage_tenantapp/issues"
+  },
+  "homepage": "https://github.com/simonho288/EstateManage_tenantapp#readme",
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^5.1.1",
+    "release-it": "^15.6.0"
+  }
+}
