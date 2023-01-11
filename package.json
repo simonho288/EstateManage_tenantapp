@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "This is the frontend mobile app of the [EstateManage.Net platform](https://www.estatemanage.net). For detail documentation, please see the [backend repository](https://github.com/simonho288/estate-manage-backend).",
   "scripts": {
-    "release": "yarn release --npm.skipChecks"
+    "release": "release-it",
+    "release_bak": "yarn release --npm.skipChecks"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,35 @@
   "devDependencies": {
     "@release-it/conventional-changelog": "^5.1.1",
     "release-it": "^15.6.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release v${version}"
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": false
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "infile": "CHANGELOG.md",
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "Features"
+            },
+            {
+              "type": "fix",
+              "section": "Bug Fixes"
+            },
+            {}
+          ]
+        }
+      }
+    }
   }
 }
