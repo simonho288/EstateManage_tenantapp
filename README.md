@@ -41,11 +41,44 @@ $ secure-random -b 64 # copy&paste the value to above 'enc_secret_key'
 $ secure-random -l 16 # copy&paste the value to above 'enc_iv'
 ```
 
+7. Android properties files
+
+Modify the file '<Project Root>/android/local.properties'. Add below settings:
+
+```ini
+...
+android.applicationId=<your application id (same as Google Play console)>
+```
+
+Download the Firebase Android App settings file to `<Project Root>android/app/google-services.json`. Please see [Firebase](https://firebase.google.com/) for more information how to create a project & Android app.
+
+Modify the file '<Project Root>/android/local.properties
+
 ## Debug The App
 
 In Visual Studio Code, select the "Debug Mode" & press [F5] to start the debugger.
 
 5. If your language is other than English, you can create a new language JSON file which copies from `assets/langs/en-US.json` to your language in same directory. For more information, please refer to the package [easy_locations](https://pub.dev/packages/easy_localization).
+
+## Deployment
+
+### Android
+
+When you deploy the App to Google Play, you'll need to generate code signing keys. Run Android Studio to do that:
+
+- In Android Studio menu, select 'Build', 'Generate Signed Bundle/API', 'Create New'
+- Keystore path: [project root]/android/app/upload-keystore.jks (make sure add this to .gitignore)
+- Enter the keystore password
+- Key alias enter 'key0'
+- Enter the key password (should same as above keystore password)
+- Enter your name, organizational unit, organization ... (every field should not empty)
+- Tick the two checkboxes. Click 'Next'
+- In the 'Build Variants' box, select 'release'. Click 'Finish'
+- It generates the private key on 'android/app/private_key.pepk'. Add this file to .gitignore
+
+### iOS
+
+<TBD>
 
 ## Backend
 

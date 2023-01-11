@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.estatemanage_tenantapp">
+    package="net.estatemanage.tenantapp">
+   <uses-permission android:name="android.permission.CAMERA"/>
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="estatemanage_tenantapp"
+        android:label="EstateMan"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
@@ -20,6 +22,10 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data
+              android:name="io.flutter.embedding.android.SplashScreenDrawable"
+              android:resource="@drawable/launch_background"
+              />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -30,5 +36,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- A custom Android Notification Channel to deliver FCM notifications on a non-default channel -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel" />
+
     </application>
 </manifest>

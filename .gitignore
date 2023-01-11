@@ -56,3 +56,4 @@ assets/cfg/secrets.json
 # Shell scripts
 *.sh
 .vscode/settings.json
+android/app/private_key.pepk
