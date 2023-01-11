@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _prefs = await SharedPreferences.getInstance();
 
-    String? encPwd = await _prefs.getString('loginPassword');
+    String? encPwd = _prefs.getString('loginPassword');
     if (encPwd != null) {
       _password = Utils.decryptStringAES256CTR(encPwd);
     }

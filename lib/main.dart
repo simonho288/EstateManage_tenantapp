@@ -18,7 +18,7 @@ import 'include.dart';
 import 'constants.dart' as Constants;
 import 'globals.dart' as Globals;
 import 'pages/receipt.dart';
-import 'pages/suspended.dart';
+// import 'pages/suspended.dart';
 import 'utils.dart' as Utils;
 import 'ajax.dart' as Ajax;
 // import 'theme.dart' as Theme;
@@ -91,14 +91,6 @@ Future<void> _initialize() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  final dbPath =
-      Path.join(await getDatabasesPath(), Constants.LOCAL_DB_FILENAME);
-
-  // TODO Comment it out in production
-  // Delete the local database & create a new one everytime.
-  await deleteDatabase(dbPath);
-  await Utils.openLocalDatabase();
-
   // Assign the global variables
   Globals.isDebug = kDebugMode;
   String configFileName = Globals.configFileName = kDebugMode ? 'dev' : 'prod';
@@ -160,6 +152,20 @@ Future<Map<String, dynamic>> _loadStartupData() async {
   Globals.hostS3Base = GlobalConfiguration().getValue('hostS3Base');
   Globals.encryptSecretKey = GlobalConfiguration().getValue('enc_secret_key');
   Globals.encryptIv = GlobalConfiguration().getValue('enc_iv');
+
+  // Get the package info from pubspec.yaml
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  Globals.appVersion = packageInfo.version;
+  final dbPath =
+      Path.join(await getDatabasesPath(), Constants.LOCAL_DB_FILENAME);
+
+  // If version is upgraded, delete the old version database
+  String? lastVersion = prefs.getString("lastVersion");
+  if (lastVersion != Globals.appVersion) {
+    await deleteDatabase(dbPath);
+    await prefs.setString('lastVersion', Globals.appVersion!);
+  }
+  await Utils.openLocalDatabase(dbPath);
 
   // developer.log(
   //     'hostApiUri: ${Globals.hostApiUri}, hostSocketUri: ${Globals.hostSocketUri}, hostS3Base: ${Globals.hostS3Base}');
@@ -356,13 +362,6 @@ class _RootPageState extends State<RootPage> {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     Map<String, dynamic> rtnVal = {}; // will be assigned to _datum
-
-    // Get the package info from pubspec.yaml
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    // String appName = packageInfo.appName;
-    // String packageName = packageInfo.packageName;
-    Globals.appVersion = packageInfo.version;
-    // String buildNumber = packageInfo.buildNumber;
 
     // Load the SharedPreference
     SharedPreferences prefs = await SharedPreferences.getInstance();

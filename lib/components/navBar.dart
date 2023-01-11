@@ -176,15 +176,16 @@ class NavBar extends StatelessWidget {
 
       // Clean the shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      Globals.accessToken = null;
       Globals.curTenantJson = null;
-      await prefs.remove('userJson');
+      await prefs.remove('tenantJson');
+      await prefs.remove('loginPassword');
 
+      // Delete the local database coz other tenant login nexttime.
       final dbPath =
           Path.join(await getDatabasesPath(), Constants.LOCAL_DB_FILENAME);
-
-      // Delete the local database & create a new one everytime.
       await deleteDatabase(dbPath);
-      await Utils.openLocalDatabase();
+      await Utils.openLocalDatabase(dbPath);
 
       Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
     }

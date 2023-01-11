@@ -462,7 +462,7 @@ Future<ApiResponse> tenantLogout({
 
   final response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/logout'),
+        Uri.parse('${Globals.hostApiUri}/api/tl/signout'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

@@ -413,6 +413,7 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
 }
 
 // Encrypt a string using AES-256-CTR & return the string in base64 format
+// The encryption key & iv is assigned in assets/cfg/secrets.json
 String encryptStringAES256CTR(val) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
   assert(val != null);
@@ -428,6 +429,7 @@ String encryptStringAES256CTR(val) {
   return encrypted.base64; // The encrypted can be view as base64 String
 }
 
+// Decrypt a string which encrypted by above function.
 String decryptStringAES256CTR(String val) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
@@ -620,11 +622,8 @@ bool parseDbBoolean(dynamic value) {
   return false;
 }
 
-Future<void> openLocalDatabase() async {
+Future<void> openLocalDatabase(String dbPath) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  final dbPath =
-      Path.join(await getDatabasesPath(), Constants.LOCAL_DB_FILENAME);
 
   // Open the database and store the reference
   Globals.sqlite = await openDatabase(

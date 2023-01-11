@@ -1,3 +1,12 @@
+///
+/// This screen is to show the tenant ID as QR-Code. At the time
+/// of the development. It is no any place to use this.
+/// It is for future use.
+///
+/// The QrCode is actually is constants + tenant ID 'tc|v1|$tenantId'
+/// And it is encrypted by Utils.encryptStringAES256CTR()
+///
+
 import 'dart:developer' as developer;
 import 'dart:convert' as convert;
 import 'package:easy_localization/easy_localization.dart';
@@ -27,27 +36,29 @@ class TenantQrcodePageState extends State<TenantQrcodePage> {
   }
 
   loadInitialData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userJsonS = prefs.getString('userJson')!;
-    var userJson = convert.jsonDecode(userJsonS);
-    String unitJsonS = prefs.getString('unitJson')!;
-    var unitJson = convert.jsonDecode(unitJsonS);
-    String unitId = unitJson['id'];
-    String tenantId = userJson['id'];
-    String unitType = userJson['unit_type'];
-    String? unitCls = (unitType == 'resident')
-        ? 'R'
-        : (unitType == 'carpark')
-            ? 'C'
-            : (unitType == 'shop')
-                ? 'S'
-                : '';
-    if (unitCls == '') {
-      Utils.showAlertDialog(context, 'Internal Error', 'Invalid unit type');
-      return;
-    }
+    developer.log(StackTrace.current.toString().split('\n')[0]);
 
-    String qrcode = 'v1|$tenantId|$unitCls|$unitId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String tenantJsonS = prefs.getString('tenantJson')!;
+    var tenantJson = convert.jsonDecode(tenantJsonS);
+    // String unitJsonS = prefs.getString('unitJson')!;
+    // var unitJson = convert.jsonDecode(unitJsonS);
+    // String unitId = unitJson['id'];
+    String tenantId = tenantJson['id'];
+    // String unitType = tenantJson['unit_type'];
+    // String? unitCls = (unitType == 'resident')
+    //     ? 'R'
+    //     : (unitType == 'carpark')
+    //         ? 'C'
+    //         : (unitType == 'shop')
+    //             ? 'S'
+    //             : '';
+    // if (unitCls == '') {
+    //   Utils.showAlertDialog(context, 'Internal Error', 'Invalid unit type');
+    //   return;
+    // }
+
+    String qrcode = 'tc|v1|$tenantId';
 
     // TODO Generate tenant QR-code
     qrcode = Utils.encryptStringAES256CTR(qrcode);
