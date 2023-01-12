@@ -1,5 +1,17 @@
 
 
+## [0.4.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.3.1...v0.4.0) (2023-01-12)
+
+
+### Features
+
+* finish release-it setup and add 'break' for breaking changes section ([c14d57a](https://github.com/simonho288/EstateManage_tenantapp/commit/c14d57aa393fb73b500475fc4fd4bb3fc7bf15cb))
+
+
+### Bug Fixes
+
+* change all property files for preparing publish to googleplay ([720394b](https://github.com/simonho288/EstateManage_tenantapp/commit/720394bc2152284d437c7fcc51cb5514a3a01be8))
+
 ### [0.3.1](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.3.0...v0.3.1) (2023-01-11)
 
 
