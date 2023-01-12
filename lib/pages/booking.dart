@@ -154,7 +154,7 @@ class _BookingPageState extends State<BookingPage> {
     // TODO: Currently support whatsapp only
     String wano = '';
     if (this._amenity.contactWhatsapp != null) {
-      wano = this._amenity.contactWhatsapp!['phone'];
+      wano = this._amenity.contactWhatsapp!['number'];
     }
 
     String msg = 'bookingWhatsappMessage'.tr();

@@ -132,7 +132,7 @@
   "amenityBkdByOthers": "The time {time} has been booked by another tenant in the mean time. Please select other time",
   "amenityNotAvailAllTime": "This amenity is not available all the time (Mon-Sun). Please contact mangement office to fix",
   "bookedSuccessTitle": "Booked Successful",
-  "tentativeBookedTitle": "Tentative Booking Made",
+  "tentativeBookedTitle": "Tentative Booking Submitted",
   "amenityBookedFailed": "Oh! Booking Unsuccessful",
   "amenityBookToCancel": "If you want to cancel the booking, please come to management office to cancel it.",
   "amenityPayUsageFeeB4Hours": "IMPORTANT: Please come to management office to pay the usage fee ${fee} within {hours} hours.",
