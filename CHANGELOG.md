@@ -1,5 +1,17 @@
 
 
+## [0.5.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.4.0...v0.5.0) (2023-01-13)
+
+
+### Features
+
+* added amenity booking 'confirmed' handling ([3416209](https://github.com/simonho288/EstateManage_tenantapp/commit/34162095c398c55037671cd34b9857ac9cfbf39c))
+
+
+### Bug Fixes
+
+* bug of amenity booking contact us whatsapp button clicks ([dbd712e](https://github.com/simonho288/EstateManage_tenantapp/commit/dbd712e3778e715f3337361211bc794b7cce2c8a))
+
 ## [0.4.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.3.1...v0.4.0) (2023-01-12)
 
 
