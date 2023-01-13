@@ -33,7 +33,7 @@ Map<String, String> _newAmenityBkg({
 
   Map<String, String> rtnVal = {};
   String amenityName = Utils.getDbStringByCurLocale(meta['amenityName']);
-  int fee = meta['fee'];
+  double fee = meta['fee'].toDouble();
   String date = Utils.formatDate(meta['date']);
   // String bookingId = params['bookingId'].toString();
   int bookingNo = meta['bookingNo'];
@@ -107,51 +107,67 @@ Map<String, String> _newAmenityBkg({
     <p>$finalLine</p>
 ''';
 
-/*
-  if (params['fee'] == 0) {
-    rtnVal['title'] =
-        '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingNo';
-    rtnVal['body'] = '''
-          <p>${'youHaveBooked'.tr()} <b>$amenityName</b>. ${'detailsAsBelow'.tr()}:</p>
-          <ul>
-            <li>${'bookingNo'.tr()}: $bookingNo</li>
-            <li>${'status'.tr()}: $status</li>
-            <li>${'date'.tr()}: $date</li>
-            <li>${'fee'.tr()}: \$$fee</li>
-          </ul>
-          <p>${'amenityBkgTimeslot'.tr()}:</p>
-          $timeSlotsUl
-          <p>${'plsComeToAmenityOntime'.tr()}</p>
-           ''';
-  } else {
-    rtnVal['title'] =
-        '${'actionRequired'.tr()} ${'tentativeBooking'.tr()} "$amenityName" ${'at'.tr()} $date. ${'bookingNo'.tr()}: $bookingNo${'fullstop'.tr()}${'pleasePayAmenityFee'.tr()}';
-    String remindToPay = 'remindToPayBookingFee'.tr();
-    remindToPay = remindToPay.replaceAll('{fee}', fee.toString());
-
-    String payBefore = '-';
-    if (params['payBefore'] != null) {
-      payBefore = Utils.formatDatetime(params['payBefore']);
-    }
-    rtnVal['body'] = '''
-          <h3>${'youHaveBooked'.tr()} <b>$amenityName</b>. ${'detailsAsBelow'.tr()}:</h3>
-          <ul>
-            <li>${'bookingNo'.tr()}: $bookingNo</li>
-            <li>${'status'.tr()}: $status</li>
-            <li>${'date'.tr()}: $date</li>
-            <li>${'fee'.tr()}: \$$fee</li>
-            <li>${'payBefore'.tr()}: $payBefore</li>
-          </ul>
-          <p>${'amenityBkgTimeslot'.tr()}</p>
-          $timeSlotsUl
-          <p>${'thankYouUsingAmenity'.tr()}</p>
-          ''';
-  }
-*/
-
   return rtnVal;
 }
 
+Map<String, String> _amenityBkgConfirmed({
+  required BuildContext context,
+  required Map<String, dynamic> meta,
+  required String type,
+}) {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
+  Map<String, String> rtnVal = {};
+  String amenityName = Utils.getDbStringByCurLocale(meta['amenityName']);
+  double fee = meta['totalFee'].toDouble();
+  String date = Utils.formatDate(meta['date']);
+  int bookingNo = meta['bookingNo'];
+  String status = (meta['status'] == 'pending')
+      ? 'pending'.tr()
+      : (meta['status'] == 'confirmed')
+          ? 'confirmed'.tr()
+          : (meta['status'] == 'cancelled')
+              ? 'cancelled'.tr()
+              : meta['status'];
+  List<dynamic> slots = meta['slots'];
+  List<String> timeSlots = []; // Store the string of time range
+  for (int i = 0; i < slots.length; i++) {
+    var slot = slots[i];
+    String timeBegin = Utils.formatTime(slot['from']);
+    String timeEnd = Utils.formatTime(slot['to']);
+    timeSlots.add(timeBegin + ' - ' + timeEnd);
+  }
+
+  String timeSlotsUl = '<ul>'; // Store the string of time range in <ul>
+  for (int i = 0; i < timeSlots.length; ++i) {
+    timeSlotsUl += '<li>${timeSlots[i]}</li>';
+  }
+  timeSlotsUl += '</ul>';
+
+  String? isPaidStr;
+  if (meta['isPaid'] != null) {
+    isPaidStr =
+        meta['isPaid'] ? 'paymentConfirmed'.tr() : 'paymentNotConfirmed'.tr();
+  }
+
+  rtnVal['title'] =
+      '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date${'fullstop'.tr()}${'bookingNo'.tr()}: $bookingNo';
+  rtnVal['body'] = '''
+      <h3>${'youHaveBooked'.tr()} <b>$amenityName</b>. ${'detailsAsBelow'.tr()}:</h3>
+      <ul>
+        <li>${'bookingNo'.tr()}: $bookingNo</li>
+        <li>${'status'.tr()}: $status</li>
+        <li>${'date'.tr()}: $date</li>
+        <li>${'fee'.tr()}: \$$fee</li>
+        ${isPaidStr != null ? "<li>$isPaidStr</li>" : ''}
+      </ul>
+      <p>${'amenityBkgTimeslot'.tr()}:</p>
+      $timeSlotsUl
+      <p>${'plsComeToAmenityOntime'.tr()}</p>
+           ''';
+  return rtnVal;
+}
+/* Backup
 Map<String, String> _amenityBkgConfirmed({
   required BuildContext context,
   required Map<String, dynamic> meta,
@@ -174,8 +190,8 @@ Map<String, String> _amenityBkgConfirmed({
   List<String> timeSlots = []; // Store the string of time range
   for (int i = 0; i < meta['slots'].length; ++i) {
     Map<String, dynamic> slot = meta['slots'][i];
-    String timeBegin = Utils.formatTime(slot['timeBegin']);
-    String timeEnd = Utils.formatTime(slot['timeEnd']);
+    String timeBegin = Utils.formatTime(slot['from']);
+    String timeEnd = Utils.formatTime(slot['to']);
     timeSlots.add(timeBegin + ' - ' + timeEnd);
   }
 
@@ -208,6 +224,7 @@ Map<String, String> _amenityBkgConfirmed({
            ''';
   return rtnVal;
 }
+*/
 
 Map<String, String> _amenityBkgCancelled({
   required BuildContext context,
