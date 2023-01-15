@@ -197,5 +197,8 @@
   "trialVersionTitle": "Trial Version",
   "trialVersion": "You are using the trial version of EstateManage Tenant App. Some functionalities are limited.",
   "scanUnitQrcodeEngCht": "Please scan unit QR-code",
-  "errorDownloadingFile": "Error downloading file"
+  "errorDownloadingFile": "Error downloading file",
+  "errNoPdfViewer": "No PDF viewer installed. Please install a PDF viewer and try again.",
+  "errPermissionDenied": "Permission denied! Please check the App permissions to allow the storage",
+  "errFileNotFound": "File not found! There was an error downloading the file"
 }

@@ -89,7 +89,16 @@ class _NoticePageState extends State<NoticePage> {
         context, 'noticeDownloadPdf'.tr(), srcUrl, dstPath);
     if (resp != null && resp.statusCode == 200) {
       final rst = await OpenFile.open(dstPath);
-      print(rst);
+      if (rst.type == ResultType.noAppToOpen) {
+        Utils.showAlertDialog(context, "error".tr(), "errNoPdfViewer".tr());
+      } else if (rst.type == ResultType.permissionDenied) {
+        Utils.showAlertDialog(
+            context, "error".tr(), "errPermissionDenied".tr());
+      } else if (rst.type == ResultType.fileNotFound) {
+        Utils.showAlertDialog(context, "error".tr(), "errFileNotFound".tr());
+      } else if (rst.type == ResultType.error) {
+        Utils.showAlertDialog(context, "error".tr(), rst.message);
+      }
     } else {
       Utils.showSnackBar(
         context,
