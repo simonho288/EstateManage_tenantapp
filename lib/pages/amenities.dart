@@ -3,17 +3,8 @@ import 'dart:developer' as developer;
 // import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:permission_handler/permission_handler.dart';
-// import 'package:open_file/open_file.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
-// import '../objectbox.g.dart'; // created by `flutter pub run build_runner build`
-// import 'package:intl/intl.dart';
-
-// import '../components/navBar.dart';
 import '../components/rawBackground.dart';
-// import '../components/dialogBuilder.dart';
 
 import '../include.dart';
 import '../models.dart' as Models;

@@ -55,34 +55,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
     return {'status': 'success'}; // Actually, always return success
   }
 
-/*
-  // Using Dio, to download the file by URL to local specified path (temp dir)
-  Future<void> _downloadFile(String url, String fullPath) async {
-    try {
-      DialogBuilder(context).showLoadingIndicator(
-          'noticeDownloadPdf'.tr() +
-              'fullstop'.tr() +
-              'pleaseWait'.tr());
-      await _dio.download(
-        url,
-        fullPath,
-        onReceiveProgress: (receive, total) {
-          setState(() {
-            _downloadProgress =
-                ((receive / total) * 100).toStringAsFixed(0) + '%';
-            print(_downloadProgress);
-            // progDlg.update(message: 'Downloading $_downloadProgress');
-          });
-        },
-      );
-    } catch (e) {
-      print(e);
-    } finally {
-      DialogBuilder(context).hideOpenDialog();
-    }
-  }
-*/
-
   Future<void> _onBtnDownloadPdf() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 

@@ -290,18 +290,7 @@ class Estate {
   String? email;
   String? website;
   String? langEntries;
-  // int? committeeTerm;
-  // String? termDate;
-  // int? mgrfeePaymentDays;
-  // String? chequePayableTo;
-  // bool? isEffect;
-  // String? srvLangMode;
-  // DateTime? trialExpiry;
-  // String? mgrfeeTitle;
-  // bool? isModMiscIncome;
   String? tenantAppEstateImage;
-  // String? stripePublishableKey;
-  // String? stripeSecretKey;
   String? currency;
 
   Estate({
@@ -313,18 +302,7 @@ class Estate {
     this.email,
     this.website,
     this.langEntries,
-    // this.committeeTerm,
-    // this.termDate,
-    // this.mgrfeePaymentDays,
-    // this.chequePayableTo,
-    // this.isEffect,
-    // this.srvLangMode,
-    // this.trialExpiry,
-    // this.mgrfeeTitle,
-    // this.isModMiscIncome,
     this.tenantAppEstateImage,
-    // this.stripePublishableKey,
-    // this.stripeSecretKey,
     this.currency,
   });
 }

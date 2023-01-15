@@ -90,24 +90,6 @@ class NavBar extends StatelessWidget {
       title: Text(text, style: TextStyle(color: color, fontSize: 18.0)),
       hoverColor: hoverColor,
       onTap: onClicked,
-      /*
-      trailing: ClipOval(
-        child: Container(
-          color: Colors.red,
-          width: 20,
-          height: 20,
-          child: Center(
-            child: Text(
-              '8',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ),
-      ),
-      */
     );
   } // buildAnMenuItem()
 

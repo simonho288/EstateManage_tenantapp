@@ -450,17 +450,6 @@ class _RootPageState extends State<RootPage> {
         home = RegisterPage();
       } else {
         home = LoginPage();
-        /*
-        // State 2
-        int status = Globals.curTenantJson?['status'];
-        if (status == 0) {
-          home = PendingPage();
-        } else if (status == 2) {
-          home = SuspendedPage();
-        } else if (status == 1) {
-          home = LoginPage();
-        }
-        */
       }
     }
 

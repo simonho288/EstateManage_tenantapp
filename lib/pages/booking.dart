@@ -5,18 +5,10 @@ import 'dart:convert' as convert;
 // import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:permission_handler/permission_handler.dart';
-// import 'package:open_file/open_file.dart';
-// import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart' as Stripe;
-
-// import '../components/navBar.dart';
-// import '../components/dialogBuilder.dart';
 
 import '../components/rawBackground.dart';
 
@@ -79,13 +71,6 @@ class _BookingPageState extends State<BookingPage> {
         convert.jsonDecode(data['sectionBased']));
     Map<String, dynamic> contact = convert.jsonDecode(data['contact']);
     Map<String, dynamic> whatsapp = contact['whatsapp'];
-    // String whatsapp = '';
-    // if (contact['whatsapp'] != null &&
-    //     contact['whatsapp']['name'] != null &&
-    //     contact['whatsapp']['number'] != null) {
-    //   whatsapp =
-    //       '${contact['whatsapp']['name']}: ${contact['whatsapp']['number']}';
-    // }
 
     _amenity = Models.Amenity(
       id: data['id'],
@@ -169,62 +154,6 @@ class _BookingPageState extends State<BookingPage> {
     // The "launch" method is part of "url_launcher".
     await launch('$link');
   }
-
-/*
-  Future<void> _onBtnPayWithCard() async {
-    developer.log(StackTrace.current.toString().split('\n')[0]);
-
-    // Ref: https://github.com/flutter-stripe/flutter_stripe/blob/main/example/lib/screens/payment_sheet/payment_sheet_screen.dart
-
-    try {
-      var loopParams = convert.jsonDecode(_loop.paramsJson!);
-
-      final Ajax.ApiResponse resp = await Ajax.fetchPaymentSheetData(
-        clientCode: Globals.curClientJson?['code'],
-        tenantAmenityBookingId: loopParams['bookingId'],
-      );
-      final paymentSheetData = resp.data;
-      Stripe.Stripe.publishableKey = paymentSheetData['publishableKey'];
-      // paymentSheetData['publishableKey'];
-      await Stripe.Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: Stripe.SetupPaymentSheetParameters(
-          applePay: true,
-          googlePay: true,
-          style: ThemeMode.dark,
-          testEnv: true,
-          merchantCountryCode: 'HK',
-          merchantDisplayName: paymentSheetData['estateName'],
-          customerId: paymentSheetData['customerId'],
-          paymentIntentClientSecret:
-              paymentSheetData['paymentIntentClientSecret'],
-          customerEphemeralKeySecret:
-              paymentSheetData['customerEphemeralKeySecret'],
-        ),
-      );
-      await Stripe.Stripe.instance.presentPaymentSheet();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Payment succesfully completed'),
-        ),
-      );
-    } on Exception catch (e) {
-      if (e is Stripe.StripeException) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error from Stripe: ${e.error.localizedMessage}'),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Unforeseen error: ${e}'),
-          ),
-        );
-      }
-    }
-  }
-*/
 
   Widget _renderBody() {
     // Main content of this page.
@@ -319,26 +248,6 @@ class _BookingPageState extends State<BookingPage> {
         );
         contents.add(SizedBox(height: 20));
       }
-
-/*
-      if (this._loop.titleId == Constants.LOOP_TITLE_NEW_AMENITY_BOOKING &&
-          _amenity.fee != 0 &&
-          _client.stripeCurrency != null) {
-        contents.add(
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Globals.primaryColor,
-            ),
-            onPressed: _onBtnPayWithCard,
-            child: Text(
-              'bookingPayByCard'.tr(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-        contents.add(SizedBox(height: 20));
-      }
-*/
     }
 
     // Draw the card
@@ -391,21 +300,3 @@ class _BookingPageState extends State<BookingPage> {
     );
   }
 }
-
-// class PaymentService {
-//   final int amount;
-//   final String url;
-
-//   PaymentService(this.amount, this.url);
-
-//   static init() {
-//     StripePayment.setOptions(
-//       StripeOptions(
-//         publishableKey: Globals.stripePublishableKey,
-//         merchantId: Globals.stripeMerchantId,
-//         androidPayMode: 'test',
-//       ),
-//       )
-//     )
-//   }
-// }

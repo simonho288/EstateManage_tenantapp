@@ -167,64 +167,6 @@ Map<String, String> _amenityBkgConfirmed({
            ''';
   return rtnVal;
 }
-/* Backup
-Map<String, String> _amenityBkgConfirmed({
-  required BuildContext context,
-  required Map<String, dynamic> meta,
-  required String type,
-}) {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  Map<String, String> rtnVal = {};
-  String amenityName = meta['amenityName'];
-  int fee = meta['totalFee'];
-  String date = meta['date'];
-  String bookingId = meta['bookingId'].toString();
-  String status = (meta['status'] == 'pending')
-      ? 'pending'.tr()
-      : (meta['status'] == 'confirmed')
-          ? 'confirmed'.tr()
-          : (meta['status'] == 'cancelled')
-              ? 'cancelled'.tr()
-              : meta['status'];
-  List<String> timeSlots = []; // Store the string of time range
-  for (int i = 0; i < meta['slots'].length; ++i) {
-    Map<String, dynamic> slot = meta['slots'][i];
-    String timeBegin = Utils.formatTime(slot['from']);
-    String timeEnd = Utils.formatTime(slot['to']);
-    timeSlots.add(timeBegin + ' - ' + timeEnd);
-  }
-
-  String timeSlotsUl = '<ul>'; // Store the string of time range in <ul>
-  for (int i = 0; i < timeSlots.length; ++i) {
-    timeSlotsUl += '<li>${timeSlots[i]}</li>';
-  }
-  timeSlotsUl += '</ul>';
-
-  String? isPaidStr;
-  if (meta['isPaid'] != null) {
-    isPaidStr =
-        meta['isPaid'] ? 'paymentConfirmed'.tr() : 'paymentNotConfirmed'.tr();
-  }
-
-  rtnVal['title'] =
-      '${'bookingConfirm'.tr()} "$amenityName" ${'at'.tr()} $date${'fullstop'.tr()}${'bookingNo'.tr()}: $bookingId';
-  rtnVal['body'] = '''
-      <h3>${'youHaveBooked'.tr()} <b>${meta["amenityName"]}</b>. ${'detailsAsBelow'.tr()}:</h3>
-      <ul>
-        <li>${'bookingNo'.tr()}: $bookingId</li>
-        <li>${'status'.tr()}: $status</li>
-        <li>${'date'.tr()}: $date</li>
-        <li>${'fee'.tr()}: \$$fee</li>
-        ${isPaidStr != null ? "<li>$isPaidStr</li>" : ''}
-      </ul>
-      <p>${'amenityBkgTimeslot'.tr()}:</p>
-      $timeSlotsUl
-      <p>${'plsComeToAmenityOntime'.tr()}</p>
-           ''';
-  return rtnVal;
-}
-*/
 
 Map<String, String> _amenityBkgCancelled({
   required BuildContext context,

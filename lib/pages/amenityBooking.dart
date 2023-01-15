@@ -35,8 +35,6 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
   Future<bool>? _futureData;
   late List<Models.TenantAmenityBooking> _dbBookings;
 
-  /////////////////////////// Getters/Setters ///////////////////////////
-
   // Called by child to check total booking is reach limit
   int get _totalBookMinutes {
     developer.log(StackTrace.current.toString().split('\n')[0]);
@@ -67,8 +65,6 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
   List<TimeSlot> get _timeSlots {
     return _slots;
   }
-
-  //////////////////////////////// Functions ////////////////////////////////
 
   _AmenityBookingPageState(Models.Amenity amenity) {
     this._amenity = amenity;
@@ -252,90 +248,6 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
       startTime = timeTo;
     }
   }
-  /* Backup
-  void _createTimeSlots() {
-    developer.log(StackTrace.current.toString().split('\n')[0]);
-
-    DateTime now = DateTime.now();
-    bool isDateChanged = _tarDate.year != now.year ||
-        _tarDate.month != now.month ||
-        _tarDate.day !=
-            now.day; // If date changed, the begin time will be the amenity opening time
-
-    // Calculate the amenity bookable start time & end time
-    DateTime startTime;
-    DateTime endTime = DateTime(now.year, now.month, now.day,
-        this._amenity.timeClose!.hour, this._amenity.timeClose!.minute, 0);
-    endTime = endTime.subtract(Duration(minutes: this._amenity.timeIncrement!));
-
-    // Is today pass? If so, proceed to tomorrow's startTime defined in amenity
-    if (!isDateChanged && now.isAfter(endTime)) {
-      isDateChanged = true;
-      _tarDate = _tarDate.add(Duration(days: 1)); // move to tomorrow
-    }
-
-    // Skip until the weekday is bookable
-    int loop = 0; // To detect whole week is not bookable
-    while (!_isWeekdayOpen(_tarDate)) {
-      isDateChanged = true;
-      _tarDate = _tarDate.add(Duration(days: 1));
-      if (++loop > 7) {
-        throw 'This amenity is not available all the time (Mon-Sun). Please contact mangement office';
-      }
-    }
-
-    if (_minDate == null) {
-      _minDate = _tarDate; // Tell popup calendar the minimum date
-    }
-
-    if (isDateChanged) {
-      startTime = DateTime(_tarDate.year, _tarDate.month, _tarDate.day,
-          this._amenity.timeOpen!.hour, this._amenity.timeOpen!.minute, 0);
-    } else {
-      startTime = _tarDate;
-    }
-
-    endTime = DateTime(startTime.year, startTime.month, startTime.day,
-        this._amenity.timeClose!.hour, this._amenity.timeClose!.minute, 0);
-    endTime = endTime.subtract(Duration(minutes: this._amenity.timeIncrement!));
-
-    // is it today?
-    if (!isDateChanged) {
-      // Is the time earlier than amenity?
-      if (now.isBefore(startTime)) {
-        startTime = DateTime(now.year, now.month, now.day,
-            this._amenity.timeOpen!.hour, this._amenity.timeOpen!.minute, 0);
-      } else {
-        DateTime dt = DateTime(now.year, now.month, now.day,
-            this._amenity.timeOpen!.hour, this._amenity.timeOpen!.minute, 0);
-        while (dt.isBefore(now)) {
-          dt = dt.add(Duration(minutes: this._amenity.timeIncrement!));
-        }
-        startTime = dt;
-      }
-    }
-
-    // Reset the time slots
-    _slots = [];
-    DateFormat timeFmt1 = DateFormat('h:mm a'); // Time format for human
-    DateFormat timeFmt2 = DateFormat('HH:mm'); // time format for computer
-    int seq = 0;
-    while (startTime.isAtSameMomentAs(endTime) || startTime.isBefore(endTime)) {
-      DateTime timeTo =
-          startTime.add(Duration(minutes: this._amenity.timeIncrement!));
-      TimeSlot slot = new TimeSlot(
-          seq: ++seq,
-          startText: timeFmt1.format(startTime).toLowerCase(),
-          endText: timeFmt1.format(timeTo),
-          timeStart: timeFmt2.format(startTime),
-          timeEnd: timeFmt2.format(timeTo),
-          duration: timeTo.difference(startTime).inMinutes);
-      _slots.add(slot);
-
-      startTime = timeTo;
-    }
-  }
-  */
 
   // Create the screen bookable slots for 'section' based amenity
   void _createSectionSlots() {
@@ -384,19 +296,6 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
 
     // What section(s) will be shown
     List<Models.AmenityBookingSection> sections = [];
-    // if (isNotToday) {
-    //   // If not today, all sections are okay
-    //   sections.addAll(this._amenity.bookingSections!);
-    // } else {
-    //   // If today, calculate what section(s) is past
-    //   String nowTime = DateFormat('HH:mm').format(now);
-    //   for (int i = 0; i < this._amenity.bookingSections!.length; ++i) {
-    //     var bs = this._amenity.bookingSections![i];
-    //     if (nowTime.compareTo(bs.timeBegin) < 0) {
-    //       sections.add(bs);
-    //     }
-    //   }
-    // }
     sections.addAll(this._amenity.bookingSections!);
 
     // Reset the time slots
@@ -458,13 +357,6 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
           }
         }
       }
-      // _dbBookings.forEach((booking) {
-      //   booking.slots.forEach((slot) {
-      //     if (slot.timeStart == ts.timeStart) {
-      //       found = true;
-      //     }
-      //   });
-      // });
 
       if (found) {
         // Comment this to test the time booked by other

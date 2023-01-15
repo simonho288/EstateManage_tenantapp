@@ -113,23 +113,6 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     Globals.curEstateJson = resp.data['estate'];
     // Globals.accessToken = resp.data['token'];
 
-/*
-    if (Globals.curEstateJson!['membership_status'] == 'trial') {
-      await Utils.showAlertDialog(
-        context,
-        'trialVersionTitle'.tr(),
-        'trialVersion'.tr(),
-      );
-    } else if (Globals.curEstateJson!['membership_status'] != 'active') {
-      await Utils.showAlertDialog(
-        context,
-        'notEffective'.tr(),
-        'estateDisabled'.tr(),
-      );
-      return;
-    }
-*/
-
     // Save all the Json to local storage
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString(
@@ -147,14 +130,6 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
 
   Widget _buildQrView(BuildContext context) {
     developer.log(StackTrace.current.toString().split('\n')[0]);
-
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    // var scanArea = (MediaQuery.of(context).size.width < 400 ||
-    //         MediaQuery.of(context).size.height < 400)
-    //     ? 150.0
-    //     : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
 
     return MobileScanner(
       controller: _controller,
@@ -204,16 +179,6 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
 /// This widget is to simulate the QRcode scan
 ///
 class _SimulateQrScan extends StatelessWidget {
-  // To obtain the IDs, login to MySql console and run the following queries:
-  //
-  // 1. Directus User ID
-  // select id,email from directus_users;
-  // 2. Unit ID
-  // select * from residences where user_created="[userID]" and floor=1;
-  // final _directusUserId = 'e89e2f20-cf0e-46c1-aead-050dc02e10e7';
-  // final _cls = 'R'; // R, C, S
-  // final _unitId = '0261737f-d4c5-4950-b23f-bbf02a851222';
-
   const _SimulateQrScan({Key? key}) : super(key: key);
 
   Future<void> _onBtnSimulateScan(BuildContext context) async {
