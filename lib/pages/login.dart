@@ -182,67 +182,76 @@ class _LoginPageState extends State<LoginPage> {
     bool isRemember = values['remember'];
     String? fcmDeviceToken = await Utils.generateDeviceToken();
 
-    Ajax.ApiResponse resp = await Ajax.tenantLogin(
-      userId: Globals.userId!,
-      mobileOrEmail: mobileOrEmail,
-      password: password,
-      fcmDeviceToken: fcmDeviceToken,
-    );
-
-    if (resp.error != null) {
-      String err = resp.error!;
-      if (err == 'tenant_not_found' || err == 'invalid_password') {
-        await Utils.showAlertDialog(
-          context,
-          'loginFailed'.tr(),
-          'invalidMobileNoOrEmail'.tr(),
-        );
-      } else if (err == 'account_pending') {
-        await Utils.showAlertDialog(
-          context,
-          'loginFailed'.tr(),
-          'accountPendingApproval'.tr(),
-        );
-      } else if (err == 'account_suspended') {
-        await Utils.showAlertDialog(
-          context,
-          'loginFailed'.tr(),
-          'accountIsSuspended'.tr(),
-        );
-      } else {
-        await Utils.showAlertDialog(
-          context,
-          'sysError'.tr(),
-          'serverError'.tr() + err.toString(),
-        );
-      }
-    } else {
-      Map<String, dynamic> data = resp.data;
-
-      Globals.accessToken = data['token']; // jwt token
-      Globals.curTenantJson = data['tenant'];
-      if (isRemember) {
-        if (_password != password) {
-          // Encrypt the password
-          await _prefs.setString(
-              'loginPassword', Utils.encryptStringAES256CTR(password));
-        }
-        await _prefs.setString(
-            'tenantJson', convert.jsonEncode(Globals.curTenantJson));
-      } else {
-        await _prefs.remove('loginPassword');
-      }
-
-      // Read the client image background
-      resp = await Ajax.getEstate(
-        id: Globals.curEstateJson?['id'],
+    late Ajax.ApiResponse resp;
+    try {
+      resp = await Ajax.tenantLogin(
+        userId: Globals.userId!,
+        mobileOrEmail: mobileOrEmail,
+        password: password,
+        fcmDeviceToken: fcmDeviceToken,
       );
-      data = resp.data;
-      Map<String, dynamic> estate = data;
-      Globals.curEstateJson?['estateImageApp'] = estate['estateImageApp'];
 
-      // Navigator.pushReplacementNamed(context, '/home');
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+      if (resp.error != null) {
+        String err = resp.error!;
+        if (err == 'tenant_not_found' || err == 'invalid_password') {
+          await Utils.showAlertDialog(
+            context,
+            'loginFailed'.tr(),
+            'invalidMobileNoOrEmail'.tr(),
+          );
+        } else if (err == 'account_pending') {
+          await Utils.showAlertDialog(
+            context,
+            'loginFailed'.tr(),
+            'accountPendingApproval'.tr(),
+          );
+        } else if (err == 'account_suspended') {
+          await Utils.showAlertDialog(
+            context,
+            'loginFailed'.tr(),
+            'accountIsSuspended'.tr(),
+          );
+        } else {
+          await Utils.showAlertDialog(
+            context,
+            'sysError'.tr(),
+            'serverError'.tr() + err.toString(),
+          );
+        }
+      } else {
+        Map<String, dynamic> data = resp.data;
+
+        Globals.accessToken = data['token']; // jwt token
+        Globals.curTenantJson = data['tenant'];
+        if (isRemember) {
+          if (_password != password) {
+            // Encrypt the password
+            await _prefs.setString(
+                'loginPassword', Utils.encryptStringAES256CTR(password));
+          }
+          await _prefs.setString(
+              'tenantJson', convert.jsonEncode(Globals.curTenantJson));
+        } else {
+          await _prefs.remove('loginPassword');
+        }
+
+        // Read the client image background
+        resp = await Ajax.getEstate(
+          id: Globals.curEstateJson?['id'],
+        );
+        data = resp.data;
+        Map<String, dynamic> estate = data;
+        Globals.curEstateJson?['estateImageApp'] = estate['estateImageApp'];
+
+        // Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+      }
+    } catch (e) {
+      await Utils.showAlertDialog(
+        context,
+        "error".tr(),
+        "serverResponseError".tr(),
+      );
     }
 
     _isLoginPressed = false;

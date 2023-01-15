@@ -6,7 +6,7 @@
   "error": "Error",
   "or": "Or",
   "errorEngCht": "Error",
-  "serverResponseError": "Cannot connect Server: ",
+  "serverResponseError": "Cannot connect Server!\nPlease check Internet connection or try again later. If the problem persists, please contact the estate administrator",
   "save": "Save",
   "success": "Success",
   "created": "Record created",
