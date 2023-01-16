@@ -1,5 +1,18 @@
 
 
+## [0.6.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.5.0...v0.6.0) (2023-01-16)
+
+
+### Features
+
+* precisely show the error message if any problem downloading notice ([caf922a](https://github.com/simonho288/EstateManage_tenantapp/commit/caf922a6fa306c9da4216d1a88cdf9adedd50b6c))
+
+
+### Bug Fixes
+
+* catch the exception if cannot connect to backend ([02de396](https://github.com/simonho288/EstateManage_tenantapp/commit/02de39665d2ac6f1e89b91cbc6eb7a69ab43b5aa))
+* remove all old backup codes ([21b84b6](https://github.com/simonho288/EstateManage_tenantapp/commit/21b84b6f3dc05ec8b29e0f6c8bc3a74ddb6799b2))
+
 ## [0.5.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.4.0...v0.5.0) (2023-01-13)
 
 
