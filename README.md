@@ -1,4 +1,9 @@
-# Estate Manage Tenant Flutter App (Beta)
+# Estate Manage Tenant Flutter App
+
+> This repo is currently a `Work In Progress`.
+>
+> This is the mobile app for the estate tenants. There is a [backend repo](EstateManage_backend) for the estate manager.
+
 
 This is the frontend mobile app of the [EstateManage.Net platform](https://www.estatemanage.net). For detail documentation, please see the [backend repository](https://github.com/simonho288/estate-manage-backend).
 
