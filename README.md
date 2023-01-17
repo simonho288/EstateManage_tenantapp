@@ -4,9 +4,6 @@
 >
 > This is the mobile app for the estate tenants. There is a [backend repo](https://github.com/simonho288/EstateManage_backend) for the estate manager.
 
-
-This is the frontend mobile app of the [EstateManage.Net platform](https://www.estatemanage.net). For detail documentation, please see the [backend repository](https://github.com/simonho288/estate-manage-backend).
-
 ## Installation
 
 1. Login to your Firebase console to create a new project with Android and iOS Apps. Note that the `GoogleService-Info.plist` & `google-services.json` files you don't need to download & copy to your flutter project. It will be handled by FlutterFire as next instruction.
