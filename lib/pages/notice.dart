@@ -73,7 +73,6 @@ class _NoticePageState extends State<NoticePage> {
         issueDate: data['issueDate'],
         title: data['title'],
         pdfUrl: data['pdf'],
-        // pdfUrl: Globals.hostS3Base! + '/' + data['pdf'] + '.pdf',
       );
 
       return {'status': 'success'};

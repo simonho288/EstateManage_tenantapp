@@ -59,10 +59,8 @@ class _BookingPageState extends State<BookingPage> {
         // clientCode: Globals.curClientJson?['code'],
         id: loopParams['amenityId']);
     Map<String, dynamic> data = resp.data;
-    String photo = data['photo'] == null
-        ? Globals.defaultAmenityCanvas
-        // : Globals.hostS3Base! + '/${data['photo']}.jpg';
-        : data['photo'];
+    String photo =
+        data['photo'] == null ? Globals.defaultAmenityCanvas : data['photo'];
 
     Map<String, dynamic> availableDays =
         convert.jsonDecode(data['availableDays']);

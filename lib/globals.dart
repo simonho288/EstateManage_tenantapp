@@ -43,8 +43,6 @@ late bool isDebug;
 
 // Url of the backend
 String? hostApiUri;
-// String? hostSocketUri;
-String? hostS3Base; // https://vpms-hk.s3.us-west-004.backblazeb2.com
 
 // Can get the "context" anywhere
 final navigatorKey = GlobalKey<NavigatorState>();

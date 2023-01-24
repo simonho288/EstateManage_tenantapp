@@ -20,8 +20,7 @@ Note: Why flutter project requires NodeJS packages? Because release-it package i
 
 ```json
 {
-  "hostApiUri": "<YOUR_BACKEND_URL>",
-  "hostS3Base": "<YOUR_S3_ENDPOINT_URL>"
+  "hostApiUri": "<YOUR_BACKEND_URL>"
 }
 ```
 

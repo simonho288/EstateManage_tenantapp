@@ -48,7 +48,6 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
       var e = remoteData[i];
       String photo =
           e['photo'] == null ? Globals.defaultAmenityCanvas : e['photo'];
-      // : Globals.hostS3Base! + '/${e['photo']}.jpg';
       DateTime? dtOpen = null;
       DateTime? dtClose = null;
       int? timeMinimum = null;

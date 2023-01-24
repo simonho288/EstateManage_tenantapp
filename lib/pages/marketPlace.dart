@@ -79,7 +79,6 @@ class _MarketplacePageState extends State<MarketplacePage> {
         dateCreated: DateTime.parse(data['dateCreated']),
         postDate: data['dateStart'],
         title: data['title'],
-        // adImage: Globals.hostS3Base! + '/' + data['adImage'] + '.jpg',
         adImage: data['adImage'],
         adImageThm: data['adImage'],
         commerceUrl: data['commerceUrl'],

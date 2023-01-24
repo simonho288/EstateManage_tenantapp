@@ -226,7 +226,6 @@ class _HomePageState extends State<HomePage> {
       imageUrl = Globals
           .defaultEstateImage; // When the user didn't upload their estate image
     } else {
-      // imageUrl = Globals.hostS3Base! + '/' + imageUrl + '.jpg';
       imageUrl = imageUrl;
     }
 

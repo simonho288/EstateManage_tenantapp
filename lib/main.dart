@@ -149,7 +149,6 @@ Future<Map<String, dynamic>> _loadStartupData() async {
   final prefs = await SharedPreferences.getInstance();
 
   Globals.hostApiUri = GlobalConfiguration().getValue("hostApiUri");
-  Globals.hostS3Base = GlobalConfiguration().getValue('hostS3Base');
   Globals.encryptSecretKey = GlobalConfiguration().getValue('enc_secret_key');
   Globals.encryptIv = GlobalConfiguration().getValue('enc_iv');
 
@@ -166,9 +165,6 @@ Future<Map<String, dynamic>> _loadStartupData() async {
     await prefs.setString('lastVersion', Globals.appVersion!);
   }
   await Utils.openLocalDatabase(dbPath);
-
-  // developer.log(
-  //     'hostApiUri: ${Globals.hostApiUri}, hostSocketUri: ${Globals.hostSocketUri}, hostS3Base: ${Globals.hostS3Base}');
 
   String? langId = prefs.getString('language');
   if (langId == null) {
