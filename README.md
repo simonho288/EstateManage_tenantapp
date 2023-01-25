@@ -61,6 +61,16 @@ In Visual Studio Code, select the "Debug Mode" & press [F5] to start the debugge
 
 5. If your language is other than English, you can create a new language JSON file which copies from `assets/langs/en-US.json` to your language in same directory. For more information, please refer to the package [easy_locations](https://pub.dev/packages/easy_localization).
 
+## Testing
+
+At project root, open a terminal and run:
+
+```sh
+$ flutter test
+```
+
+**IMPORTANT**: Testing relies SharedPreference data which was executed before. So make sure the app runs in debug mode successfully before performing tests.
+
 ## Deployment
 
 ### Android
