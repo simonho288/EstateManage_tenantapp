@@ -107,10 +107,6 @@ Future<ApiResponse> scanUnitQrcode(String qrcode) async {
 Future<ApiResponse> createNewTenant(
     {required String unitId,
     required String userId,
-    // required String unitType,
-    // required String block,
-    // required String floor,
-    // required String number,
     required String role,
     required String name,
     required String mobile,
@@ -121,14 +117,10 @@ Future<ApiResponse> createNewTenant(
 
   final Map<String, dynamic> param = {
     'unitId': unitId,
-    // 'unitType': unitType,
-    // 'block': block,
-    // 'floor': floor,
-    // 'number': number,
     'userId': userId,
     'role': role,
     'name': name,
-    'mobile': mobile,
+    'phone': mobile,
     'email': email,
     'password': password,
     'fcmDeviceToken': fcmDeviceToken,
@@ -149,26 +141,24 @@ Future<ApiResponse> createNewTenant(
   return _returnResponse(response);
 }
 
-Future<ApiResponse> setUserPassword({
-  required String clientCode,
+Future<ApiResponse> setTenantPassword({
   required String tenantId,
   required String password,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   final Map<String, dynamic> param = {
-    'id': tenantId,
+    'tenantId': tenantId,
     'password': password,
   };
-  final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
 
   final response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/setUserPassword'),
+        Uri.parse('${Globals.hostApiUri}/api/tl/setPassword'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: 'Apikey ' + ccEnc,
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
       )
@@ -182,7 +172,7 @@ Future<ApiResponse> tenantLogin({
   required String userId,
   required String mobileOrEmail,
   required String password,
-  required String? fcmDeviceToken,
+  String? fcmDeviceToken,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 

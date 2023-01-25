@@ -14,14 +14,17 @@ import 'package:global_configuration/global_configuration.dart';
 
 import 'package:estatemanage_tenantapp/ajax.dart' as Ajax;
 import 'package:estatemanage_tenantapp/globals.dart' as Globals;
+import 'package:estatemanage_tenantapp/utils.dart' as Utils;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const USER_ID = 'adminuserid123';
+const UNIT_ID = 'AprTvXkFWkxp6X765kfo3';
 const TENANT_EMAIL = 'simonho288@gmail.com';
 const TENANT_PASSWORD = 'password';
 const TENANT_ID = '2dh71lyQgEC4dLJGm3T97';
 const DEBUG_QRCODE =
-    'https://www.estatemanage.net/appdl/index.html/?a=adminuserid123&b=AprTvXkFWkxp6X765kfo3&c=aCfFPPdSR3tLJ2QRN5VXl';
+    'https://www.estatemanage.net/appdl/index.html/?a=$USER_ID&b=$UNIT_ID&c=aCfFPPdSR3tLJ2QRN5VXl';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +42,8 @@ void main() async {
   String configFileName = Globals.configFileName = 'dev';
   await GlobalConfiguration().loadFromAsset(configFileName);
   await GlobalConfiguration().loadFromAsset('secrets');
+  late String newTenantId;
+  late String newTenantEmail;
 
   Globals.isDebug = true;
   Globals.hostApiUri = GlobalConfiguration().getValue("hostApiUri");
@@ -47,9 +52,9 @@ void main() async {
     // Expected result JSON.
     // The unit is created by insertSampleOthers.ts in backend
     Map<String, dynamic> expectedJson = {
+      "userId": USER_ID,
       "success": true,
-      "unitId": "AprTvXkFWkxp6X765kfo3",
-      "userId": "adminuserid123",
+      "unitId": UNIT_ID,
       "type": "res",
       "block": "A",
       "floor": "1",
@@ -77,10 +82,10 @@ void main() async {
 
   test('tenant login', () async {
     Ajax.ApiResponse resp = await Ajax.tenantLogin(
-        userId: Globals.userId!,
-        mobileOrEmail: TENANT_EMAIL,
-        password: TENANT_PASSWORD,
-        fcmDeviceToken: '');
+      userId: Globals.userId!,
+      mobileOrEmail: TENANT_EMAIL,
+      password: TENANT_PASSWORD,
+    );
     // print(resp.data);
     expect(resp.data, contains('token'));
     expect(resp.data, contains('tenant'));
@@ -93,6 +98,53 @@ void main() async {
     // print(resp.data);
     expect(resp.data, contains('status'));
     expect(resp.data['status'], equals(1));
+  });
+
+  test('createNewTenant', () async {
+    newTenantEmail = 'dummy@example${Utils.getRandomInt(1, 10000)}.com';
+    Ajax.ApiResponse resp = await Ajax.createNewTenant(
+      unitId: UNIT_ID,
+      userId: USER_ID,
+      role: 'tenant',
+      name: '<dummy name>',
+      mobile: '11122233333',
+      email: newTenantEmail,
+      password: 'password',
+      fcmDeviceToken: '',
+    );
+    expect(resp.data, contains('tenantId'));
+    newTenantId = resp.data['tenantId'];
+  });
+
+  test('new tenant login', () async {
+    Ajax.ApiResponse resp = await Ajax.tenantLogin(
+      userId: Globals.userId!,
+      mobileOrEmail: newTenantEmail,
+      password: 'password',
+    );
+    expect(resp.error, equals('account_pending'));
+  });
+
+  test('setTenantPassword', () async {
+    Ajax.ApiResponse resp = await Ajax.setTenantPassword(
+        tenantId: newTenantId, password: 'password2');
+    expect(resp.data, contains('success'));
+    expect(resp.data['success'], equals(true));
+  });
+
+  test('new tenant login with new password', () async {
+    Ajax.ApiResponse resp = await Ajax.tenantLogin(
+      userId: Globals.userId!,
+      mobileOrEmail: newTenantEmail,
+      password: 'password2',
+    );
+    expect(resp.error, equals('account_pending'));
+  });
+
+  test('tenantLogout', () async {
+    Ajax.ApiResponse resp = await Ajax.tenantLogout(tenantId: newTenantId);
+    expect(resp.data, contains('success'));
+    expect(resp.data['success'], equals(true));
   });
 
 /*

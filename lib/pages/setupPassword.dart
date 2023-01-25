@@ -81,8 +81,7 @@ class _setupPasswordPageState extends State<SetupPasswordPage> {
   Future<void> _savePassword(String password) async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
-    Ajax.ApiResponse resp = await Ajax.setUserPassword(
-      clientCode: Globals.curEstateJson?['code'],
+    Ajax.ApiResponse resp = await Ajax.setTenantPassword(
       tenantId: Globals.curTenantJson?['id'],
       password: password,
     );

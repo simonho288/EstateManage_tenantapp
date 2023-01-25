@@ -117,26 +117,11 @@ class _RegisterPageState extends State<RegisterPage> {
       String? fcmDeviceToken = await Utils.generateDeviceToken();
 
       assert(Globals.curEstateJson != null);
-      /*
-      String unitType = _unitJson['type'];
-      // String unitType = _unitJson['type'] == 'res'
-      //     ? 'resident'
-      //     : _unitJson['type'] == 'car'
-      //         ? 'carpark'
-      //         : 'shop';
-      String block = _unitJson['block'] ?? '';
-      String floor = _unitJson['floor'] ?? '';
-      String number = _unitJson['number'] ?? '';
-      */
       fcmDeviceToken = fcmDeviceToken != null ? fcmDeviceToken : '';
 
       Ajax.ApiResponse resp = await Ajax.createNewTenant(
         unitId: _unitJson['id'],
         userId: Globals.userId!,
-        // unitType: unitType,
-        // block: block,
-        // floor: floor,
-        // number: number,
         role: role,
         name: name,
         mobile: mobile,

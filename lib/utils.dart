@@ -3,6 +3,7 @@ library utils;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:math' as Math;
 // import 'package:stack_trace/stack_trace.dart';
 // import 'dart:convert' as convert;
 // import 'dart:io';
@@ -443,6 +444,12 @@ String decryptStringAES256CTR(String val) {
       encrypter.decrypt(encrypt.Encrypted.fromBase64(val), iv: iv);
 
   return decrypted; // The decrypted can be view as String
+}
+
+int getRandomInt(int min, int max) {
+  // Generate a random integer within range
+  var random = new Math.Random();
+  return min + random.nextInt(max - min);
 }
 
 // This is to replace (xxx as List).map((e) => e as Map<String, dynamic>).toList()
