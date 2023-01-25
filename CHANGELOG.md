@@ -1,5 +1,17 @@
 
 
+## [0.7.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.6.0...v0.7.0) (2023-01-25)
+
+
+### Features
+
+* added basic unit test for ajax ([5d1619f](https://github.com/simonho288/EstateManage_tenantapp/commit/5d1619fead46a556fec3e3786809337c20492912))
+
+
+### Bug Fixes
+
+* hostS3Base is no longer required and it's removed ([e172663](https://github.com/simonho288/EstateManage_tenantapp/commit/e172663a130cd9a3cd9d74084e6efb0841501bc4))
+
 ## [0.6.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.5.0...v0.6.0) (2023-01-16)
 
 
