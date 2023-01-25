@@ -66,7 +66,7 @@ void main() async {
   await _initialize();
 
   // Get the settings from the SharedPreferences...
-  Map<String, dynamic> data = await _loadStartupData();
+  Map<String, dynamic> data = await loadStartupData();
 
   // Pass default language ID (which stored in SharedPreferences)
   // Globals.curLang = data['langId'];
@@ -142,7 +142,7 @@ Future<void> _initialize() async {
   }
 }
 
-Future<Map<String, dynamic>> _loadStartupData() async {
+Future<Map<String, dynamic>> loadStartupData() async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   // Load data from SharedPreferences
@@ -408,7 +408,7 @@ class _RootPageState extends State<RootPage> {
             // Remove the userJson from the return value
             rtnVal['userJson'] = null;
           } else {
-            Globals.curTenantJson!['status'] = resp.data[0]['status'];
+            Globals.curTenantJson!['status'] = resp.data['status'];
           }
         }
       }

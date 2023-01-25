@@ -18,10 +18,10 @@ class RejectedPage extends StatelessWidget {
       tenantId: Globals.curTenantJson!['id'],
     );
 
-    String newStatus = resp.data[0]['status'];
+    String newStatus = resp.data['status'];
     if (newStatus == 'approved') {
       // Save the new status to SharedPreferences
-      Globals.curTenantJson?['status'] = newStatus;
+      Globals.curTenantJson?['status'] = 1; // active
       await prefs.setString(
           'userJson', convert.jsonEncode(Globals.curTenantJson));
 

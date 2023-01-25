@@ -65,7 +65,7 @@ Future<ApiResponse> getTenantStatus({required String tenantId}) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/items/tenants/$tenantId?fields=status'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getTenantStatus'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -571,8 +571,6 @@ Future<ApiResponse> saveAmenityBooking({
       // 'fee': slot.fee,
     });
   });
-
-  // final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
 
   final response = await http
       .post(
