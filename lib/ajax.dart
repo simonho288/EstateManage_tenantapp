@@ -206,11 +206,34 @@ Future<ApiResponse> tenantLogout({
   final Map<String, dynamic> param = {
     'tenantId': tenantId,
   };
-  // final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
 
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/signout'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(param),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+
+Future<ApiResponse> deleteTenant({
+  required String tenantId,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
+  final Map<String, dynamic> param = {
+    'tenantId': tenantId,
+  };
+
+  final response = await http
+      .delete(
+        Uri.parse('${Globals.hostApiUri}/api/tl/deleteTenant'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

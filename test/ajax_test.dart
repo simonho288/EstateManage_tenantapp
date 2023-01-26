@@ -117,6 +117,7 @@ void main() async {
   });
 
   test('new tenant login', () async {
+    expect(newTenantEmail, isNotNull);
     Ajax.ApiResponse resp = await Ajax.tenantLogin(
       userId: Globals.userId!,
       mobileOrEmail: newTenantEmail,
@@ -143,6 +144,12 @@ void main() async {
 
   test('tenantLogout', () async {
     Ajax.ApiResponse resp = await Ajax.tenantLogout(tenantId: newTenantId);
+    expect(resp.data, contains('success'));
+    expect(resp.data['success'], equals(true));
+  });
+
+  test('deleteTenant', () async {
+    Ajax.ApiResponse resp = await Ajax.deleteTenant(tenantId: newTenantId);
     expect(resp.data, contains('success'));
     expect(resp.data['success'], equals(true));
   });
