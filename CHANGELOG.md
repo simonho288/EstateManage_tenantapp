@@ -1,5 +1,18 @@
 
 
+## [0.8.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.7.0...v0.8.0) (2023-01-26)
+
+
+### Features
+
+* added test instructions to readme.md ([17f11a9](https://github.com/simonho288/EstateManage_tenantapp/commit/17f11a9f2c9599fd54c5d91db2f1b459f9e7e23d))
+* added unit tests for tenant related ajax ([92010f8](https://github.com/simonho288/EstateManage_tenantapp/commit/92010f80cfa2abc1937da27a48226ea9f20ba894))
+
+
+### Bug Fixes
+
+* added missing set password api ([4cc439a](https://github.com/simonho288/EstateManage_tenantapp/commit/4cc439ae732d400e725035aff738bcfbb8765534))
+
 ## [0.7.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.6.0...v0.7.0) (2023-01-25)
 
 
