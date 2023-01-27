@@ -1,6 +1,6 @@
 {
   "name": "em-flutter-tenant",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "This is the frontend mobile app of the [EstateManage.Net platform](https://www.estatemanage.net). For detail documentation, please see the [backend repository](https://github.com/simonho288/estate-manage-backend).",
   "scripts": {
     "release": "release-it",

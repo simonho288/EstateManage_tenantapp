@@ -1,5 +1,12 @@
 
 
+## [0.9.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.8.0...v0.9.0) (2023-01-27)
+
+
+### Features
+
+* ajax unit tests are done ([5ec54ef](https://github.com/simonho288/EstateManage_tenantapp/commit/5ec54efc06bfbc33857e68c0b8ebf03ccc3af3a8))
+
 ## [0.8.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.7.0...v0.8.0) (2023-01-26)
 
 
