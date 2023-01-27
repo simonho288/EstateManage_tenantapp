@@ -322,7 +322,7 @@ class Amenity {
   bool saturday;
   bool sunday;
   String status;
-  int fee;
+  double? fee;
   DateTime? timeOpen;
   DateTime? timeClose;
   int? timeMinimum;
@@ -331,7 +331,7 @@ class Amenity {
   String bookingTimeBasic;
   List<AmenityBookingSection>? bookingSections;
   bool isRepetitiveBooking;
-  int bookingAdvanceDays;
+  int? bookingAdvanceDays;
   int? autoCancelHours;
   Map<String, dynamic>? contactWhatsapp;
   Map<String, dynamic>? contactEmail;
@@ -363,6 +363,34 @@ class Amenity {
     this.contactEmail,
     this.contactWhatsapp,
   });
+
+  factory Amenity.fromJSON(Map<String, dynamic> json) => Amenity(
+        id: json["id"],
+        dateCreated: json["dateCreated"],
+        name: json["name"],
+        details: json["details"],
+        photo: json["photo"],
+        monday: json["monday"],
+        tuesday: json["tuesday"],
+        wednesday: json["wednesday"],
+        thursday: json["thursday"],
+        friday: json["friday"],
+        saturday: json["saturday"],
+        sunday: json["sunday"],
+        status: json["status"],
+        fee: json["fee"],
+        timeOpen: json["timeOpen"],
+        timeClose: json["timeClose"],
+        timeMinimum: json["timeMinimum"],
+        timeMaximum: json["timeMaximum"],
+        timeIncrement: json["timeIncrement"],
+        bookingTimeBasic: json["bookingTimeBasic"],
+        isRepetitiveBooking: json["isRepetitiveBooking"],
+        bookingAdvanceDays: json["bookingAdvanceDays"],
+        autoCancelHours: json["autoCancelHours"],
+        contactEmail: json["contactEmail"],
+        contactWhatsapp: json["contactWhatsapp"],
+      );
 }
 
 // Schema for tenant_amenity_booking.

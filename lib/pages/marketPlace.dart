@@ -64,7 +64,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
 
     assert(_loop.paramsJson != null);
     var loopParams = convert.jsonDecode(_loop.paramsJson!);
-    Ajax.ApiResponse resp = await Ajax.getOneMarketplace(
+    Ajax.ApiResponse resp = await Ajax.getMarketplaceById(
         // clientCode: Globals.curClientJson?['code'],
         id: loopParams['adId']);
 

@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         // Read the client image background
-        resp = await Ajax.getEstate(
+        resp = await Ajax.getEstateById(
           id: Globals.curEstateJson?['id'],
         );
         data = resp.data;

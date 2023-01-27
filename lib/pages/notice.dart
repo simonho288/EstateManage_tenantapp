@@ -61,7 +61,8 @@ class _NoticePageState extends State<NoticePage> {
 
     assert(_loop.paramsJson != null);
     var loopParams = convert.jsonDecode(_loop.paramsJson!);
-    Ajax.ApiResponse resp = await Ajax.getNotice(id: loopParams['noticeId']);
+    Ajax.ApiResponse resp =
+        await Ajax.getNoticeById(id: loopParams['noticeId']);
 
     if (resp.data == null) {
       return {'error': 'rec_not_found'};

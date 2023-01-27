@@ -386,7 +386,9 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
         // if (this._amenity.bookingTimeBasic == 'section') {
         //   sectionId = slot.sectionId;
         // }
-        totalFee += _amenity.fee.toDouble();
+        if (_amenity.fee != null) {
+          totalFee += _amenity.fee!.toDouble();
+        }
 
         tabslots.add(Models.TenantAmenityBookingSlot(
           timeStart: slot.timeStart,
@@ -561,9 +563,11 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
   Future<void> _onBtnChgDate() async {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
-    int advanceDays = this._amenity.bookingAdvanceDays;
-    if (advanceDays == 0) {
-      advanceDays = 365;
+    int advanceDays = 365;
+    if (this._amenity.bookingAdvanceDays != null) {
+      if (this._amenity.bookingAdvanceDays != 0) {
+        advanceDays = this._amenity.bookingAdvanceDays!;
+      }
     }
 
     // Max bookable days is 1 year

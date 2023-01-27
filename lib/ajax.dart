@@ -247,21 +247,17 @@ Future<ApiResponse> deleteTenant({
 }
 
 Future<ApiResponse> getAllUnits({
-  required String clientCode,
-  required bool isWithAuthorizer,
-  required bool isWithMgrFee,
+  required String type, // unit type, which is: res,car,shp
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   final Map<String, dynamic> param = {
-    'isWithAuthorizer': isWithAuthorizer,
-    'isWithMgrFee': isWithMgrFee,
+    'type': type,
   };
-  // final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
 
   final response = await http
       .post(
-        Uri.parse('${Globals.hostApiUri}/api/tenant/getAllUnits'),
+        Uri.parse('${Globals.hostApiUri}/api/tl/getAllUnits'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -276,14 +272,15 @@ Future<ApiResponse> getAllUnits({
 
 Future<ApiResponse> getLoops({
   required String tenantId,
-  required List<String> excludeIDs,
+  List<String>? excludeIDs,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
   assert(Globals.curTenantJson != null);
 
-  final Map<String, dynamic> param = {
-    'excludeIDs': excludeIDs,
-  };
+  Map<String, dynamic> param = {};
+  if (excludeIDs != null) {
+    param['excludeIDs'] = excludeIDs;
+  }
 
   final response = await http
       .post(
@@ -302,158 +299,56 @@ Future<ApiResponse> getLoops({
 
 Future<ApiResponse> getNotices({
   required String unitType,
-  required List<int> excludeIDs,
+  List<String>? excludeIDs,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  // Directus query filter
-  // Doc: https://docs.directus.io/reference/api/query/#filter
-  Map<String, dynamic> filter = {};
-  if (unitType == 'res') {
-    filter['for_residence'] = true;
-  } else if (unitType == 'car') {
-    filter['for_carpark'] = true;
-  } else if (unitType == 'shp') {
-    filter['for_shop'] = true;
-  } else {
-    throw 'Unhandled unitType: $unitType';
+  Map<String, dynamic> param = {
+    'type': unitType,
+  };
+  if (excludeIDs != null) {
+    param['excludeIDs'] = excludeIDs;
   }
 
-  // If there're existing IDs to exclude, use 'not in': _nin
-  if (excludeIDs.length > 0) {
-    filter['id'] = {'_nin': excludeIDs};
-  }
-
-  const sort = 'date_created';
-  const fields = 'id,title,issue_date,pdf';
-
-  final response = await http.get(
-    Uri.parse(
-        '${Globals.hostApiUri}/items/notices?filter=${convert.jsonEncode(filter)}&sort=$sort&fields=$fields'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/getNotices'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(param),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
 }
 
 Future<ApiResponse> getMarketplaces({
-  // required String clientCode,
   required String unitType,
-  required List<int> excludeIDs,
+  List<String>? excludeIDs,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  // Directus query filter
-  // Doc: https://docs.directus.io/reference/api/query/#filter
-  Map<String, dynamic> filter = {};
-  if (unitType == 'res') {
-    filter['for_residence'] = true;
-  } else if (unitType == 'car') {
-    filter['for_carpark'] = true;
-  } else if (unitType == 'shp') {
-    filter['for_shop'] = true;
-  } else {
-    throw 'Unhandled unitType: $unitType';
+  Map<String, dynamic> param = {
+    'type': unitType,
+  };
+  if (excludeIDs != null) {
+    param['excludeIDs'] = excludeIDs;
   }
 
-  // If there're existing IDs to exclude, use 'not in': _nin
-  if (excludeIDs.length > 0) {
-    filter['id'] = {'_nin': excludeIDs};
-  }
-
-  const sort = 'date_created';
-  const fields = 'id,title,post_date,ad_image,commerce_url';
-
-  final response = await http.get(
-    Uri.parse(
-        '${Globals.hostApiUri}/items/marketplaces?filter=${convert.jsonEncode(filter)}&sort=$sort&fields=$fields'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-}
-
-Future<ApiResponse> getAmenity({
-  required String id,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/api/tl/getAmenity/$id'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-}
-
-Future<ApiResponse> getEstate({
-  // required String clientCode,
-  required String id,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  // Calling Directus API ItemServices
-  final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/api/tl/getEstate/${id}'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-}
-
-Future<ApiResponse> getNotice({
-  required String id,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/api/tl/getNotice/$id'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-}
-
-Future<ApiResponse> getOneMarketplace({
-  // required String clientCode,
-  required String id,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  final response = await http.get(
-    Uri.parse('${Globals.hostApiUri}/api/tl/getMarketplace/$id'),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-    },
-    // body: convert.jsonEncode({'s': s}),
-  ).timeout(Duration(seconds: TIMEOUT));
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/getMarketplaces'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(param),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
 }
@@ -474,23 +369,69 @@ Future<ApiResponse> getBookableAmenities() async {
   return _returnResponse(response);
 }
 
-Future<ApiResponse> getAmenityBookingSections({
-  // required String clientCode,
-  required String amenityId,
+Future<ApiResponse> getAmenityById({
+  required String id,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
-  Map<String, dynamic> filter = {
-    'amenities_id': {
-      '_eq': amenityId,
+  final response = await http.get(
+    Uri.parse('${Globals.hostApiUri}/api/tl/getAmenity/$id'),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
     },
-  };
-  const fields =
-      '*,booking_sections_id.*,booking_sections.booking_sections_id.name,booking_sections.booking_sections_id.time_begin,booking_sections.booking_sections_id.time_end';
+    // body: convert.jsonEncode({'s': s}),
+  ).timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+
+Future<ApiResponse> getEstateById({
+  // required String clientCode,
+  required String id,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
+  // Calling Directus API ItemServices
+  final response = await http.get(
+    Uri.parse('${Globals.hostApiUri}/api/tl/getEstate/${id}'),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+    },
+    // body: convert.jsonEncode({'s': s}),
+  ).timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+
+Future<ApiResponse> getNoticeById({
+  required String id,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
 
   final response = await http.get(
-    Uri.parse(
-        '${Globals.hostApiUri}/items/amenities_booking_sections?filter=${convert.jsonEncode(filter)}&fields=$fields'),
+    Uri.parse('${Globals.hostApiUri}/api/tl/getNotice/$id'),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+    },
+    // body: convert.jsonEncode({'s': s}),
+  ).timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+
+Future<ApiResponse> getMarketplaceById({
+  required String id,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
+  final response = await http.get(
+    Uri.parse('${Globals.hostApiUri}/api/tl/getMarketplace/$id'),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -601,27 +542,54 @@ Future<ApiResponse> saveAmenityBooking({
 } // saveAmenityBooking()
 
 Future<ApiResponse> deleteTenantBooking({
-  // required String clientCode,
   required List<String> tenantAmenityBookingIds,
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
+  Map<String, dynamic> params = {
+    'bkgIds': tenantAmenityBookingIds,
+  };
+
   final response = await http
-      .delete(
-        Uri.parse('${Globals.hostApiUri}/items/tenant_amenity_bookings'),
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/deleteTenantAmenityBkgs'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
-        body: convert.jsonEncode(
-            tenantAmenityBookingIds), // the encrypted param put to 's'
+        body: convert.jsonEncode(params),
       )
       .timeout(Duration(seconds: TIMEOUT));
 
   return _returnResponse(response);
 }
 
+Future<ApiResponse> deleteTenantLoops({
+  required List<String> loopIds,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
+  Map<String, dynamic> params = {
+    'loopIds': loopIds,
+  };
+
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/deleteTenantLoops'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
+        },
+        body: convert.jsonEncode(params),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+
+/*
 Future<ApiResponse> fetchPaymentSheetData({
   required String clientCode,
   required int tenantAmenityBookingId,
@@ -649,3 +617,4 @@ Future<ApiResponse> fetchPaymentSheetData({
 
   return _returnResponse(response);
 }
+*/

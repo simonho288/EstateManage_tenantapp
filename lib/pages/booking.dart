@@ -55,7 +55,7 @@ class _BookingPageState extends State<BookingPage> {
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
     assert(_loop.paramsJson != null);
     var loopParams = convert.jsonDecode(_loop.paramsJson!);
-    Ajax.ApiResponse resp = await Ajax.getAmenity(
+    Ajax.ApiResponse resp = await Ajax.getAmenityById(
         // clientCode: Globals.curClientJson?['code'],
         id: loopParams['amenityId']);
     Map<String, dynamic> data = resp.data;
@@ -101,7 +101,7 @@ class _BookingPageState extends State<BookingPage> {
       contactWhatsapp: whatsapp,
     );
 
-    resp = await Ajax.getEstate(
+    resp = await Ajax.getEstateById(
       // clientCode: Globals.curClientJson?['code'],
       id: Globals.curEstateJson?['id'],
       // fields: 'stripe_publishable_key,stripe_secret_key,payment_currency',
