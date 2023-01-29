@@ -84,7 +84,7 @@ class _BookingPageState extends State<BookingPage> {
       saturday: availableDays['sat'],
       sunday: availableDays['sun'],
       status: data['status'],
-      fee: data['fee'],
+      fee: data['fee'] != null ? data['fee'].toDouble() : null,
       timeOpen: timeBased['timeOpen'] != null
           ? DateTime.parse(today + ' ' + timeBased['timeOpen'])
           : null,
