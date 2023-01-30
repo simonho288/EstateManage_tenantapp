@@ -1,5 +1,17 @@
 
 
+### [0.9.1](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.9.0...v0.9.1) (2023-01-30)
+
+
+### Features
+
+* util.dart unit tests are done ([633c191](https://github.com/simonho288/EstateManage_tenantapp/commit/633c19123b1523abe9cd6186053af89807e99be9))
+
+
+### Bug Fixes
+
+* amenity model field 'fee' int convert to double bug ([69332a1](https://github.com/simonho288/EstateManage_tenantapp/commit/69332a1aaebc384d79d7fdb4d74208fece76d6e8))
+
 ## [0.9.0](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.8.0...v0.9.0) (2023-01-27)
 
 
