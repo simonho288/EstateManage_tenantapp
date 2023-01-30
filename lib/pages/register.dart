@@ -248,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
     widgets.add(SizedBox(height: MARGIN1));
     String msgConfirmUnit = 'pleaseVerifyUnitBelow'.tr();
-    String unitName = Utils.buildUnitNameWithLangByJson(context, _unitJson);
+    String unitName = Utils.buildUnitNameWithLangByJson(_unitJson);
     msgConfirmUnit = msgConfirmUnit.replaceFirst('{unit}', unitName);
     widgets.add(
       RichText(

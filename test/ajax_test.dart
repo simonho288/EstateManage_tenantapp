@@ -8,14 +8,14 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:convert/convert.dart';
+// import 'package:convert/convert.dart';
 // import 'package:test/test.dart';
 
 import 'package:estatemanage_tenantapp/ajax.dart' as Ajax;
@@ -43,7 +43,7 @@ void main() async {
     buildNumber: '1',
     buildSignature: '',
   );
-  var defaultLocale = Locale('en', 'US');
+  // var defaultLocale = Locale('en', 'US');
   Globals.curLang = 'en';
   String configFileName = Globals.configFileName = 'dev';
   await GlobalConfiguration().loadFromAsset(configFileName);

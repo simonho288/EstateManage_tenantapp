@@ -237,7 +237,7 @@ Map<String, String> _mgrmReceipt({
   var unitJson = meta['unit'];
   unitJson['cls'] = meta['unitType'];
   String month = meta['month'];
-  String unitName = Utils.buildUnitNameWithLangByJson(context, meta['unit']);
+  String unitName = Utils.buildUnitNameWithLangByJson(meta['unit']);
   String paidDate = meta['paidRec']['paidRec']['paid']['paidDate'];
   String paidDate2 = Utils.formatDate(paidDate);
 

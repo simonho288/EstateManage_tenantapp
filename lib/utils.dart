@@ -207,10 +207,9 @@ String getDbMapByCurLocale(Map<String, dynamic> dbJson) {
 
 // A generic empty text field checking
 // e.g.: validator: (text) { return Utils.isFieldEmpty(text); }
-String isFieldEmpty(BuildContext context, String text) {
+String isFieldEmpty(String text) {
   if (text.isEmpty) {
-    // return 'cantEmpty'.tr();
-    return 'Can\'t empty!';
+    return 'cantEmpty'.tr();
   }
   return '';
 }
@@ -242,7 +241,6 @@ String formatCurrency(int value) {
 }
 
 String buildUnitNameWithLangByJson(
-  BuildContext context,
   Map<String, dynamic> unitJson,
 ) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
@@ -252,33 +250,32 @@ String buildUnitNameWithLangByJson(
   String floor = unitJson['floor'] != null ? unitJson['floor'] : '';
   String number = unitJson['number'];
   String? authorizer = null; // unitJson['authorizer'];
+  String unitType = unitJson['type'];
   late String unitCode;
-  late String unitType;
   late String propTypeName;
 
-  if (unitJson['type'] == 'res') {
+  if (unitType == 'res') {
     unitCode = '$block|$floor|$number';
-    unitType = 'residences';
     propTypeName = 'residence'.tr();
-  } else if (unitJson['type'] == 'car') {
+  } else if (unitType == 'car') {
     unitCode = '$block|$floor|$number';
-    unitType = 'carparks';
     propTypeName = 'carpark'.tr();
-  } else if (unitJson['type'] == 'shp') {
+  } else if (unitType == 'shp') {
     unitCode = '$block|$floor|$number';
-    unitType = 'shops';
     propTypeName = 'shop'.tr();
+  } else {
+    throw 'Invalid unit type: $unitType';
   }
 
   Map<String, dynamic> rst =
-      buildUnitNameWithLangByCode(context, unitType, unitCode, authorizer);
+      buildUnitNameWithLangByCode(unitType, unitCode, authorizer);
 
   return propTypeName + 'colon'.tr() + rst['unitName'];
 }
 
 // Where unitType: residences/carparks/shops
 // unitCode: <phase>|<block>|<floor>|<number>
-Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
+Map<String, dynamic> buildUnitNameWithLangByCode(
     String unitType, String? unitCode, String? authorizer) {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
@@ -287,9 +284,9 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
   String rstUnitName = '';
   if (unitCode != null) {
     List<String> unitParts = unitCode.split('|');
-    if (unitType == 'residences') {
+    if (unitType == 'res') {
       // rstUnitType = 'residence'.tr();
-      rstUnitType = 'Residence';
+      rstUnitType = 'residence'.tr();
       String block = unitParts[0].trim();
       String floor = unitParts[1].trim();
       String room = unitParts[2].trim();
@@ -320,7 +317,7 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
           // rstUnitName += 'Room $room';
         }
       }
-    } else if (unitType == 'carparks') {
+    } else if (unitType == 'car') {
       rstUnitType = 'carpark'.tr();
       // rstUnitType = 'Carpark';
       String stage = unitParts[0].trim();
@@ -353,7 +350,7 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
           // rstUnitName += 'Room $room';
         }
       }
-    } else if (unitType == 'shops') {
+    } else if (unitType == 'shp') {
       rstUnitType = 'shop'.tr();
       // rstUnitType = 'Shop';
       String stage = unitParts[0].trim();
@@ -387,19 +384,16 @@ Map<String, dynamic> buildUnitNameWithLangByCode(BuildContext context,
         }
       }
     } else {
-      assert(false);
+      throw 'Invalid unit type: $unitType';
     }
   } else if (authorizer != null) {
     rstUnitName = authorizer;
-    if (unitType == 'residences') {
+    if (unitType == 'res') {
       rstUnitType = 'residence'.tr();
-      // rstUnitType = 'Residence';
-    } else if (unitType == 'carparks') {
+    } else if (unitType == 'car') {
       rstUnitType = 'carpark'.tr();
-      // rstUnitType = 'Carpark';
-    } else if (unitType == 'shops') {
+    } else if (unitType == 'shp') {
       rstUnitType = 'shop'.tr();
-      // rstUnitType = 'Shop';
     } else {
       assert(false);
     }
@@ -450,23 +444,6 @@ int getRandomInt(int min, int max) {
   // Generate a random integer within range
   var random = new Math.Random();
   return min + random.nextInt(max - min);
-}
-
-// This is to replace (xxx as List).map((e) => e as Map<String, dynamic>).toList()
-// or List<Map<String, dynamic>>.from(xxx)
-// because socket.io in iPhone the response cause InternalLinkedHashMap<xxx> error
-List<Map<String, dynamic>> myConvertJsonList(List<dynamic> list) {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-  assert(list != null);
-
-  List<Map<String, dynamic>> rst = [];
-  for (int i = 0; i < list.length; ++i) {
-    var el = list[i];
-    Map<String, dynamic> obj = new Map<String, dynamic>.from(el);
-    rst.add(obj);
-  }
-
-  return rst;
 }
 
 Locale langIdToLocale(String langId) {
@@ -551,7 +528,6 @@ String truncateString(String val, int len) {
 }
 
 DateTime isoDatetimeToLocal(String isoDatetime) {
-  // return DateTime.parse(isoDatetime.replaceAll('T', ' ') + '.000000Z').toLocal();
   return DateTime.parse(isoDatetime).toLocal();
 }
 
@@ -619,12 +595,17 @@ void showSnackBar(BuildContext context, String msg) {
 bool parseDbBoolean(dynamic value) {
   if (value == null) {
     return false;
-  }
-  if (value is bool) {
+  } else if (value is bool) {
     return value;
-  }
-  if (value is String) {
-    return value == 'true';
+  } else if (value is int) {
+    return value > 0 ? true : false;
+  } else if (value is double) {
+    return value > 0.0 ? true : false;
+  } else if (value is String) {
+    return value == '1' ||
+        value.toLowerCase() == 'true' ||
+        value.toLowerCase() == 'yes' ||
+        value.toLowerCase() == 'y';
   }
   return false;
 }
