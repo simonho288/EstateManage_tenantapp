@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:path/path.dart' as Path;
 
 // import 'package:estatemanage_tenantapp/main.dart';
 // import 'package:estatemanage_tenantapp/ajax.dart' as Ajax;
-import 'package:estatemanage_tenantapp/constants.dart' as Constants;
+// import 'package:estatemanage_tenantapp/constants.dart' as Constants;
 import 'package:estatemanage_tenantapp/globals.dart' as Globals;
 import 'package:estatemanage_tenantapp/utils.dart' as Utils;
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 // import 'package:estatemanage_tenantapp/models.dart' as Models;
 // import 'package:estatemanage_tenantapp/utils.dart' as Utils;
 
@@ -35,6 +34,7 @@ void main() async {
   Globals.encryptIv = GlobalConfiguration().getValue('enc_iv');
 
   await EasyLocalization.ensureInitialized();
+
   // EasyLocalization(
   //   supportedLocales: [defaultLocale],
   //   path: 'assets/langs',

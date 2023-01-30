@@ -48,7 +48,7 @@ dependencies:
   global_configuration: ^2.0.0-nullsafety.0
   encrypt: ^5.0.0
   uri: ^1.0.0
-  path_provider: ^2.0.5
+  path_provider: ^2.0.9
   dio: ^4.0.6
   permission_handler: ^9.2.0
   open_file: ^3.2.1
