@@ -8,6 +8,7 @@ import 'dart:math' as Math;
 // import 'dart:convert' as convert;
 // import 'dart:io';
 // import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as Path;
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -474,6 +475,10 @@ Future<String?> generateDeviceToken() async {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('deviceToken', token);
       rtnVal = token;
+
+      if (kDebugMode) {
+        print('fcmDeviceToken: ' + token);
+      }
     }
   }
 

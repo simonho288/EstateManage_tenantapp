@@ -282,19 +282,15 @@ class _RootPageState extends State<RootPage> {
 
     super.initState();
 
-    // For debugging, get the device token for Firebase console to send instant test message
-    if (kDebugMode) {
-      _getDeviceFCMtoken();
-    }
     _initPushMessaging();
     _future = _loadInitialData();
   }
 
-  void _getDeviceFCMtoken() async {
-    String? token = await _messaging.getToken();
+  // void _getDeviceFCMtoken() async {
+  //   String? token = await _messaging.getToken();
 
-    print('FCM key for firebase console: $token');
-  }
+  //   print('FCM deviceToken: $token');
+  // }
 
   void _initPushMessaging() {
     // Setup Firebase messaging notification
