@@ -1,5 +1,18 @@
 
 
+### [0.9.2](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.9.1...v0.9.2) (2023-02-07)
+
+
+### Features
+
+* to match backend to re-structure the tenant for handling firebase messaging ([34966c3](https://github.com/simonho288/EstateManage_tenantapp/commit/34966c3922e475db5b65fae5a96b21db0e057167))
+* upgrad android build kotlin version ([b2f799b](https://github.com/simonho288/EstateManage_tenantapp/commit/b2f799ba70b29a09c1462f0b041fd15e41124f69))
+
+
+### Bug Fixes
+
+* just upgrade the path_provider package ([3ab22bf](https://github.com/simonho288/EstateManage_tenantapp/commit/3ab22bf523673bd1b2c8564745b37cb97cb87850))
+
 ### [0.9.1](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.9.0...v0.9.1) (2023-01-30)
 
 
