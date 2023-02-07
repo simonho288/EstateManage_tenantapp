@@ -73,7 +73,9 @@ class _RegisterPageState extends State<RegisterPage> {
       DropdownMenuItem(child: Text('occupant'.tr()), value: 'occupant'),
       DropdownMenuItem(child: Text('agent'.tr()), value: 'agent'),
     ];
-    _selectedRole = _ddmiRoles?[0].value;
+    if (_selectedRole == null) {
+      _selectedRole = _ddmiRoles?[0].value;
+    }
   }
 
   Future<void> _onLangChanged(String? val) async {
@@ -297,7 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
         style: TextStyle(fontSize: 16.0, color: Colors.black),
         onChanged: (value) {
           setState(() {
-            _selectedRole = value.toString();
+            _selectedRole = value;
           });
         },
       ),

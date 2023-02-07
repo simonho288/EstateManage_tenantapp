@@ -141,32 +141,6 @@ Future<ApiResponse> createNewTenant(
   return _returnResponse(response);
 }
 
-Future<ApiResponse> setTenantPassword({
-  required String tenantId,
-  required String password,
-}) async {
-  developer.log(StackTrace.current.toString().split('\n')[0]);
-
-  final Map<String, dynamic> param = {
-    'tenantId': tenantId,
-    'password': password,
-  };
-
-  final response = await http
-      .post(
-        Uri.parse('${Globals.hostApiUri}/api/tl/setPassword'),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
-        },
-        body: convert.jsonEncode(param),
-      )
-      .timeout(Duration(seconds: TIMEOUT));
-
-  return _returnResponse(response);
-}
-
 Future<ApiResponse> tenantLogin({
   // required String clientCode,
   required String userId,
@@ -190,6 +164,32 @@ Future<ApiResponse> tenantLogin({
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+        },
+        body: convert.jsonEncode(param),
+      )
+      .timeout(Duration(seconds: TIMEOUT));
+
+  return _returnResponse(response);
+}
+
+Future<ApiResponse> setTenantPassword({
+  required String tenantId,
+  required String password,
+}) async {
+  developer.log(StackTrace.current.toString().split('\n')[0]);
+
+  final Map<String, dynamic> param = {
+    'tenantId': tenantId,
+    'password': password,
+  };
+
+  final response = await http
+      .post(
+        Uri.parse('${Globals.hostApiUri}/api/tl/setPassword'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ' + Globals.accessToken!,
         },
         body: convert.jsonEncode(param),
       )
