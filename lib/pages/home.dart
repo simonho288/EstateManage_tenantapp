@@ -68,24 +68,23 @@ class _HomePageState extends State<HomePage> {
     developer.log(StackTrace.current.toString().split('\n')[0]);
 
     _database = await Globals.sqlite;
-    Map<String, dynamic> rtnVal = {}; // Return JSON (equivalent _datum)
+    Map<String, dynamic> rtnVal = {};
 
     // Get existing records from Sqflite
-    List<Models.Loop> records;
+    List<Models.Loop> loops;
     if (this._filter == null) {
-      records = await Models.Loop.getAll(_database);
-      // Sort by date
-      records.sort(
-          (a, b) => b.dateCreated.compareTo(a.dateCreated)); // Sort descending
+      loops = await Models.Loop.getAll(_database);
+      // Sort by date (decending)
+      loops.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
     } else {
       const sql = 'SELECT * FROM Loops WHERE type=? ORDER BY dateCreated DESC';
-      records = await Models.Loop.query(_database, sql, [_filter]);
+      loops = await Models.Loop.query(_database, sql, [_filter]);
     }
 
     // Read all newest Loops only in homepage.
     if (this._filter == null) {
       // Read remote data without duplication
-      List<String> existingIDs = records.map((e) => e.id).toList();
+      List<String> existingIDs = loops.map((e) => e.id).toList();
 
       // Get any new records where are exclude existing records
       Ajax.ApiResponse resp = await Ajax.getLoops(
@@ -93,13 +92,13 @@ class _HomePageState extends State<HomePage> {
         tenantId: Globals.curTenantJson?['id'],
         excludeIDs: existingIDs,
       );
-      List<Map<String, dynamic>> remoteData =
+      List<Map<String, dynamic>> respData =
           new List<Map<String, dynamic>>.from(resp.data as List);
 
       // Add the remote records to Sqlite
-      if (remoteData.length > 0) {
+      if (respData.length > 0) {
         // Copy the records from server to local db
-        remoteData.forEach((e) async {
+        respData.forEach((e) async {
           Map<String, dynamic> meta = convert.jsonDecode(e['meta']);
           // Add the title_id to the paramsJson
           // meta['title_id'] = e['title_id'];
@@ -124,12 +123,12 @@ class _HomePageState extends State<HomePage> {
             isNew: true,
           );
           notice.insert(_database); // Save to Sqlite
-          records.insert(0, notice); // Don't forget to add to this memory
+          loops.insert(0, notice); // Don't forget to add to this memory
         });
       }
     }
 
-    rtnVal['loops'] = records;
+    rtnVal['loops'] = loops;
 
     return rtnVal; // Assign to _datum
   }
@@ -165,6 +164,37 @@ class _HomePageState extends State<HomePage> {
       default:
         developer.log('Unhandled loop type: ${rec.titleId}');
         break;
+    }
+  }
+
+  Widget _renderGotoPage(Map<String, dynamic> data) {
+    if (data['type'] != null) {
+      if (data['type'] == 'loop') {
+        String id = data['id'].toString();
+        var loops = _datum['loops'];
+        var found = loops.where((d) => d.id == id);
+        if (found.isNotEmpty) {
+          Models.Loop loop = found.first;
+          if (loop.type == 'notice') {
+            Navigator.pushNamed(context, '/notice', arguments: {'rec': loop});
+          }
+          print(loop);
+        }
+      }
+    }
+    return Container();
+  }
+
+  void _simulateTapLoopRecord(BuildContext context) {
+    var loops = _datum['loops'];
+    var gotoData = Globals.goToPageData!;
+    String id = gotoData['id'].toString();
+    var found = loops.where((d) => d.id == id);
+    if (found.isNotEmpty) {
+      Models.Loop loop = found.first;
+      if (loop.type == 'notice') {
+        _onTap(loop);
+      }
     }
   }
 
@@ -227,6 +257,14 @@ class _HomePageState extends State<HomePage> {
           .defaultEstateImage; // When the user didn't upload their estate image
     } else {
       imageUrl = imageUrl;
+    }
+
+    // If there is data in Globals.goToPageData, it means that the App is started
+    // from notification. When the user tap the notification, after logging in, here
+    // to direct goto the loop record such as open the notice, or open the booking
+    if (loops.length > 0 && Globals.goToPageData != null) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _simulateTapLoopRecord(context));
     }
 
     return _Background(

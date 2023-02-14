@@ -39,7 +39,7 @@ import 'pages/scanEstateQr.dart';
 import 'pages/terms.dart';
 import 'pages/setupPassword.dart';
 import 'pages/rejected.dart';
-import 'pages/pending.dart';
+// import 'pages/pending.dart';
 import 'pages/tenantQrcode.dart';
 
 FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -66,7 +66,7 @@ void main() async {
   await _initialize();
 
   // Get the settings from the SharedPreferences...
-  Map<String, dynamic> data = await loadStartupData();
+  Map<String, dynamic> data = await _loadStartupData();
 
   // Pass default language ID (which stored in SharedPreferences)
   // Globals.curLang = data['langId'];
@@ -101,6 +101,10 @@ Future<void> _initialize() async {
   await GlobalConfiguration().loadFromAsset(configFileName);
   await GlobalConfiguration().loadFromAsset('secrets');
 
+  await _initFirebaseMessaging();
+}
+
+Future<void> _initFirebaseMessaging() async {
   // Firebase initialization
   await Firebase.initializeApp();
 
@@ -142,7 +146,7 @@ Future<void> _initialize() async {
   }
 }
 
-Future<Map<String, dynamic>> loadStartupData() async {
+Future<Map<String, dynamic>> _loadStartupData() async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   // Load data from SharedPreferences
@@ -286,68 +290,61 @@ class _RootPageState extends State<RootPage> {
     _future = _loadInitialData();
   }
 
-  // void _getDeviceFCMtoken() async {
-  //   String? token = await _messaging.getToken();
+  // Setup Firebase foreground messaging listener
+  // Docs: https://firebase.google.com/docs/cloud-messaging/flutter/receive
+  void _initPushMessaging() async {
+    // initialMessage is the message delivered by system notification.
+    RemoteMessage? initialMessage = await _messaging.getInitialMessage();
+    if (initialMessage != null) {
+      _handleMessage(initialMessage, 'from getInitialMessage');
+    }
 
-  //   print('FCM deviceToken: $token');
-  // }
-
-  void _initPushMessaging() {
-    // Setup Firebase messaging notification
-    _messaging.getInitialMessage().then((RemoteMessage? message) {
-      if (message != null) {
-        developer.log('Firebase initial message received');
-
-        // Navigator.pushNamed(context, '/notifications', arguments: message);
-      }
+    FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
+      // Ignore the message if it is received when the App is running
+      // _handleMessage(msg, 'from onMessage');
     });
 
-    // Setup Firebase foreground messaging listener
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      AppleNotification? apple = message.notification?.apple;
-      if (notification != null && !kIsWeb) {
-        if (Platform.isAndroid) {
-          _fltNotification.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                _channel.id,
-                _channel.name,
-                channelDescription: _channel.description,
-                icon: 'launch_background',
-                // '1',
-                // 'channelName',
-                // 'channel Description',
-              ),
-            ),
-          );
-        } else if (Platform.isIOS) {
-          _fltNotification.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              iOS: IOSNotificationDetails(
-                presentSound: true,
-                presentAlert: true,
-              ),
-            ),
-          );
-        }
-      }
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage msg) {
+      _handleMessage(msg, 'from onMessageOpenedApp');
     });
+  }
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      developer.log('A new onMessageOpenedApp event was published!');
+  _handleMessage(RemoteMessage msg, String debugInfo) {
+    developer.log(StackTrace.current.toString().split('\n')[0]);
 
-      // TODO Handle push notification from OS
-      // Navigator.pushNamed(context, '/home', arguments: message);
-      Navigator.pushNamed(context, '/');
-    });
+    RemoteNotification? notification = msg.notification;
+    Map<String, dynamic> data = msg.data;
+    print(data);
+    if (notification != null && !kIsWeb) {
+      AndroidNotification? android = notification.android;
+      AppleNotification? apple = notification.apple;
+
+      // if (Platform.isAndroid || Platform.isIOS) {
+      //   _fltNotification.show(
+      //     notification.hashCode,
+      //     notification.title,
+      //     notification.body! + ',' + addMsg,
+      //     NotificationDetails(
+      //       android: AndroidNotificationDetails(
+      //         _channel.id,
+      //         _channel.name,
+      //         channelDescription: _channel.description,
+      //         icon: 'launch_background',
+      //         // '1',
+      //         // 'channelName',
+      //         // 'channel Description',
+      //       ),
+      //       iOS: IOSNotificationDetails(
+      //         presentSound: true,
+      //         presentAlert: true,
+      //       ),
+      //     ),
+      //   );
+      // }
+
+      Globals.goToPageData = data;
+      // Navigator.pushNamed(context, '/notice', arguments: {'rec': rec});
+    }
   }
 
   Future<bool> _loadInitialData() async {

@@ -22,7 +22,7 @@ const Color primaryLighterColor2 = const Color(0xFFF9F0DF);
 // Current client config record (collection client)
 String? userId;
 // String? tenantId;
-String? accessToken;
+String? accessToken; // backend JWT token
 
 // Saved database records
 Map<String, dynamic>? curTenantJson;
@@ -59,6 +59,10 @@ late Database sqlite;
 // Homepage widget
 late HomePage homePage;
 
-// // copy from assets/secret/keys.json. See README.md Installation section
+// Copy from assets/secret/keys.json. See README.md Installation section
 late String encryptSecretKey;
 late String encryptIv;
+
+// Go to the page after logged in: This is used when the notification
+// received when the App is running in background
+Map<String, dynamic>? goToPageData;

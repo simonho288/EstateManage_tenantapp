@@ -243,7 +243,6 @@ class _LoginPageState extends State<LoginPage> {
         Map<String, dynamic> estate = data;
         Globals.curEstateJson?['estateImageApp'] = estate['estateImageApp'];
 
-        // Navigator.pushReplacementNamed(context, '/home');
         Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
       }
     } catch (e) {
