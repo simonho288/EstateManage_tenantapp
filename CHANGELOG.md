@@ -1,5 +1,12 @@
 
 
+### [0.9.3](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.9.2...v0.9.3) (2023-02-14)
+
+
+### Features
+
+* implemented click the notification to trigger show the corresponding notice ([e1dbafa](https://github.com/simonho288/EstateManage_tenantapp/commit/e1dbafad00842568d39db9d8b6c15de102a0201b))
+
 ### [0.9.2](https://github.com/simonho288/EstateManage_tenantapp/compare/v0.9.1...v0.9.2) (2023-02-07)
 
 
