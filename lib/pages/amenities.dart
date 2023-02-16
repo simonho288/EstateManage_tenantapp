@@ -115,7 +115,7 @@ class _AmenitiesPageState extends State<AmenitiesPage> {
         saturday: availableDays['sat'],
         sunday: availableDays['sun'],
         status: e['status'],
-        fee: e['fee'],
+        fee: e['fee'] != null ? e['fee'].toDouble() : null,
         timeOpen: dtOpen,
         timeClose: dtClose,
         timeMinimum: timeMinimum,

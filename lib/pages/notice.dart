@@ -84,7 +84,9 @@ class _NoticePageState extends State<NoticePage> {
     // if (await Permission.storage.request().isGranted) {
     Directory dir = await getTemporaryDirectory();
     String srcUrl = _notice.pdfUrl;
-    String dstPath = '${dir.path}/${_notice.title}.pdf';
+    // String noticeTitle = Utils.getDbStringByCurLocale(_notice.title);
+    const pdfFilename = 'notice.pdf';
+    String dstPath = '${dir.path}/${pdfFilename}';
     Response? resp = await Utils.downloadFile(
         context, 'noticeDownloadPdf'.tr(), srcUrl, dstPath);
     if (resp != null && resp.statusCode == 200) {
