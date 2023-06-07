@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'dart:io';
 import 'dart:convert' as convert;
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -8,12 +9,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 
 import '../components/rawBackground.dart';
-import '../components/dialogBuilder.dart';
 
-import '../include.dart';
 import '../constants.dart' as Constants;
 import '../models.dart' as Models;
-import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
 import '../loopTranslate.dart' as LoopTranslate;
 import '../globals.dart' as Globals;

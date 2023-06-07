@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,9 +12,9 @@ import 'package:global_configuration/global_configuration.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path/path.dart' as Path;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'include.dart';
 import 'constants.dart' as Constants;
 import 'globals.dart' as Globals;
 import 'pages/receipt.dart';

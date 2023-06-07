@@ -1,13 +1,14 @@
 library globals;
 
-import 'include.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
+// import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 // import 'package:objectbox/objectbox.dart';
+export 'package:shared_preferences/shared_preferences.dart';
 
 import 'pages/home.dart';
 
-const FlexScheme usedFlexScheme = FlexScheme.mango;
+// const FlexScheme usedFlexScheme = FlexScheme.mango;
 const defaultEstateImage =
     'https://vpms-hk.s3.us-west-004.backblazeb2.com/assets/tenantapp_default_estate_640x360.jpg';
 const defaultAmenityCanvas =

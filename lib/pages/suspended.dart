@@ -1,7 +1,5 @@
 import 'dart:developer' as developer;
-
-import '../include.dart';
-import '../components/navBar.dart';
+import 'package:flutter/material.dart';
 
 class SuspendedPage extends StatelessWidget {
   const SuspendedPage({Key? key}) : super(key: key);

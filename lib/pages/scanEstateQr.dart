@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 // import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -10,13 +12,13 @@ import 'dart:convert' as convert;
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../include.dart';
 import '../ajax.dart' as Ajax;
 import '../utils.dart' as Utils;
 import '../globals.dart' as Globals;
 // import '../components/navBar.dart';
 // import 'register.dart';
 
+// In below debug QRCode URL: a=userId, b=unitId, c=(for future)
 const DEBUG_QRCODE =
     'https://www.estatemanage.net/appdl/index.html/?a=adminuserid123&b=AprTvXkFWkxp6X765kfo3&c=aCfFPPdSR3tLJ2QRN5VXl';
 

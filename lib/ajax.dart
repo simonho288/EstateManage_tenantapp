@@ -5,13 +5,12 @@ import 'dart:developer' as developer;
 import 'dart:async';
 import 'dart:convert' as convert;
 import 'dart:io';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:intl/intl.dart';
 // import '../objectbox.g.dart'; // created by `flutter pub run build_runner
 
-import 'include.dart';
-import 'utils.dart' as Utils;
 import 'globals.dart' as Globals;
 import '../models.dart' as Models;
 
@@ -59,11 +58,22 @@ ApiResponse _returnResponse(var postResp) {
   return resp;
 }
 
+// This is to solve flutter CERTIFICATE_VERIFY_FAILED error when it is Cloudflare Workers custom domain.
+// Src: https://flutteragency.com/solve-flutter-certificate_verify_failed-error-while-performing-a-post-request/
+IOClient _createHttpInstance() {
+  final ioc = new HttpClient();
+  ioc.badCertificateCallback =
+      (X509Certificate cert, String host, int port) => true;
+  final http = new IOClient(ioc);
+  return http;
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 Future<ApiResponse> getTenantStatus({required String tenantId}) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
+  final http = _createHttpInstance();
   final response = await http.get(
     Uri.parse('${Globals.hostApiUri}/api/tl/getTenantStatus'),
     headers: {
@@ -85,6 +95,7 @@ Future<ApiResponse> scanUnitQrcode(String qrcode) async {
   final Map<String, dynamic> param = {
     'url': qrcode,
   };
+  final http = _createHttpInstance();
   Response response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/nl/scanUnitQrcode'),
@@ -126,6 +137,7 @@ Future<ApiResponse> createNewTenant(
     'fcmDeviceToken': fcmDeviceToken,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/nl/createNewTenant'),
@@ -158,6 +170,7 @@ Future<ApiResponse> tenantLogin({
   };
   // final String ccEnc = Utils.encryptStringAES256CTR(clientCode);
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/nl/tenant/auth'),
@@ -183,6 +196,7 @@ Future<ApiResponse> setTenantPassword({
     'password': password,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/setPassword'),
@@ -207,6 +221,7 @@ Future<ApiResponse> tenantLogout({
     'tenantId': tenantId,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/signout'),
@@ -231,6 +246,7 @@ Future<ApiResponse> deleteTenant({
     'tenantId': tenantId,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .delete(
         Uri.parse('${Globals.hostApiUri}/api/tl/deleteTenant'),
@@ -255,6 +271,7 @@ Future<ApiResponse> getAllUnits({
     'type': type,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/getAllUnits'),
@@ -282,6 +299,7 @@ Future<ApiResponse> getLoops({
     param['excludeIDs'] = excludeIDs;
   }
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/getHomepageLoops'),
@@ -310,6 +328,7 @@ Future<ApiResponse> getNotices({
     param['excludeIDs'] = excludeIDs;
   }
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/getNotices'),
@@ -338,6 +357,7 @@ Future<ApiResponse> getMarketplaces({
     param['excludeIDs'] = excludeIDs;
   }
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/getMarketplaces'),
@@ -356,6 +376,7 @@ Future<ApiResponse> getMarketplaces({
 Future<ApiResponse> getBookableAmenities() async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
+  final http = _createHttpInstance();
   final response = await http.get(
     Uri.parse('${Globals.hostApiUri}/api/tl/getBookableAmenities'),
     headers: {
@@ -374,6 +395,7 @@ Future<ApiResponse> getAmenityById({
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
+  final http = _createHttpInstance();
   final response = await http.get(
     Uri.parse('${Globals.hostApiUri}/api/tl/getAmenity/$id'),
     headers: {
@@ -394,6 +416,7 @@ Future<ApiResponse> getEstateById({
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
   // Calling Directus API ItemServices
+  final http = _createHttpInstance();
   final response = await http.get(
     Uri.parse('${Globals.hostApiUri}/api/tl/getEstate/${id}'),
     headers: {
@@ -412,6 +435,7 @@ Future<ApiResponse> getNoticeById({
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
+  final http = _createHttpInstance();
   final response = await http.get(
     Uri.parse('${Globals.hostApiUri}/api/tl/getNotice/$id'),
     headers: {
@@ -430,6 +454,7 @@ Future<ApiResponse> getMarketplaceById({
 }) async {
   developer.log(StackTrace.current.toString().split('\n')[0]);
 
+  final http = _createHttpInstance();
   final response = await http.get(
     Uri.parse('${Globals.hostApiUri}/api/tl/getMarketplace/$id'),
     headers: {
@@ -458,6 +483,7 @@ Future<ApiResponse> getTenantBookingsByDate({
     'times': times,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/getAmenityBookingsByDate'),
@@ -526,6 +552,7 @@ Future<ApiResponse> saveAmenityBooking({
     });
   });
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/saveAmenityBooking'),
@@ -550,6 +577,7 @@ Future<ApiResponse> deleteTenantBooking({
     'bkgIds': tenantAmenityBookingIds,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/deleteTenantAmenityBkgs'),
@@ -574,6 +602,7 @@ Future<ApiResponse> deleteTenantLoops({
     'loopIds': loopIds,
   };
 
+  final http = _createHttpInstance();
   final response = await http
       .post(
         Uri.parse('${Globals.hostApiUri}/api/tl/deleteTenantLoops'),

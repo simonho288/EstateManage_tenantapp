@@ -1,4 +1,5 @@
-import '../include.dart';
+import 'package:flutter/material.dart';
+
 import '../globals.dart' as Globals;
 
 class TextFieldContainer extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
+import 'package:flutter/material.dart';
 
-import '../include.dart';
 import '../components/navBar.dart';
 
 class SettingsPage extends StatelessWidget {

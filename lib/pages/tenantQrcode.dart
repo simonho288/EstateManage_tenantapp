@@ -9,10 +9,11 @@
 
 import 'dart:developer' as developer;
 import 'dart:convert' as convert;
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:qr_flutter/qr_flutter.dart'; // For generate QR-code
 
-import '../include.dart';
 import '../Utils.dart' as Utils;
 
 class TenantQrcodePage extends StatefulWidget {
@@ -84,8 +85,8 @@ class TenantQrcodePageState extends State<TenantQrcodePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            QrImage(
+          children: [
+            QrImageView(
               data: _qrcode,
               version: QrVersions.auto,
               size: size.width * 0.8,

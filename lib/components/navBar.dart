@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:sqflite/sqflite.dart';
-import '../include.dart';
 import 'dart:developer' as developer;
 import 'package:path/path.dart' as Path;
 
@@ -19,11 +19,9 @@ class NavBar extends StatelessWidget {
 
     assert(Globals.curTenantJson != null);
     String name = Globals.curTenantJson?['name'] ?? '';
-    // String name = '陳大文';
     String email = Globals.curTenantJson?['mobile'] ??
         Globals.curTenantJson?['email'] ??
         '';
-    // String email = '9876-5432';
 
     return UserAccountsDrawerHeader(
       margin: const EdgeInsets.all(0),

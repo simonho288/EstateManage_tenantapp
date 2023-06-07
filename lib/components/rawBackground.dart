@@ -1,20 +1,5 @@
-/**
- * A raw background widget used to be common background for non-specified
- * designed pages. Such as notice, and others
- *
- * Usage:
- * in Widget build():
- * build() {
- *   return RawBackground(
- *     title: "<Page title>",
- *     child: Container or SingleChildScrollView(
- *     ...
- *   );
- * }
- */
-
-import '../include.dart';
 import 'dart:developer' as developer;
+import 'package:flutter/material.dart';
 
 import '../globals.dart' as Globals;
 

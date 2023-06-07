@@ -1,4 +1,4 @@
-import '../include.dart';
+import 'package:flutter/material.dart';
 
 class LoadingIndicator extends StatelessWidget {
   LoadingIndicator({this.text = ''});
@@ -53,5 +53,4 @@ class LoadingIndicator extends StatelessWidget {
       textAlign: TextAlign.center,
     );
   } // _getText()
-
 } // LoadingIndicator

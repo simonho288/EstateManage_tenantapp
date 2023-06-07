@@ -4,7 +4,7 @@
 
 library Theme;
 
-import 'include.dart';
+import 'package:flutter/material.dart';
 
 IconThemeData _customIconTheme(IconThemeData original) {
   return original.copyWith(color: shrineBrown900);
@@ -21,14 +21,10 @@ TextSelectionThemeData _customTextSelectionTheme(
 ThemeData buildShrineTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-    colorScheme: _shrineColorScheme,
-    accentColor: shrineBrown900,
     primaryColor: shrinePink100,
-    buttonColor: shrinePink100,
     scaffoldBackgroundColor: shrineBackgroundWhite,
     cardColor: shrineBackgroundWhite,
     textSelectionTheme: _customTextSelectionTheme(base.textSelectionTheme),
-    errorColor: shrineErrorRed,
     buttonTheme: const ButtonThemeData(
       colorScheme: _shrineColorScheme,
       textTheme: ButtonTextTheme.normal,
@@ -36,8 +32,10 @@ ThemeData buildShrineTheme() {
     primaryIconTheme: _customIconTheme(base.iconTheme),
     textTheme: _buildShrineTextTheme(base.textTheme),
     primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),
-    accentTextTheme: _buildShrineTextTheme(base.accentTextTheme),
     iconTheme: _customIconTheme(base.iconTheme),
+    colorScheme: _shrineColorScheme
+        .copyWith(secondary: shrineBrown900)
+        .copyWith(error: shrineErrorRed),
   );
 }
 

@@ -88,6 +88,7 @@
   "loginMobileOrEmail": "Mobile number or email",
   "password": "Password",
   "rememberPassword": "Remember password",
+  "rememberMe": "Remember me",
   "login": "Login",
   "loginFailed": "Login Failed",
   "invalidMobileNoOrEmail": "Invalid mobile, email or password!",

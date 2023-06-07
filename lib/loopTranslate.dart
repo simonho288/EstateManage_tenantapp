@@ -16,11 +16,11 @@
 
 library loopTranslate;
 
+import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 
-import 'include.dart';
 import 'constants.dart' as Constants;
 import 'utils.dart' as Utils;
 

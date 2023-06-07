@@ -1,25 +1,19 @@
-/**
- * The design of this page is followed this tutorial:
- * https://youtu.be/ExKYjqgswJg
- */
-
-import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:convert' as convert;
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+// import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter/gestures.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
+// import 'package:form_builder_validators/form_builder_validators.dart';
 // import 'package:intl/intl.dart';
 
 import '/components/roundedButton.dart';
 import '/components/roundedInputField.dart';
 
-import '../include.dart';
 import '../globals.dart' as Globals;
 import '../utils.dart' as Utils;
 import '../ajax.dart' as Ajax;
-import '../main.dart';
 
 // The background of this page (the upper & lower circle shapes)
 class Background extends StatelessWidget {
@@ -119,13 +113,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormBuilderState>();
+  // final _formKey = GlobalKey<FormBuilderState>();
+  final _formKey = GlobalKey<FormState>();
   late List<DropdownMenuItem> _ddiLanguages;
   bool _hidePassword = true;
   late SharedPreferences _prefs;
   String? _password;
   late Future<bool> _future;
   bool _isLoginPressed = false;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _pwdController = TextEditingController();
+  bool _remember = false;
 
   @override
   void initState() {
@@ -156,7 +154,12 @@ class _LoginPageState extends State<LoginPage> {
     String? encPwd = _prefs.getString('loginPassword');
     if (encPwd != null) {
       _password = Utils.decryptStringAES256CTR(encPwd);
+      _remember = true;
+      _pwdController.text = _password!;
     }
+
+    final email = Globals.curTenantJson?['email'] ?? '';
+    _nameController.text = email;
 
     return true;
   }
@@ -175,11 +178,12 @@ class _LoginPageState extends State<LoginPage> {
 
     _isLoginPressed = true; // prevent re-entrant
 
-    Map<String, dynamic> values = _formKey.currentState!.value;
     // Map<String, dynamic> values = _formKey.currentState!.value;
-    String mobileOrEmail = values['name'];
-    String password = values['password'];
-    bool isRemember = values['remember'];
+    // String mobileOrEmail = values['name'];
+    // String password = values['password'];
+    // bool isRemember = values['remember'];
+    String mobileOrEmail = _nameController.text;
+    String password = _pwdController.text;
     String? fcmDeviceToken = await Utils.generateDeviceToken();
 
     late Ajax.ApiResponse resp;
@@ -223,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
 
         Globals.accessToken = data['token']; // jwt token
         Globals.curTenantJson = data['tenant'];
-        if (isRemember) {
+        if (_remember) {
           if (_password != password) {
             // Encrypt the password
             await _prefs.setString(
@@ -271,14 +275,10 @@ class _LoginPageState extends State<LoginPage> {
 */
 
   Body _renderBody() {
-    final email = Globals.curTenantJson?['email'] ?? '';
-    final password = _password ?? '';
-    final remember = password != '';
-
     return Body(
       child: Column(
         children: <Widget>[
-          FormBuilder(
+          Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.disabled,
             child: Column(
@@ -308,6 +308,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 */
+                /*
                 TextFieldContainer(
                   child: FormBuilderTextField(
                     name: 'name',
@@ -327,6 +328,56 @@ class _LoginPageState extends State<LoginPage> {
                     ]),
                   ),
                 ),
+                */
+                // Create a textformfield for input email
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.person,
+                      color: Globals.primaryColor,
+                    ),
+                    labelText: 'loginMobileOrEmail'.tr(),
+                    // border: InputBorder.none,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'cantEmpty'.tr();
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _pwdController,
+                  obscureText: _hidePassword,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.lock,
+                      color: Globals.primaryColor,
+                    ),
+                    labelText: 'password'.tr(),
+                    // border: InputBorder.none,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _hidePassword ? Icons.visibility : Icons.visibility_off,
+                        color: Globals.primaryColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _hidePassword =
+                              !_hidePassword; // show/hide the password
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'cantEmpty'.tr();
+                    }
+                    return null;
+                  },
+                ),
+/*
                 TextFieldContainer(
                   child: FormBuilderTextField(
                     name: 'password',
@@ -364,18 +415,23 @@ class _LoginPageState extends State<LoginPage> {
                     ]),
                   ),
                 ),
+                */
+                SizedBox(height: 5),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox(width: 15),
                     SizedBox(
-                      width: 305,
-                      child: FormBuilderCheckbox(
-                        activeColor: Globals.primaryColor,
-                        name: 'remember',
-                        initialValue: remember,
-                        // onChanged: _onChanged,
-                        title: Text('rememberPassword'.tr(),
-                            style: TextStyle(fontSize: 18.0)),
+                      width: 200,
+                      child: CheckboxListTile(
+                        title: Text('rememberMe'.tr()),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: _remember,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _remember = newValue!;
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -383,6 +439,7 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
+          SizedBox(height: 10),
           RoundedButton(
             text: 'login'.tr(),
             color: Globals.primaryColor,

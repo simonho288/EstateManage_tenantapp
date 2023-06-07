@@ -5,13 +5,12 @@
  */
 
 import 'dart:developer' as developer;
+import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:convert' as convert;
 
-import '../include.dart';
 import '../constants.dart' as Constants;
 import '../models.dart' as Models;
 import '../ajax.dart' as Ajax;
