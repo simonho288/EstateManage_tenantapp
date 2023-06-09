@@ -9,7 +9,7 @@ import 'package:flutter/gestures.dart';
 // import 'package:intl/intl.dart';
 
 import '/components/roundedButton.dart';
-import '/components/roundedInputField.dart';
+// import '/components/roundedInputField.dart';
 
 import '../globals.dart' as Globals;
 import '../utils.dart' as Utils;
@@ -87,16 +87,6 @@ class Body extends StatelessWidget {
                 color: Globals.primaryColor,
               ),
             ),
-            // SizedBox(height: 10),
-            // Woman image
-            /*
-            Image.asset(
-              'assets/images/woman2.png',
-              width: size.width * 0.6,
-              color: Color.fromRGBO(255, 255, 255, 0.4),
-              colorBlendMode: BlendMode.modulate,
-            ),
-            */
             child,
           ],
         ),
@@ -284,51 +274,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: <Widget>[
                 SizedBox(height: 10),
-                /* Only support English at this moment
-                DropdownContainer(
-                  child: FormBuilderDropdown(
-                    name: 'language',
-                    initialValue: 'en',
-                    onChanged: _onLangChanged,
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.language,
-                        color: Globals.primaryColor,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                    ]),
-                    items: _ddiLanguages,
-                  ),
-                ),
-                */
-                /*
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    name: 'name',
-                    initialValue: email,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.person,
-                        color: Globals.primaryColor,
-                      ),
-                      hintText: 'loginMobileOrEmail'.tr(),
-                      border: InputBorder.none,
-                    ),
-                    // onChanged: _onChanged,
-                    // valueTransformer: (text) => num.tryParse(text),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                    ]),
-                  ),
-                ),
-                */
                 // Create a textformfield for input email
                 TextFormField(
                   controller: _nameController,
@@ -377,54 +322,16 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-/*
-                TextFieldContainer(
-                  child: FormBuilderTextField(
-                    name: 'password',
-                    initialValue: password,
-                    obscureText: _hidePassword,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      // labelText: 'Password',
-                      hintText: 'password'.tr(),
-                      icon: Icon(
-                        Icons.lock,
-                        color: Globals.primaryColor,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _hidePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: Globals.primaryColor,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _hidePassword =
-                                !_hidePassword; // show/hide the password
-                          });
-                        },
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    // onChanged: _onChanged,
-                    // valueTransformer: (text) => num.tryParse(text),
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                    ]),
-                  ),
-                ),
-                */
                 SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(width: 15),
                     SizedBox(
-                      width: 200,
+                      width: 350,
                       child: CheckboxListTile(
                         title: Text('rememberMe'.tr()),
+                        activeColor: Globals.primaryColor,
                         controlAffinity: ListTileControlAffinity.leading,
                         value: _remember,
                         onChanged: (newValue) {
