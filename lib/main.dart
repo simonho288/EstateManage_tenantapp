@@ -192,9 +192,7 @@ class MainApp extends StatefulWidget {
   // Can be called by anywhere MyApp.changeLanguage(...)
   static void changeLanguage(BuildContext context, Locale value) {
     _MainAppState? state = context.findAncestorStateOfType<_MainAppState>();
-    if (state != null) {
-      state.changeLanguage(value);
-    }
+    if (state != null) state.changeLanguage(value);
   }
 }
 
@@ -363,28 +361,22 @@ class _RootPageState extends State<RootPage> {
 
     try {
       String? sn = prefs.getString('accessToken');
-      if (sn != null) {
-        rtnVal['accessToken'] = sn;
-        Globals.accessToken = sn;
-      }
+      rtnVal['accessToken'] = sn;
+      Globals.accessToken = sn;
       sn = prefs.getString('userId');
-      if (sn != null) {
-        Globals.userId = sn;
-      }
+      Globals.userId = sn;
       sn = prefs.getString('tenantJson');
       if (sn != null) {
         Globals.curTenantJson = jsonDecode(sn);
+        sn = prefs.getString('estateJson');
       }
-      sn = prefs.getString('estateJson');
       if (sn != null) {
         Globals.curEstateJson = jsonDecode(sn);
         var nameJson = jsonDecode(Globals.curEstateJson!['name']);
         Globals.curEstateJson!['name'] = nameJson[Globals.curLang];
       }
       sn = prefs.getString('unitJson');
-      if (sn != null) {
-        Globals.curUnitJson = jsonDecode(sn);
-      }
+      if (sn != null) Globals.curUnitJson = jsonDecode(sn);
       sn = prefs.getString('userJson');
       if (sn != null) {
         Globals.curTenantJson = jsonDecode(sn);

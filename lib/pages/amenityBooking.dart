@@ -505,7 +505,7 @@ class _AmenityBookingPageState extends State<AmenityBookingPage> {
         width: size.width,
         height: 85,
         decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(20),
           ),

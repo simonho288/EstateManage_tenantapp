@@ -291,7 +291,7 @@ class _RegisterPageState extends State<RegisterPage> {
     widgets.add(Row(children: [
       Container(
         width: 110,
-        child: Text('role'.tr(), style: Theme.of(context).textTheme.bodyText2),
+        child: Text('role'.tr(), style: Theme.of(context).textTheme.bodyMedium),
       ),
       DropdownButton(
         value: _selectedRole,

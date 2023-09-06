@@ -234,7 +234,7 @@ class _BookingPageState extends State<BookingPage> {
         contents.add(
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Globals.primaryColor,
+              backgroundColor: Globals.primaryColor,
             ),
             onPressed: _onBtnContactUs,
             child: Text(

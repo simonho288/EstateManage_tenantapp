@@ -14,7 +14,6 @@ import '../main.dart';
 import '../utils.dart' as Utils;
 import '../ajax.dart' as Ajax;
 // import '../components/navBar.dart';
-import '/components/roundedInputField.dart';
 
 class SetupPasswordPage extends StatefulWidget {
   const SetupPasswordPage({Key? key}) : super(key: key);

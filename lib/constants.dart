@@ -1,6 +1,7 @@
 library constants;
 
-import 'package:flutter_html/style.dart';
+import 'package:flutter_html/flutter_html.dart';
+// import 'package:flutter_html_all/flutter_html_all.dart';
 
 // Must sync with VPMS Directus constants.js
 const LOOP_TITLE_TENANT_REQUEST_ACCESS = 'reqAccess';

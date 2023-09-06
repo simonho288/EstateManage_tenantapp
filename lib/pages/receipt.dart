@@ -117,7 +117,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Globals.primaryLightColor,
+                          backgroundColor: Globals.primaryLightColor,
                           textStyle: TextStyle(fontSize: 20.0)),
                       onPressed: _onBtnDownloadPdf,
                       child: Text('downloadReceipt'.tr()),

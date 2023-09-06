@@ -156,7 +156,7 @@ class _NoticePageState extends State<NoticePage> {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Globals.primaryLightColor,
+                          backgroundColor: Globals.primaryLightColor,
                           textStyle: TextStyle(fontSize: 20.0)),
                       onPressed: _onBtnDownloadPdf,
                       child: Text('noticeDownloadNotice'.tr()),

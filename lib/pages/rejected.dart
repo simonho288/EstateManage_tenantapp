@@ -169,7 +169,7 @@ class RejectedPage extends StatelessWidget {
                   children: <Widget>[
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.orange[100],
+                        backgroundColor: Colors.orange[100],
                       ),
                       onPressed: () {
                         _onBtnUpdate(context);
@@ -181,7 +181,7 @@ class RejectedPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.orange[100],
+                        backgroundColor: Colors.orange[100],
                       ),
                       onPressed: () {
                         _onBtnRegister(context);

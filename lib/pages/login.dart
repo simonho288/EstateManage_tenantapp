@@ -142,11 +142,9 @@ class _LoginPageState extends State<LoginPage> {
     _prefs = await SharedPreferences.getInstance();
 
     String? encPwd = _prefs.getString('loginPassword');
-    if (encPwd != null) {
-      _password = Utils.decryptStringAES256CTR(encPwd);
-      _remember = true;
-      _pwdController.text = _password!;
-    }
+    if (encPwd != null) _password = Utils.decryptStringAES256CTR(encPwd);
+    _remember = true;
+    _pwdController.text = _password!;
 
     final email = Globals.curTenantJson?['email'] ?? '';
     _nameController.text = email;

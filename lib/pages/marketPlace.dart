@@ -166,7 +166,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Globals.primaryLightColor,
+                          backgroundColor: Globals.primaryLightColor,
                           textStyle: TextStyle(fontSize: 20.0),
                         ),
                         onPressed: _onBtnDownloadImage,
@@ -178,7 +178,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Globals.primaryLightColor,
+                                backgroundColor: Globals.primaryLightColor,
                                 textStyle: TextStyle(fontSize: 20.0),
                               ),
                               onPressed: _onBtnOpenUrl,

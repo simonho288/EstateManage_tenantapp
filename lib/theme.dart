@@ -42,51 +42,51 @@ ThemeData buildShrineTheme() {
 TextTheme _buildShrineTextTheme(TextTheme base) {
   return base
       .copyWith(
-        caption: base.caption?.copyWith(
+        bodySmall: base.bodySmall?.copyWith(
           fontWeight: FontWeight.w500,
           letterSpacing: defaultLetterSpacing,
         ),
-        headline1: base.headline1?.copyWith(
+        displayLarge: base.displayLarge?.copyWith(
           fontWeight: FontWeight.w500,
           letterSpacing: defaultLetterSpacing,
         ),
-        subtitle1: base.subtitle1?.copyWith(
+        titleMedium: base.titleMedium?.copyWith(
           fontSize: 18,
           letterSpacing: defaultLetterSpacing,
         ),
-        subtitle2: base.subtitle2?.copyWith(
+        titleSmall: base.titleSmall?.copyWith(
           fontSize: 18,
           letterSpacing: defaultLetterSpacing,
         ),
-        overline: base.overline?.copyWith(
+        labelSmall: base.labelSmall?.copyWith(
           fontWeight: FontWeight.w400,
           fontSize: 14,
           letterSpacing: defaultLetterSpacing,
         ),
-        bodyText2: base.bodyText2?.copyWith(
+        bodyMedium: base.bodyMedium?.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 16,
           letterSpacing: defaultLetterSpacing,
         ),
-        bodyText1: base.bodyText1?.copyWith(
+        bodyLarge: base.bodyLarge?.copyWith(
           letterSpacing: defaultLetterSpacing,
         ),
-        headline2: base.headline2?.copyWith(
+        displayMedium: base.displayMedium?.copyWith(
           letterSpacing: defaultLetterSpacing,
         ),
-        headline3: base.headline3?.copyWith(
+        displaySmall: base.displaySmall?.copyWith(
           letterSpacing: defaultLetterSpacing,
         ),
-        headline4: base.headline4?.copyWith(
+        headlineMedium: base.headlineMedium?.copyWith(
           letterSpacing: defaultLetterSpacing,
         ),
-        headline5: base.headline5?.copyWith(
+        headlineSmall: base.headlineSmall?.copyWith(
           letterSpacing: defaultLetterSpacing,
         ),
-        headline6: base.headline6?.copyWith(
+        titleLarge: base.titleLarge?.copyWith(
           letterSpacing: defaultLetterSpacing,
         ),
-        button: base.button?.copyWith(
+        labelLarge: base.labelLarge?.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 14,
           letterSpacing: defaultLetterSpacing,
@@ -101,9 +101,7 @@ TextTheme _buildShrineTextTheme(TextTheme base) {
 
 const ColorScheme _shrineColorScheme = ColorScheme(
   primary: shrinePink100,
-  primaryVariant: shrineBrown900,
   secondary: shrinePink50,
-  secondaryVariant: shrineBrown900,
   surface: shrineSurfaceWhite,
   background: shrineBackgroundWhite,
   error: shrineErrorRed,
