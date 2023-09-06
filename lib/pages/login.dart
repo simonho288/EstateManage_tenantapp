@@ -143,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String? encPwd = _prefs.getString('loginPassword');
     if (encPwd != null) _password = Utils.decryptStringAES256CTR(encPwd);
+    _password = _password ?? '';
     _remember = true;
     _pwdController.text = _password!;
 
