@@ -390,7 +390,7 @@ class _Background extends StatelessWidget {
           ),
           Positioned(
             // hamburger menu
-            top: 30,
+            top: 60,
             left: 10,
             child: GestureDetector(
               onTap: () async {
