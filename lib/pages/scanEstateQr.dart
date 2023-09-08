@@ -38,7 +38,7 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     developer.log('ScanEstateQrPage initState');
 
     _controller = MobileScannerController(
-      facing: CameraFacing.front,
+      facing: CameraFacing.back,
       torchEnabled: true,
     );
     super.initState();
@@ -156,7 +156,7 @@ class _ScanEstateQrPageState extends State<ScanEstateQrPage> {
     return Scaffold(
       // drawer: NavBar(),
       appBar: AppBar(
-        title: Text('Estate Manage Tenant App'),
+        title: Text('EstateManage Tenant App'),
         centerTitle: true,
       ),
       body: Column(

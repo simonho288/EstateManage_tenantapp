@@ -325,9 +325,9 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: 15),
+                    // SizedBox(width: 15),
                     SizedBox(
-                      width: 350,
+                      width: 300,
                       child: CheckboxListTile(
                         title: Text('rememberMe'.tr()),
                         activeColor: Globals.primaryColor,

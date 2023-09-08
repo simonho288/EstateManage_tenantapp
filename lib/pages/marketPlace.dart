@@ -90,7 +90,10 @@ class _MarketplacePageState extends State<MarketplacePage> {
 
     Directory dir = await getTemporaryDirectory();
     String srcUrl = _marketplace.adImage;
-    String dstPath = '${dir.path}/${_marketplace.title}.jpg';
+    Map<String, dynamic> titleJson = convert.jsonDecode(_marketplace.title);
+    String title = titleJson["en"];
+    title = Utils.truncateString(title, 30);
+    String dstPath = '${dir.path}/${title}.jpg';
     Response? resp = await Utils.downloadFile(
         context, 'marketplaceDownloadingImg'.tr(), srcUrl, dstPath);
     if (resp != null && resp.statusCode == 200) {
